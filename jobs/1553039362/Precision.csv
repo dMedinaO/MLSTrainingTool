@@ -1,0 +1,16 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+AdaBoostClassifier,Algorithm:SAMME-n_estimators:10,CV-10,0.867777777778,0.5,0.633333333333,0.54
+AdaBoostClassifier,Algorithm:SAMME-n_estimators:100,CV-10,0.857777777778,0.55,0.65,0.583333333333
+AdaBoostClassifier,Algorithm:SAMME.R-n_estimators:10,CV-10,0.866388888889,0.55,0.65,0.566666666667
+Bagging,bootstrap:True-n_estimators:10,CV-10,0.845277777778,0.5,0.616666666667,0.5
+Bagging,bootstrap:True-n_estimators:200,CV-10,0.868888888889,0.55,0.616666666667,0.546666666667
+Bagging,bootstrap:True-n_estimators:500,CV-10,0.878888888889,0.55,0.616666666667,0.563333333333
+Bagging,bootstrap:True-n_estimators:2000,CV-10,0.868888888889,0.55,0.616666666667,0.563333333333
+RandomForestClassifier,n_estimators:10-criterion:entropy-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.867777777778,0.5,0.633333333333,0.48
+RandomForestClassifier,n_estimators:50-criterion:gini-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.866388888889,0.6,0.65,0.596666666667
+RandomForestClassifier,n_estimators:50-criterion:entropy-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.856388888889,0.45,0.65,0.583333333333
+RandomForestClassifier,n_estimators:100-criterion:gini-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.867777777778,0.55,0.75,0.55
+RandomForestClassifier,n_estimators:200-criterion:gini-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.8775,0.5,0.65,0.583333333333
+RandomForestClassifier,n_estimators:500-criterion:gini-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.867777777778,0.5,0.65,0.583333333333
+RandomForestClassifier,n_estimators:1000-criterion:gini-min_samples_split:2-min_samples_leaf:1-bootstrap:False,CV-10,0.855277777778,0.55,0.65,0.55
+RandomForestClassifier,n_estimators:1000-criterion:entropy-min_samples_split:2-min_samples_leaf:1-bootstrap:True,CV-10,0.856666666667,0.4,0.65,0.45
