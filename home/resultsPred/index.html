@@ -1,23 +1,10 @@
-<?php
-	session_start();
-  #echo $_SESSION['username'];
-  #echo "<br>";
-  #echo $_SESSION['idUser'];
-  if (!$_SESSION){
-	   echo '<script language = javascript>
-	    alert("User No Authenticated")
-	    self.location = "../closeConnection"
-	    </script>';
-  }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Smart Training</title>
+		<title>Dashboard MLSTraining</title>
 
     <!--STYLESHEET-->
     <!--=================================================-->
@@ -32,6 +19,8 @@
 
     <!--Nifty Stylesheet [ REQUIRED ]-->
     <link href="../css/nifty.min.css" rel="stylesheet">
+		<link href="../css/demo/nifty-demo-icons.min.css" rel="stylesheet">
+    <link href="../plugins/magic-check/css/magic-check.min.css" rel="stylesheet">
 
 
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
@@ -62,7 +51,8 @@
 
     <!--NiftyJS [ RECOMMENDED ]-->
     <script src="../js/nifty.min.js"></script>
-
+		<script src="../plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+		<script src="../js/demo/form-wizard.js"></script>
     <!--Dropzone [ OPTIONAL ]-->
     <script src="../plugins/dropzone/dropzone.min.js"></script>
     <link href="../plugins/dropzone/dropzone.min.css" rel="stylesheet">
@@ -95,11 +85,21 @@
 
     <!-- para los higcharts-->
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<!-- para los higcharts-->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
 
-    <script src="../js/jobsQueue/viewResponseJobPrediction.js"></script>
-		<script src="../js/jobsQueue/processViewStatisticsPrediction.js"></script>
-		<script src="../js/jobsQueue/processViewSummaryPrediction.js"></script>
 
+		<script src="../js/resultsClf/viewResponseJobClass.js"></script>
+		<script src="../js/resultsClf/processViewStatisticsClass.js"></script>
+		<script src="../js/resultsClf/processViewSummaryClass.js"></script>
+
+		<!-- mostrar la seleccion de modelos-->
+		<script src="../js/resultsClf/viewSelectModels.js"></script>
+		<script src="../js/resultsClf/viewSelectModelsGraphic.js"></script>
+
+		<!-- mostrar la union de modelos -->
 </head>
 
 <!--TIPS-->
@@ -114,11 +114,11 @@
 
                 <!--Brand logo & name-->
                 <!--================================-->
-                <div class="navbar-header">
-                    <a href="../" class="navbar-brand">
+								<div class="navbar-header">
+                    <a href="" class="navbar-brand">
                         <img src="../img/logo.png" alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text">S. Training</span>
+                            <span class="brand-text">MLSTraining</span>
                         </div>
                     </a>
                 </div>
@@ -142,38 +142,6 @@
                         <!--End Navigation toogle button-->
 
                     </ul>
-                    <ul class="nav navbar-top-links pull-right">
-
-                        <!--User dropdown-->
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <li id="dropdown-user" class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                                <span class="ic-user pull-right">
-                                    <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
-                                    <i class="demo-pli-male"></i>
-                                </span>
-                                <div class="username hidden-xs">
-                                  <?php
-                                    echo $_SESSION['username'];
-                                  ?>
-                                </div>
-                            </a>
-
-
-                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
-                                <!-- Dropdown footer -->
-                                <div class="pad-all text-right">
-                                    <a href="../closeConnection" class="btn btn-primary">
-                                        <i class="demo-pli-unlock"></i> Log out!
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                        <!--End user dropdown-->
-
-
-                    </ul>
                 </div>
                 <!--================================-->
                 <!--End Navbar Dropdown-->
@@ -193,10 +161,7 @@
                     <!--Page Title-->
                     <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                     <div id="page-title">
-                        <h1 class="page-header text-overflow">Response for Job:
-													<?php
-														echo $_GET['job'];
-													?>
+                        <h1 class="page-header text-overflow nameJob">
 												</h1>
 
                     </div>
@@ -208,183 +173,408 @@
                 <!--Page content-->
                 <!--===================================================-->
               <div id="page-content">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="panel panel-bordered panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Histogram by R Score</h3>
-                        </div>
-                        <div class="panel-body">
-                          <div id="rscore"></div>
-                        </div>
-                    </div>
-                  </div>
+								<div class="col-lg-12 col-md-12 col-sm-12">
+										<div class="panel">
 
-									<div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="panel panel-bordered panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Histogram by Pearson</h3>
-                        </div>
-                        <div class="panel-body">
-                          <div id="pearson"></div>
-                        </div>
-                    </div>
-                  </div>
+								<div id="demo-cir-wz">
+										<div class="wz-heading pad-ver">
 
-								</div>
-
-
-								<div class="row">
-
-									<div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="panel panel-bordered panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Histogram by Spearman</h3>
-                        </div>
-                        <div class="panel-body">
-                          <div id="spearman"></div>
-                        </div>
-                    </div>
-                  </div>
-
-									<div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="panel panel-bordered panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Histogram by Kendalltau</h3>
-                        </div>
-                        <div class="panel-body">
-                          <div id="kendall"></div>
-                        </div>
-                    </div>
-                  </div>
-
-                </div>
-
-								<div class="row">
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<div class="panel panel-bordered panel-primary">
-												<div class="panel-heading">
-														<h3 class="panel-title">Job Summary Process</h3>
+												<!--Progress bar-->
+												<div class="progress progress-xs progress-light-base">
+														<div class="progress-bar progress-bar-primary"></div>
 												</div>
-												<div class="panel-body">
 
-													<table id="jobSummary" class="table table-striped table-bordered" cellspacing="0" width="100%">
-															<thead>
-																<tr>
-																	<th class="min-tablet">Algorithm</th>
-																	<th class="min-tablet">Params</th>
-																	<th class="min-tablet">R_Score</th>
-																	<th class="min-tablet">Pearson</th>
-																	<th class="min-tablet">Spearman</th>
-																	<th class="min-tablet">Kendalltau</th>
-																</tr>
-															</thead>
-													</table>
-
-												</div>
+												<!--Nav-->
+												<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+												<ul class="wz-nav-off">
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab1" title="Performance distribution" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab2" title="Statistical Summary" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab3" title="Summary Process" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab4" title="Selection Models" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab5" title="Join Models" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+														<li class="col-xs-2">
+																<a data-toggle="tab" href="#demo-cir-tab6" title="Finally workflow" class="add-tooltip">
+																		<div class="icon-wrap icon-wrap-sm bg-gray">
+																				<i class="wz-icon demo-pli-information icon-lg"></i>
+																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
+																		</div>
+																</a>
+														</li>
+												</ul>
 										</div>
-									</div>
-								</div>
 
-								<div class="row">
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<div class="panel panel-bordered panel-primary">
-												<div class="panel-heading">
-														<h3 class="panel-title">Summary Statistics data of Performance</h3>
-												</div>
+										<!--Form-->
+										<form class="form-horizontal">
 												<div class="panel-body">
+														<div class="tab-content">
 
-													<table id="statistical" class="table table-striped table-bordered" cellspacing="0" width="100%">
-															<thead>
-																<tr>
-																	<th class="min-tablet">Performance</th>
-																	<th class="min-tablet">Average</th>
-																	<th class="min-tablet">Standar Deviation</th>
-																	<th class="min-tablet">Variance</th>
-																	<th class="min-tablet">Max Value</th>
-																	<th class="min-tablet">Min Value</th>
-																</tr>
-															</thead>
-													</table>
+																<!--First tab-->
+																<div id="demo-cir-tab1" class="tab-pane">
+																	<div class="row">
 
+																		<div class="col-lg-6 col-md-6 col-sm-6">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Histogram by Precision</h3>
+																	        </div>
+																	        <div class="panel-body">
+																	          <div id="precisionHistogram"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+
+																	  <div class="col-lg-6 col-md-6 col-sm-6">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Histogram by Accuracy</h3>
+																	        </div>
+																	        <div class="panel-body">
+																	          <div id="accuracyHistogram"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+
+																		<div class="col-lg-6 col-md-6 col-sm-6">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Histogram by Recall</h3>
+																	        </div>
+																	        <div class="panel-body">
+																	          <div id="recallHistogram"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+
+																	  <div class="col-lg-6 col-md-6 col-sm-6">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Histogram by F1</h3>
+																	        </div>
+																	        <div class="panel-body">
+																	          <div id="f1Histogram"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+																	</div>
+																</div>
+
+																<!--Second tab-->
+																<div id="demo-cir-tab2" class="tab-pane fade">
+																	<div class="row">
+																	  <div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Summary Statistics data of Performance</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="statistical" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Performance</th>
+																	                  <th class="min-tablet">Average</th>
+																	                  <th class="min-tablet">Standar Deviation</th>
+																	                  <th class="min-tablet">Variance</th>
+																	                  <th class="min-tablet">Max Value</th>
+																	                  <th class="min-tablet">Min Value</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+
+																	        </div>
+																	    </div>
+																	  </div>
+																	</div>
+																</div>
+
+																<!--Third tab-->
+																<div id="demo-cir-tab3" class="tab-pane">
+																	<div class="row">
+																	  <div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Job Summary Process</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="jobSummary" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Algorithm</th>
+																	                  <th class="min-tablet">Params</th>
+																	                  <th class="min-tablet">CV</th>
+																	                  <th class="min-tablet">Accuracy</th>
+																	                  <th class="min-tablet">Recall</th>
+																	                  <th class="min-tablet">Precision</th>
+																	                  <th class="min-tablet">F1 Score</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+
+																	        </div>
+																	    </div>
+																	  </div>
+																	</div>
+
+																	<div class="row">
+																	  <div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Summary Process and Definition</h3>
+																	        </div>
+																	        <div class="panel-body">
+																	          <table class="table table-hover table-vcenter">
+																	          <tbody>
+																	            <tr>
+																	              <td>
+																	                <span class="text-main text-semibold">Start Process</span>
+																	              </td>
+																	              <td>
+																	                <span class="text-main text-semibold start"></span>
+																	                <br>
+																	              </td>
+																	             </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">End Process</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main text-semibold end"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Duration in minutes</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main text-semibold duration"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Correct executions</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main text-semibold correct"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Incorrect executions</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main text-semibold incorrect"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Accuracy</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main  accuracyDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Precision</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main  precisionDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Recall</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main  recallDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">F1 Score</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main f1Definition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	          </tbody>
+																	      </table>
+																	        </div>
+																	    </div>
+																	  </div>
+																	</div>
+
+																</div>
+
+																<!--Fourth tab-->
+																<div id="demo-cir-tab4" class="tab-pane">
+
+																	<div class="row">
+																	  <div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Selected Models By Precision</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="modelP" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Algorithm</th>
+																	                  <th class="min-tablet">Params</th>
+																	                  <th class="min-tablet">Precision</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+
+																	        </div>
+																	    </div>
+																	  </div>
+
+																		<div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Selected Models By Accuracy</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="modelA" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Algorithm</th>
+																	                  <th class="min-tablet">Params</th>
+																	                  <th class="min-tablet">Accuracy</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+
+																	        </div>
+																	    </div>
+																	  </div>
+
+																		<div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Selected Models By Recall</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="modelR" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Algorithm</th>
+																	                  <th class="min-tablet">Params</th>
+																	                  <th class="min-tablet">Recall</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+																	        </div>
+																	    </div>
+																	  </div>
+
+																		<div class="col-lg-12 col-md-12 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Selected Models By F1</h3>
+																	        </div>
+																	        <div class="panel-body">
+
+																	          <table id="modelF" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	              <thead>
+																	                <tr>
+																	                  <th class="min-tablet">Algorithm</th>
+																	                  <th class="min-tablet">Params</th>
+																	                  <th class="min-tablet">F1</th>
+																	                </tr>
+																	              </thead>
+																	          </table>
+																	        </div>
+																	    </div>
+																	  </div>
+																	</div>
+																</div>
+																<!--Five tab-->
+																<div id="demo-cir-tab5" class="tab-pane">
+
+																</div>
+
+																<!--Six tab-->
+																<div id="demo-cir-tab6" class="tab-pane">
+																</div>
+														</div>
 												</div>
-										</div>
-									</div>
+
+												<!--Footer button-->
+												<div class="panel-footer text-right">
+														<div class="box-inline">
+																<button type="button" class="previous btn btn-primary">Previous</button>
+																<button type="button" class="next btn btn-primary">Next</button>
+																<button type="button" class="finish btn btn-success" disabled>Finish</button>
+														</div>
+												</div>
+										</form>
 								</div>
-
-
-								<div class="row">
-									<div class="col-lg-12 col-md-12 col-sm-12">
-										<div class="panel panel-bordered panel-primary">
-												<div class="panel-heading">
-														<h3 class="panel-title">Summary Process and Definition</h3>
-												</div>
-												<div class="panel-body">
-													<table class="table table-hover table-vcenter">
-													<tbody>
-														<tr>
-															<td>
-																<span class="text-main text-semibold">Start Process</span>
-															</td>
-															<td>
-																<span class="text-main text-semibold start"></span>
-																<br>
-															</td>
-														 </tr>
-
-															<tr>
-																	<td>
-																		<span class="text-main text-semibold">End Process</span>
-																	</td>
-																	<td>
-																			<span class="text-main text-semibold end"></span>
-																			<br>
-																	</td>
-															</tr>
-
-															<tr>
-																	<td>
-																		<span class="text-main text-semibold">Duration in minutes</span>
-																	</td>
-																	<td>
-																			<span class="text-main text-semibold duration"></span>
-																			<br>
-																	</td>
-															</tr>
-
-															<tr>
-																	<td>
-																		<span class="text-main text-semibold">Correct executions</span>
-																	</td>
-																	<td>
-																			<span class="text-main text-semibold correct"></span>
-																			<br>
-																	</td>
-															</tr>
-
-															<tr>
-																	<td>
-																		<span class="text-main text-semibold">Incorrect executions</span>
-																	</td>
-																	<td>
-																			<span class="text-main text-semibold incorrect"></span>
-																			<br>
-																	</td>
-															</tr>
-															
-													</tbody>
-											</table>
-												</div>
-										</div>
-									</div>
-								</div>
-
+							</div>
+					</div>
               </div>
             </div>
 
             <!--MAIN NAVIGATION-->
             <!--===================================================-->
-            <nav id="mainnav-container">
+						<nav id="mainnav-container">
                 <div id="mainnav">
 
                     <!--Menu-->
@@ -400,121 +590,57 @@
                                         <div class="pad-btm">
                                             <img class="img-circle img-md" src="../img/profile-photos/11.png" alt="Profile Picture">
                                         </div>
-                                        <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
-                                            <span class="pull-right dropdown-toggle">
-                                                <i class="dropdown-caret"></i>
-                                            </span>
-                                            <p class="mnp-name">
-                                              <?php
-                                                echo $_SESSION['username'];
-                                              ?>
-                                            </p>
-                                        </a>
-                                    </div>
-                                    <div id="profile-nav" class="collapse list-group bg-trans">
 
-                                        <a href="../closeConnection" class="list-group-item">
-                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> Log out
-                                        </a>
+                                        <p class="mnp-name">
+                                            User View
+                                        </p>
                                     </div>
                                 </div>
 
                                 <ul id="mainnav-menu" class="list-group">
 
-                                  <li class="list-header">My Panel</li>
+                                  <li class="list-header">Dashboard</li>
 
                                   <li>
-          						                <a href="../profile/">
-          						                    <i class="fa fa fa-user"></i>
-          						                    <span class="menu-title">My Profile</span><i class="arrow"></i>
+          						                <a href="../query/">
+          						                    <i class="fa fa fa-list"></i>
+          						                    <span class="menu-title">Query Job</span><i class="arrow"></i>
           						                </a>
 
           						            </li>
 
                                   <li>
           						                <a href="../dataSet/">
+          						                    <i class="fa fa fa-archive"></i>
+          						                    <span class="menu-title">Data Sets Demo</span><i class="arrow"></i>
+          						                </a>
+
+          						            </li>
+
+                                  <li>
+          						                <a href="../about">
+          						                    <i class="fa fa fa-users"></i>
+          						                    <span class="menu-title">About Us</span><i class="arrow"></i>
+          						                </a>
+
+          						            </li>
+
+                                  <li>
+          						                <a href="../userManual">
           						                    <i class="fa fa fa-file"></i>
-          						                    <span class="menu-title">My Data Sets</span><i class="arrow"></i>
+          						                    <span class="menu-title">How to use</span><i class="arrow"></i>
           						                </a>
 
           						            </li>
-
-                                  <li>
-          						                <a href="../jobs">
-          						                    <i class="fa fa fa-archive"></i>
-          						                    <span class="menu-title">My Jobs</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li>
-          						                <a href="../jobsQueue">
-          						                    <i class="fa fa fa-archive"></i>
-          						                    <span class="menu-title">My Jobs in Queue</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-																	<li class="list-header">Process Options</li>
-
-                                  <li>
-          						                <a href="../statistic">
-          						                    <i class="fa fa fa-pie-chart"></i>
-          						                    <span class="menu-title">Statistic Process</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li>
-          						                <a href="../characteristic">
-          						                    <i class="fa fa fa-bar-chart"></i>
-          						                    <span class="menu-title">Characteristic Analysis</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li>
-          						                <a href="../statisticalTest">
-          						                    <i class="fa fa fa-line-chart"></i>
-          						                    <span class="menu-title">Statistical Test</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li class="list-header">Machine Learning Options</li>
-
-                                  <li>
-          						                <a href="../clustering">
-          						                    <i class="fa fa fa-search"></i>
-          						                    <span class="menu-title">Clustering Process</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li>
-          						                <a href="../training">
-          						                    <i class="fa fa fa-graduation-cap"></i>
-          						                    <span class="menu-title">Supervised Learning: Classification</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
-                                  <li>
-          						                <a href="../prediction">
-          						                    <i class="fa fa fa-line-chart"></i>
-          						                    <span class="menu-title">Supervised Learning: Prediction</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
-
 
                                   <li>
           						                <a href="../">
           						                    <i class="fa fa fa-home"></i>
-          						                    <span class="menu-title">home</span><i class="arrow"></i>
+          						                    <span class="menu-title">Home</span><i class="arrow"></i>
           						                </a>
 
           						            </li>
+
 						            </ul>
 
                     <!--================================-->
@@ -539,18 +665,11 @@
                 You have <a href="#" class="text-main"><span class="badge badge-danger">3</span> pending action.</a>
             </div>
 
-
-
-
-
-
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-            <p class="pad-lft">&#0169; 2019 Developed by <a href="http://pesb2.cl/smartTraining"> SmartTraining Group, </a>Centre for Biothecnology and Bioengineering, FCFM, University of Chile</p>
-
-
+            <p class="pad-lft">&#0169; 2019 Developed by <a href="http://pesb2.cl/"> PESB2 Group, </a>Centre for Biothecnology and Bioengineering, FCFM, University of Chile</p>
 
         </footer>
         <!--===================================================-->

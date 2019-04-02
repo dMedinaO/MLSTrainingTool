@@ -86,10 +86,14 @@
     <!-- para los higcharts-->
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		<!-- para los higcharts-->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="http://code.highcharts.com/modules/heatmap.js"></script>
 
+    <script src="http://d3js.org/d3.v4.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
 
 		<script src="../js/resultsClf/viewResponseJobClass.js"></script>
 		<script src="../js/resultsClf/processViewStatisticsClass.js"></script>
@@ -463,6 +467,29 @@
 																<div id="demo-cir-tab4" class="tab-pane">
 
 																	<div class="row">
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Distribution models by Performance</h3>
+																	        </div>
+																	        <div class="panel-body">
+                                            <div id="distributionPerformanceModel"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+																	    <div class="panel panel-bordered panel-primary">
+																	        <div class="panel-heading">
+																	            <h3 class="panel-title">Wordcloud of Algorithm</h3>
+																	        </div>
+																	        <div class="panel-body">
+                                            <div id="worldcloud"></div>
+																	        </div>
+																	    </div>
+																	  </div>
+
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
@@ -621,6 +648,14 @@
           						                <a href="../about">
           						                    <i class="fa fa fa-users"></i>
           						                    <span class="menu-title">About Us</span><i class="arrow"></i>
+          						                </a>
+
+          						            </li>
+
+                                  <li>
+          						                <a href="../userManual">
+          						                    <i class="fa fa fa-file"></i>
+          						                    <span class="menu-title">How to use</span><i class="arrow"></i>
           						                </a>
 
           						            </li>

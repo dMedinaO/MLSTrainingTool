@@ -18,6 +18,7 @@ var listModelsP = function(){
       "responsive": true,
       "dom": '<"newtoolbar">frtip',
       "destroy":true,
+      "order": [[ 2, "desc" ]],
       "ajax":{
         "method":"POST",
         "url": url
@@ -42,6 +43,7 @@ var listModelsR = function(){
       "responsive": true,
       "dom": '<"newtoolbar">frtip',
       "destroy":true,
+      "order": [[ 2, "desc" ]],
       "ajax":{
         "method":"POST",
         "url": url
@@ -66,6 +68,7 @@ var listModelsA = function(){
       "responsive": true,
       "dom": '<"newtoolbar">frtip',
       "destroy":true,
+      "order": [[ 2, "desc" ]],
       "ajax":{
         "method":"POST",
         "url": url
@@ -90,6 +93,7 @@ var listModelsF = function(){
       "responsive": true,
       "dom": '<"newtoolbar">frtip',
       "destroy":true,
+      "order": [[ 2, "desc" ]],
       "ajax":{
         "method":"POST",
         "url": url
