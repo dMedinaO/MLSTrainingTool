@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
 --
 -- Host: localhost    Database: mls_class_db
 -- ------------------------------------------------------
--- Server version	5.7.23-0ubuntu0.16.04.1
+-- Server version	5.7.25-0ubuntu0.16.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -44,7 +44,7 @@ CREATE TABLE `jobData` (
 
 LOCK TABLES `jobData` WRITE;
 /*!40000 ALTER TABLE `jobData` DISABLE KEYS */;
-INSERT INTO `jobData` VALUES (1553388562,'New Job Regression','Testing regression Job','david.medina@cebib.cl',0,'2019-03-23 21:49:22','2019-03-24 09:04:52','FINISH','INIT JOB','PREDICTION','data.csv'),(1553388608,'New Job classification','Description Job Class','david.medina@cebib.cl',0,'2019-03-23 21:50:08','2019-03-24 09:49:13','FINISH','INIT JOB','CLASSIFICATION','audit_risk_edit.csv'),(1553716723,'Testing job','Testing predict ','david.medina@cebib.cl',0,'2019-03-27 16:58:43','2019-03-27 16:58:43','PROCESSING','INIT JOB','CLASSIFICATION','Immunotherapy_edit.csv'),(1553799242,'123123','123123','david.medina@cebib.cl',0,'2019-03-28 15:54:02','2019-03-28 15:54:02','START','INIT JOB','CLASSIFICATION','caesarian_edit.csv');
+INSERT INTO `jobData` VALUES (1553039362,'New Job Regression','Testing regression Job','david.medina@cebib.cl',0,'2019-03-23 21:49:22','2019-03-24 09:04:52','FINISH','INIT JOB','CLASSIFICATION','data.csv'),(1554153833,'Testing prediction','Testing prediction','david.medina@cebib.cl',0,'2019-04-01 18:23:53','2019-04-01 18:29:18','FINISH','INIT JOB','PREDICTION','data.csv');
 /*!40000 ALTER TABLE `jobData` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-01  6:34:06
+-- Dump completed on 2019-04-02 20:39:51
