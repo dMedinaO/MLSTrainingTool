@@ -38,7 +38,6 @@ class selectedModel(object):
 
         index_response = []
         check = mean+(stdValue*index)
-        print "Check: ", check
         for i in range(len(data)):
             if data[i] >=check:
                 index_response.append(i)
@@ -57,7 +56,6 @@ class selectedModel(object):
     #metodo que permite seleccionar los elementos a cada medida de desempeno
     def selectedModelData(self, meanValue, stdValue, performance):
 
-        print performance
         #formamos la lista completa con la informacion asociada
         dataInformation = []
 
@@ -69,18 +67,14 @@ class selectedModel(object):
         indexJoin = []
 
         if len(three_dv)>0:
-            print "Entre!"
             indexJoin = three_dv
         else:
             if len(two_dv)>0:
-                print "Entre 2!"
                 indexJoin = two_dv
             else:
                 if len(onepoint_dv)>0:
-                    print "Entre 3!"
                     indexJoin = onepoint_dv
                 else:#trabajamos solo con el mayor valor.
-                    print "Default"
                     indexJoin = self.getIndexMaxValues(self.dataSet[performance], max(self.dataSet[performance]))
 
         #a partir de la lista de indices obtenemos los valores para formar el set de datos
@@ -88,6 +82,7 @@ class selectedModel(object):
 
         for index in indexJoin:
             row = []
+
             for key in self.otherKeys:#completamos con las primeras keys
                 row.append(self.dataSet[key][index])
 
@@ -97,7 +92,7 @@ class selectedModel(object):
 
         #exportamos la data
         header = self.otherKeys + self.listKey
-        dataFrame = pd.DataFrame(matrixResponse, columns=header)
+        self.dataFrame = pd.DataFrame(matrixResponse, columns=header)
 
         nameFile = self.pathOutput+performance+".csv"
-        dataFrame.to_csv(nameFile, index=False)
+        self.dataFrame.to_csv(nameFile, index=False)

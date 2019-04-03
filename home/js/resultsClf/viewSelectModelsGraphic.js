@@ -1,50 +1,52 @@
-$(document).ready(function() {
+$(function () {
+  var jobID =getQuerystring('job');
+	var processed_json = new Array();
+  var url = '../php/queue/showDistributionClf.php?job='+jobID;
+  console.log(url);
+	$.getJSON(url, function(data) {
 
-  // List of words
-  var myWords = [{word: "Running", size: "10"}, {word: "Surfing", size: "20"}, {word: "Climbing", size: "50"}, {word: "Kiting", size: "30"}, {word: "Sailing", size: "20"}, {word: "Snowboarding", size: "60"} ]
+    console.log(data);
 
-  // set the dimensions and margins of the graph
-  var margin = {top: 10, right: 10, bottom: 10, left: 10},
-      width = 450 - margin.left - margin.right,
-      height = 450 - margin.top - margin.bottom;
+		// Populate series
+		for (i = 0; i < data.length; i++){
+			var cantidad = parseInt(data[i].value);
+			processed_json.push([data[i].performance, cantidad]);
+		}
+    console.log("response");
+    console.log(processed_json);
+		// draw chart
+      $('#distributionPerformanceModel').highcharts({
+				chart: {
+					plotBackgroundColor: null,
+					plotBorderWidth: null,
+					plotShadow: false,
+					type: 'pie'
+				},
 
-  // append the svg object to the body of the page
-  var svg = d3.select("#worldcloud").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+				plotOptions: {
+					pie: {
+						allowPointSelect: true,
+						cursor: 'pointer',
+						dataLabels: {
+							enabled: false
+						},
+						showInLegend: true
+					}
+				},
+				credits: {
+				  enabled: false
+				},
 
-            // Constructs a new cloud layout instance. It run an algorythm to find the position of words that suits your requirements
-            // Wordcloud features that are different from one word to the other must be here
-            var layout = d3.layout.cloud()
-              .size([width, height])
-              .words(myWords.map(function(d) { return {text: d.word, size:d.size}; }))
-              .padding(5)        //space between words
-              .rotate(function() { return ~~(Math.random() * 2) * 90; })
-              .fontSize(function(d) { return d.size; })      // font size of words
-              .on("end", draw);
-            layout.start();
+				title: {
+					text: ""
+				},
 
-  // This function takes the output of 'layout' above and draw the words
-  // Wordcloud features that are THE SAME from one word to the other can be here
-  function draw(words) {
-    svg
-      .append("g")
-        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-        .selectAll("text")
-          .data(words)
-        .enter().append("text")
-          .style("font-size", function(d) { return d.size; })
-          .style("fill", "#69b3a2")
-          .attr("text-anchor", "middle")
-          .style("font-family", "Impact")
-          .attr("transform", function(d) {
-            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-          })
-          .text(function(d) { return d.text; });
-  }
+		           series: [{
+					name: 'Performance',
+		               data: processed_json
+				}]
+			});
+	});
 });
 
 //funcion para recuperar la clave del valor obtenido por paso de referencia

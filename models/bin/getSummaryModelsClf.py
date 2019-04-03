@@ -23,4 +23,4 @@ dictResponse3 = {"values": len(pdRecall), "performance": "Recall"}
 dictResponse4 = {"values": len(pdF1), "performance": "F1"}
 
 response = [dictResponse1, dictResponse2, dictResponse3, dictResponse4]
-print response
+print json.dumps(response)
