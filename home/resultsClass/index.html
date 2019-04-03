@@ -87,14 +87,15 @@
 		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		<!-- para los higcharts-->
     <script src="http://code.highcharts.com/highcharts.js"></script>
-    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="http://code.highcharts.com/modules/heatmap.js"></script>
 
     <script src="http://d3js.org/d3.v4.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
-
+    <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
 		<script src="../js/resultsClf/viewResponseJobClass.js"></script>
 		<script src="../js/resultsClf/processViewStatisticsClass.js"></script>
 		<script src="../js/resultsClf/processViewSummaryClass.js"></script>
@@ -102,7 +103,16 @@
 		<!-- mostrar la seleccion de modelos-->
 		<script src="../js/resultsClf/viewSelectModels.js"></script>
 		<script src="../js/resultsClf/viewSelectModelsGraphic.js"></script>
+    <script src="../js/resultsClf/worldcloud.js"></script>
+    <script src="../js/resultsClf/loadResponseDiagramm.js"></script>
 
+    <style media="screen">
+      #viewDiagramm {
+        min-width: 320px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    </style>
 </head>
 
 <!--TIPS-->
@@ -484,7 +494,7 @@
 																	            <h3 class="panel-title">Wordcloud of Algorithm</h3>
 																	        </div>
 																	        <div class="panel-body">
-                                            <div id="worldcloud"></div>
+                                            <img id="worldcloudView" class="img-thumbnail"></img>
 																	        </div>
 																	    </div>
 																	  </div>
@@ -572,20 +582,21 @@
 																	  </div>
 																	</div>
 																</div>
-																<!--Five tab-->
-																<div id="demo-cir-tab5" class="tab-pane">
+
+                                <!--Five tab-->
+                                <div id="demo-cir-tab5" class="tab-pane">
 
                                   <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="panel panel-bordered panel-primary">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title">Join Models in Venn Diagram</h3>
+                                            <h3 class="panel-title">Join Models in view Diagramm</h3>
                                         </div>
                                         <div class="panel-body">
-
+                                          <div id="viewDiagramm"></div>
                                         </div>
                                     </div>
                                   </div>
-																</div>
+                                </div>
 
 																<!--Six tab-->
 																<div id="demo-cir-tab6" class="tab-pane">

@@ -3,6 +3,8 @@ import sys
 
 from mls_models.utils import selectorModels
 from mls_models.utils import joinModels
+from mls_models.utils import makeworld_cloud
+from mls_models.utils import makeDiagrammRepresent
 
 dataSet = pd.read_csv(sys.argv[1])
 listKey = ['Accuracy', 'Recall', 'Precision', 'F1']
@@ -17,3 +19,11 @@ for i in range(len(listKey)):
 #testeamos la union de modelos
 joinModelsObject = joinModels.joinModels(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
 joinModelsObject.joinAndGetUnique()
+
+#testeamos la generacion del wordcloud
+makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
+makeWord.createGraphic()
+
+#testeamos la generacion de la data para el grafico de valores anidados
+makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
+makeDiagram.formatResponse()
