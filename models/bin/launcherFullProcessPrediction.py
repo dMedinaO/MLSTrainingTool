@@ -38,6 +38,40 @@ from mls_models.utils import ScaleLogNormalScore
 #para evaluar la performance
 from mls_models.supervised_learning_predicction import performanceData
 
+from mls_models.utils import selectorModels
+from mls_models.utils import joinModels
+from mls_models.utils import makeworld_cloud
+from mls_models.utils import makeDiagrammRepresent
+from mls_models.utils import getPerformanceModel
+
+def completeProcess(dataSetName, pathResponse):
+
+    dataSet = pd.read_csv(dataSetName)
+    listKey = ['R_Score','Pearson','Spearman','Kendalltau']
+    otherKeys = ['Algorithm', 'Params']
+    modelSelecter = selectorModels.selectedModel(dataSet, pathResponse, listKey, otherKeys)
+    dataSetsSelected = []
+
+    for i in range(len(listKey)):
+        modelSelecter.selectedModelData(modelSelecter.meanData[i], modelSelecter.stdData[i], listKey[i])
+        dataSetsSelected.append(modelSelecter.dataFrame)
+
+    #testeamos la union de modelos
+    joinModelsObject = joinModels.joinModels(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
+    joinModelsObject.joinAndGetUnique()
+
+    #testeamos la generacion del wordcloud
+    makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
+    makeWord.createGraphic()
+
+    #testeamos la generacion de la data para el grafico de valores anidados
+    makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
+    makeDiagram.formatResponse()
+
+    #testeamos la generacion de las medidas de desempeno del modelo de meta learning
+    performancePond = getPerformanceModel.ponderatedModelPerformance(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
+    performancePond.getMeanValuesPerformance()
+
 #funcion que permite calcular los estadisticos de un atributo en el set de datos, asociados a las medidas de desempeno
 def estimatedStatisticPerformance(summaryObject, attribute):
 
@@ -82,7 +116,7 @@ header = ["Algorithm", "Params", "R_Score", "Pearson", "Spearman", "Kendalltau"]
 matrixResponse = []
 
 #comenzamos con las ejecuciones...
-'''
+
 #AdaBoost
 for loss in ['linear', 'squar', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
@@ -125,7 +159,7 @@ for bootstrap in [True, False]:
         except:
             iteracionesIncorrectas+=1
             pass
-'''
+
 #DecisionTree
 for criterion in ['mse', 'friedman_mse', 'mae']:
     for splitter in ['best', 'random']:
@@ -147,7 +181,7 @@ for criterion in ['mse', 'friedman_mse', 'mae']:
         except:
             iteracionesIncorrectas+=1
             pass
-'''
+
 #gradiente
 for loss in ['ls', 'lad', 'huber', 'quantile']:
     for criterion in ['friedman_mse', 'mse', 'mae']:
@@ -199,9 +233,9 @@ for n_neighbors in range(1,11):
 for activation in ['identity', 'logistic', 'tanh', 'relu']:
     for solver in ['lbfgs', 'sgd', 'adam']:
         for learning_rate in ['constant', 'invscaling', 'adaptive']:
-            for hidden_layer_sizes_a in  range(1,11):
-                for hidden_layer_sizes_b in range(1,11):
-                    for hidden_layer_sizes_c in range(1, 11):
+            for hidden_layer_sizes_a in  range(1,2):
+                for hidden_layer_sizes_b in range(1,2):
+                    for hidden_layer_sizes_c in range(1,2):
                         for alpha in [0.001, 0.002, 0.01, 0.02, 0.1, 0.2]:
                             for max_iter in [100,200,500,1000,1500]:
                                 for shuffle in [True, False]:
@@ -296,7 +330,7 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
                         pass
                     print matrixResponse
 
-'''
+
 
 #generamos el export de la matriz convirtiendo a data frame
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
@@ -343,6 +377,10 @@ dictionary.update({"iteracionesIncorrectas": iteracionesIncorrectas})
 nameFileExport = "%s%s/summaryProcess_%s.json" % (pathResponse, job, job)
 with open(nameFileExport, 'w') as fp:
     json.dump(dictionary, fp)
+
+nameFileExportCSV = "%s%s/summaryProcessJob_%s.csv" % (pathResponse, job, job)
+
+completeProcess(nameFileExportCSV, pathResponse)
 
 #enviar correo con finalizacion del job....
 body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)

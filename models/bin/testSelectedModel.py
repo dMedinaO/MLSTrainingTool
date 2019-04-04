@@ -8,8 +8,8 @@ from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
 
 dataSet = pd.read_csv(sys.argv[1])
-listKey = ['Accuracy', 'Recall', 'Precision', 'F1']
-otherKeys = ['Algorithm', 'Params', 'Validation']
+listKey = ['R_Score','Pearson','Spearman','Kendalltau']
+otherKeys = ['Algorithm', 'Params']
 modelSelecter = selectorModels.selectedModel(dataSet, sys.argv[2], listKey, otherKeys)
 dataSetsSelected = []
 

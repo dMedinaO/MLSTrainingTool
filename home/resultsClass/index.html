@@ -105,6 +105,7 @@
 		<script src="../js/resultsClf/viewSelectModelsGraphic.js"></script>
     <script src="../js/resultsClf/worldcloud.js"></script>
     <script src="../js/resultsClf/loadResponseDiagramm.js"></script>
+    <script src="../js/resultsClf/viewPerformanceData.js"></script>
 
     <style media="screen">
       #viewDiagramm {
@@ -201,7 +202,7 @@
 												<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 												<ul class="wz-nav-off">
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab1" title="Models Results and Performance" class="add-tooltip">
+																<a data-toggle="tab" href="#models" title="Models Results and Performance" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -209,7 +210,7 @@
 																</a>
 														</li>
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab2" title="Selected Model" class="add-tooltip">
+																<a data-toggle="tab" href="#selected" title="Selected Model" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -217,7 +218,7 @@
 																</a>
 														</li>
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab3" title="Statistical Summary" class="add-tooltip">
+																<a data-toggle="tab" href="#statisticSummary" title="Statistical Summary" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -225,7 +226,7 @@
 																</a>
 														</li>
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab4" title="Distribution Performance" class="add-tooltip">
+																<a data-toggle="tab" href="#distribution" title="Distribution Performance" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -233,7 +234,7 @@
 																</a>
 														</li>
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab5" title="Summary Process" class="add-tooltip">
+																<a data-toggle="tab" href="#summary" title="Summary Process" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -241,7 +242,7 @@
 																</a>
 														</li>
 														<li class="col-xs-2">
-																<a data-toggle="tab" href="#demo-cir-tab6" title="Try Model" class="add-tooltip">
+																<a data-toggle="tab" href="#tryModel" title="Try Model" class="add-tooltip">
 																		<div class="icon-wrap icon-wrap-sm bg-gray">
 																				<i class="wz-icon demo-pli-information icon-lg"></i>
 																				<i class="wz-icon-done demo-pli-like icon-lg"></i>
@@ -257,7 +258,7 @@
 														<div class="tab-content">
 
 																<!--First tab-->
-																<div id="demo-cir-tab4" class="tab-pane">
+																<div id="distribution" class="tab-pane">
 																	<div class="row">
 
 																		<div class="col-lg-12 col-md-12 col-sm-12">
@@ -307,7 +308,7 @@
 																</div>
 
 																<!--Second tab-->
-																<div id="demo-cir-tab3" class="tab-pane fade">
+																<div id="statisticSummary" class="tab-pane fade">
 																	<div class="row">
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
@@ -336,7 +337,7 @@
 																</div>
 
 																<!--Third tab-->
-																<div id="demo-cir-tab5" class="tab-pane">
+																<div id="summary" class="tab-pane">
 																	<div class="row">
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
@@ -473,7 +474,7 @@
 																</div>
 
 																<!--Fourth tab-->
-																<div id="demo-cir-tab2" class="tab-pane">
+																<div id="selected" class="tab-pane">
 
 																	<div class="row">
 
@@ -584,7 +585,7 @@
 																</div>
 
                                 <!--Five tab-->
-                                <div id="demo-cir-tab1" class="tab-pane">
+                                <div id="models" class="tab-pane">
 
                                   <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="panel panel-bordered panel-primary">
@@ -596,10 +597,77 @@
                                         </div>
                                     </div>
                                   </div>
+
+                                  <!-- medidas de desempeno -->
+                                  <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="panel panel-bordered panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Weighted Performance for the selected models</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                          <div class="row">
+
+                                            <div class="col-lg-3 col-md-3">
+                                              <div class="panel media middle pad-all">
+                                                  <div class="media-left">
+                                                      <span class="icon-wrap icon-wrap-sm icon-circle bg-primary">
+                                                      <i class="fa fa-bar-chart fa-2x"></i>
+                                                      </span>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <p class="text-2x mar-no text-semibold text-main precision"></p>
+                                                      <p class="text-muted mar-no">Precision</p>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                              <div class="panel media middle pad-all">
+                                                  <div class="media-left">
+                                                      <span class="icon-wrap icon-wrap-sm icon-circle bg-primary">
+                                                      <i class="fa fa-line-chart fa-2x"></i>
+                                                      </span>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <p class="text-2x mar-no text-semibold text-main accuracy"></p>
+                                                      <p class="text-muted mar-no">Accuracy</p>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                              <div class="panel media middle pad-all">
+                                                  <div class="media-left">
+                                                      <span class="icon-wrap icon-wrap-sm icon-circle bg-primary">
+                                                      <i class="fa fa-code-fork fa-2x"></i>
+                                                      </span>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <p class="text-2x mar-no text-semibold text-main recall"></p>
+                                                      <p class="text-muted mar-no">Recall</p>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                              <div class="panel media middle pad-all">
+                                                  <div class="media-left">
+                                                      <span class="icon-wrap icon-wrap-sm icon-circle bg-primary">
+                                                      <i class="fa fa-pie-chart fa-2x"></i>
+                                                      </span>
+                                                  </div>
+                                                  <div class="media-body">
+                                                      <p class="text-2x mar-no text-semibold text-main f1Values"></p>
+                                                      <p class="text-muted mar-no">F1 Score</p>
+                                                  </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        </div>
+                                    </div>
+                                  </div>
                                 </div>
 
 																<!--Six tab-->
-																<div id="demo-cir-tab6" class="tab-pane">
+																<div id="tryModel" class="tab-pane">
 																</div>
 														</div>
 												</div>
