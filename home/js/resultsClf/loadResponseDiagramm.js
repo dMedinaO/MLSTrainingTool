@@ -1,52 +1,72 @@
 $(function () {
   var jobID =getQuerystring('job');
 
-  Highcharts.chart('viewDiagramm', {
-    chart: {
-        type: 'packedbubble',
-        height: '100%'
-    },
-    title: {
-        text: ''
-    },
-    tooltip: {
-        useHTML: true,
-        pointFormat: '<b>{point.name}:</b> {point.y} models'
-    },
-    plotOptions: {
-        packedbubble: {
-            minSize: '40%',
-            maxSize: '100%',
-            zMin: 0,
-            zMax: 1000,
-            layoutAlgorithm: {
-                gravitationalConstant: 0.05,
-                splitSeries: true,
-                seriesInteraction: false,
-                dragBetweenSeries: true,
-                parentNodeLimit: true
-            },
-            dataLabels: {
-                enabled: true,
-                format: '{point.name}',
+  var job = getQuerystring('job');
+  var nameFile = "../../jobs/"+job+"/result.json";
 
-                style: {
-                    color: 'black',
-                    textOutline: 'none',
-                    fontWeight: 'normal'
-                }
-            }
-        }
-    },
+  readTextFile(nameFile, function(text){
 
-    credits:{
-    	enabled: false
-    },
+    Highcharts.chart('viewDiagramm', {
+      chart: {
+          type: 'packedbubble',
+          height: '100%'
+      },
+      title: {
+          text: ''
+      },
+      tooltip: {
+          useHTML: true,
+          pointFormat: '<b>{point.name}:</b> {point.y} models'
+      },
+      plotOptions: {
+          packedbubble: {
+              minSize: '40%',
+              maxSize: '100%',
+              zMin: 0,
+              zMax: 1000,
+              layoutAlgorithm: {
+                  gravitationalConstant: 0.05,
+                  splitSeries: true,
+                  seriesInteraction: false,
+                  dragBetweenSeries: true,
+                  parentNodeLimit: true
+              },
+              dataLabels: {
+                  enabled: true,
+                  format: '{point.name}',
 
-    series: [{data: [{name: "Bagging", value: 4}], name: 'Precision'}, {data: [{name: 'NuSVM', value: 14}], name: 'Accuracy'}, {data: [{name: 'Bagging', value: 4}, {name: 'AdaBoostClassifier', value: 3}, {name: 'RandomForestClassifier', value: 8}], name: 'Recall'}, {data: [{name: 'AdaBoostClassifier', value: 1}, {name: 'RandomForestClassifier', value: 4}], name: 'F1'}]
+                  style: {
+                      color: 'black',
+                      textOutline: 'none',
+                      fontWeight: 'normal'
+                  }
+              }
+          }
+      },
 
+      credits:{
+      	enabled: false
+      },
+
+      series: data
+
+    });
   });
+
 });
+
+//read document
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(null);
+}
 
 //funcion para recuperar la clave del valor obtenido por paso de referencia
 function getQuerystring(key) {
