@@ -10,10 +10,10 @@
 	$output3 = [];
 	$output4 = [];
 
-	$command1 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Accuracy.csv | wc -l";
-	$command2 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Precision.csv | wc -l";
-	$command3 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Recall.csv | wc -l";
-	$command4 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/F1.csv | wc -l";
+	$command1 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/R_Score.csv | wc -l";
+	$command2 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Pearson.csv | wc -l";
+	$command3 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Spearman.csv | wc -l";
+	$command4 = "cat /var/www/html/MLSTrainingTool/jobs/$idjob/Kendalltau.csv | wc -l";
 
 	exec($command1, $output1);
 	exec($command2, $output2);
@@ -22,16 +22,16 @@
 
 	//formamos el arreglo asociativo con la respuesta
 	$response = [];
-	$data1["performance"] = "Accuracy";
+	$data1["performance"] = "R Score";
 	$data1["value"] = $output1[0]-1;
 
-	$data2["performance"] = "Precision";
+	$data2["performance"] = "Pearson Coeficient";
 	$data2["value"] = $output2[0]-1;
 
-	$data3["performance"] = "Recall";
+	$data3["performance"] = "Spearman Coeficient";
 	$data3["value"] = $output3[0]-1;
 
-	$data4["performance"] = "F1";
+	$data4["performance"] = "Kendall Tau Rank";
 	$data4["value"] = $output4[0]-1;
 
 	$response[0] = $data1;

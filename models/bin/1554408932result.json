@@ -1,1 +1,0 @@
-[{"data": [{"name": "DecisionTree", "value": 6}], "name": "R_Score"}, {"data": [{"name": "DecisionTree", "value": 6}], "name": "Pearson"}, {"data": [{"name": "DecisionTree", "value": 6}], "name": "Spearman"}, {"data": [{"name": "DecisionTree", "value": 6}], "name": "Kendalltau"}]
