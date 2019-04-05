@@ -5,7 +5,7 @@ $(function () {
   var nameFile = "../../jobs/"+job+"/result.json";
 
   readTextFile(nameFile, function(text){
-
+    var data = JSON.parse(text);
     Highcharts.chart('viewDiagramm', {
       chart: {
           type: 'packedbubble',
