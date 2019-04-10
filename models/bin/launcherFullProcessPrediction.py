@@ -127,12 +127,12 @@ for loss in ['linear', 'squar', 'exponential']:
 
             #obtenemos el restante de performance
             performanceValues = performanceData.performancePrediction(target, AdaBoostObject.predicctions.tolist())
-            pearsonValue = performanceValues.calculatedPearson()
-            spearmanValue = performanceValues.calculatedSpearman()
-            kendalltauValue = performanceValues.calculatekendalltau()
+            pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+            spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+            kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
             params = "loss:%s-n_estimators:%d" % (loss, n_estimators)
-            row = ["AdaBoostClassifier", params, AdaBoostObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+            row = ["AdaBoostRegressor", params, AdaBoostObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
@@ -148,12 +148,12 @@ for bootstrap in [True, False]:
             bagginObject.trainingMethod()
 
             performanceValues = performanceData.performancePrediction(target, bagginObject.predicctions.tolist())
-            pearsonValue = performanceValues.calculatedPearson()
-            spearmanValue = performanceValues.calculatedSpearman()
-            kendalltauValue = performanceValues.calculatekendalltau()
+            pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+            spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+            kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
             params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
-            row = ["Bagging", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+            row = ["Baggin", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
@@ -194,12 +194,12 @@ for loss in ['ls', 'lad', 'huber', 'quantile']:
                         gradientObject.trainingMethod()
 
                         performanceValues = performanceData.performancePrediction(target, gradientObject.predicctions.tolist())
-                        pearsonValue = performanceValues.calculatedPearson()
-                        spearmanValue = performanceValues.calculatedSpearman()
-                        kendalltauValue = performanceValues.calculatekendalltau()
+                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                         params = "criterion:%s-n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (criterion, n_estimators, loss, min_samples_split, min_samples_leaf)
-                        row = ["GradientBoostingClassifier", params, gradientObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                        row = ["GradientBoostingRegressor", params, gradientObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
                         matrixResponse.append(row)
                         iteracionesCorrectas+=1
                     except:
@@ -216,12 +216,12 @@ for n_neighbors in range(1,11):
                     knnObect.trainingMethod()
 
                     performanceValues = performanceData.performancePrediction(target, knnObect.predicctions.tolist())
-                    pearsonValue = performanceValues.calculatedPearson()
-                    spearmanValue = performanceValues.calculatedSpearman()
-                    kendalltauValue = performanceValues.calculatekendalltau()
+                    pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                    spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                    kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                     params = "n_neighbors:%d-algorithm:%s-metric:%s-weights:%s" % (n_neighbors, algorithm, metric, weights)
-                    row = ["KNeighborsClassifier", params, knnObect.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                    row = ["KNeighborsRegressor", params, knnObect.r_score, pearsonValue, spearmanValue, kendalltauValue]
                     matrixResponse.append(row)
                     iteracionesCorrectas+=1
                 except:
@@ -245,9 +245,9 @@ for activation in ['identity', 'logistic', 'tanh', 'relu']:
                                         MLPObject.trainingMethod()
 
                                         performanceValues = performanceData.performancePrediction(target, MLPObject.predicctions.tolist())
-                                        pearsonValue = performanceValues.calculatedPearson()
-                                        spearmanValue = performanceValues.calculatedSpearman()
-                                        kendalltauValue = performanceValues.calculatekendalltau()
+                                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                                         params = "activation:%s-solver:%s-learning:%s-hidden_layer_sizes:%d+%d+%d-alpha:%f-max_iter:%d-shuffle:%s" % (activation, solver, learning_rate, hidden_layer_sizes_a, hidden_layer_sizes_b, hidden_layer_sizes_c, alpha, max_iter, str(shuffle))
                                         row = ["MLPRegressor", params, MLPObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
@@ -269,9 +269,9 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
                     nuSVM.trainingMethod()
 
                     performanceValues = performanceData.performancePrediction(target, nuSVM.predicctions.tolist())
-                    pearsonValue = performanceValues.calculatedPearson()
-                    spearmanValue = performanceValues.calculatedSpearman()
-                    kendalltauValue = performanceValues.calculatekendalltau()
+                    pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                    spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                    kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                     params = "kernel:%s-nu:%f-degree:%d-gamma:%f" % (kernel, nu, degree, gamma)
                     row = ["NuSVM", params, nuSVM.r_score, pearsonValue, spearmanValue, kendalltauValue]
@@ -292,9 +292,9 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
                 svm.trainingMethod()
 
                 performanceValues = performanceData.performancePrediction(target, svm.predicctions.tolist())
-                pearsonValue = performanceValues.calculatedPearson()
-                spearmanValue = performanceValues.calculatedSpearman()
-                kendalltauValue = performanceValues.calculatekendalltau()
+                pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                 params = "kernel:%s-degree:%d-gamma:%f" % (kernel, degree, gamma)
                 row = ["SVM", params, svm.r_score, pearsonValue, spearmanValue, kendalltauValue]
@@ -317,9 +317,9 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
                         rf.trainingMethod()
 
                         performanceValues = performanceData.performancePrediction(target, rf.predicctions.tolist())
-                        pearsonValue = performanceValues.calculatedPearson()
-                        spearmanValue = performanceValues.calculatedSpearman()
-                        kendalltauValue = performanceValues.calculatekendalltau()
+                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
                         params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, min_samples_split, min_samples_leaf, str(bootstrap))
                         row = ["RandomForestRegressor", params, rf.r_score, pearsonValue, spearmanValue, kendalltauValue]

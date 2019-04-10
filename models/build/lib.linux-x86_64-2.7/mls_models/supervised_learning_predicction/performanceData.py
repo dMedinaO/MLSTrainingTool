@@ -5,6 +5,8 @@ clase con la responsabilidad de calcular distintas medidas de desempeno asociada
 from scipy.stats import pearsonr
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau
+from sklearn.metrics import r2_score
+
 import math
 
 class performancePrediction(object):
@@ -66,3 +68,14 @@ class performancePrediction(object):
 
         dictResponse = {"kendalltau": r1, "pvalue": r2}
         return dictResponse
+
+    #metodo que permite calcular el rscore
+    def calculateRscore(self):
+
+        response = r2_score(self.realValues, self.predictValues)
+        if math.isnan(response):
+            r1 = 'ERROR'
+        else:
+            r1 = response
+
+        return r1

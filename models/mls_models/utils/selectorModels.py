@@ -10,6 +10,7 @@ posterior union de los modelos
 
 import pandas as pd
 import numpy as np
+import json
 
 class selectedModel(object):
 
@@ -96,3 +97,4 @@ class selectedModel(object):
 
         nameFile = self.pathOutput+performance+".csv"
         self.dataFrame.to_csv(nameFile, index=False)
+    
