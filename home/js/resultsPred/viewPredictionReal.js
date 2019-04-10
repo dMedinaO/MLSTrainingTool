@@ -9,42 +9,64 @@ $(function () {
     var valuesReal = data.real;
 
     var xValues = [];
+    var errorGraphic = [];
 
     //generamos el array con las x...
     for (i=0;i<valuesReal.length; i++){
       xValues.push(i+1);
-
+      errorGraphic[i] = (valuesReal[i]-valuesPredict[i]);
     }
     createGraphicData(valuesReal, valuesPredict, xValues)
+    createGraphicDataOnlyTrace(errorGraphic, xValues);
 
   });
 });
 
 //funcion para cargar el grafico
-function createGraphicData(valuesReal, valuesPredict, xValues){
-
-	var trace1 = {
-		x: xValues,
-	  y: valuesReal,
-	  mode: 'markers',
-	  type: 'scatter',
-		name: 'Real Values'
-	};
+function createGraphicDataOnlyTrace(values, xValues){
 
 	var trace2 = {
 		x: xValues,
-	  y: valuesPredict,
-	  mode: 'lines+markers',
-	  type: 'scatter',
-		name: 'Predict Values',
+	  y: values,
+	  mode: 'markers',
+		name: 'Error Values',
 		line: {
       line: {shape: 'spline'}
     },
 	};
 
-	var data = [trace1, trace2];
+	var data = [trace2];
 
-	Plotly.newPlot('predictionReal', data);
+	Plotly.newPlot('errorData', data);
+
+}
+
+//funcion para cargar el grafico
+function createGraphicData(valuesReal, valuesPredict, xValues){
+
+	var trace1 = {
+		x: valuesReal,
+	  y: valuesPredict,
+	  mode: 'markers',
+	  type: 'scatter',
+    marker: {
+      color: 'rgb(142, 124, 195)',
+      size: 5
+    }
+	};
+
+  var layout = {
+    xaxis:{
+      title: "Real Values"
+    },
+
+    yaxis:{
+      title: "Prediction Values"
+    }
+  }
+	var data = [trace1];
+
+	Plotly.newPlot('predictionReal', data, layout);
 
 }
 

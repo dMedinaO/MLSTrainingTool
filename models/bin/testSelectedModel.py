@@ -7,18 +7,17 @@ from mls_models.utils import makeworld_cloud
 from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
 from mls_models.utils import exportMetaModel
-from mls_models.utils import useSelectedModelPrediction
+from mls_models.utils import useSelectedModelClf
 
 dataSet = pd.read_csv(sys.argv[1])
-listKey = ['R_Score','Pearson','Spearman','Kendalltau']
-otherKeys = ['Algorithm', 'Params']
+listKey = ['Accuracy','Recall','Precision','F1']
+otherKeys = ['Algorithm', 'Params', 'Validation']
 modelSelecter = selectorModels.selectedModel(dataSet, sys.argv[2], listKey, otherKeys)
 dataSetsSelected = []
 
 for i in range(len(listKey)):
     modelSelecter.selectedModelData(modelSelecter.meanData[i], modelSelecter.stdData[i], listKey[i])
     dataSetsSelected.append(modelSelecter.dataFrame)
-
 
 #testeamos la generacion del wordcloud
 makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
@@ -33,5 +32,5 @@ exportModel = exportMetaModel.exportMetaModel(dataSetsSelected[0], dataSetsSelec
 exportModel.getUniqueModels()
 
 #usamos el meta modelo para obtener las medidas de desempeno
-modelsMeta = useSelectedModelPrediction.useSelectedModels(sys.argv[3], sys.argv[2]+"meta_models.json", sys.argv[2])
+modelsMeta = useSelectedModelClf.useSelectedModels(sys.argv[3], sys.argv[2]+"meta_models.json", sys.argv[2])
 modelsMeta.applyModelsSelected()

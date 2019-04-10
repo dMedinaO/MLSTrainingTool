@@ -1,7 +1,0 @@
-Algorithm,Params,R_Score,Pearson,Spearman,Kendalltau
-DecisionTree,criterion:mse-splitter:best,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-DecisionTree,criterion:mse-splitter:random,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-DecisionTree,criterion:friedman_mse-splitter:best,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-DecisionTree,criterion:friedman_mse-splitter:random,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-DecisionTree,criterion:mae-splitter:best,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-DecisionTree,criterion:mae-splitter:random,0.996692578554,0.998344919632,0.998344327741,0.987497583537

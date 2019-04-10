@@ -95,8 +95,7 @@
     <script src="http://d3js.org/d3.v4.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
-    <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
-    <
+    <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>    
     <script src="../js/resultsClf/viewResponseJobClass.js"></script>
 		<script src="../js/resultsClf/processViewStatisticsClass.js"></script>
 		<script src="../js/resultsClf/processViewSummaryClass.js"></script>
@@ -107,6 +106,7 @@
     <script src="../js/resultsClf/worldcloud.js"></script>
     <script src="../js/resultsClf/loadResponseDiagramm.js"></script>
     <script src="../js/resultsClf/viewPerformanceData.js"></script>
+    <script src="../js/resultsClf/showResultsForClf.js"></script>
 
     <style media="screen">
       #viewDiagramm {
@@ -663,6 +663,18 @@
 
                                           </div>
                                         </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="panel panel-bordered panel-primary">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Confusion Matrix</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                          <div id="confusionMatrixGraph"></div>
+                                        </div>
+
                                     </div>
                                   </div>
                                 </div>

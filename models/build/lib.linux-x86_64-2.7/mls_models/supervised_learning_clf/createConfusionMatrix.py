@@ -34,8 +34,14 @@ class confusionMatrix(object):
         else:
             self.cv_values = cv_values
 
+    def __init__ (self, predictions, target, classList):
+
+        self.predictions = predictions
+        self.target = target
+        self.classList = classList
+
     #metodo que permite exportar la matriz a un csv y adiciona las filas y columnas correspondientes a fiabilidad y bakanosidad
-    def exportConfusionMatrix(self, matrix, dictTransform):
+    def exportConfusionMatrix(self, matrix, dictTransform, ):
 
         print dictTransform
         #calculamos la bakanosidad del modelo (en base a los valores de la primera columna)
@@ -90,6 +96,13 @@ class confusionMatrix(object):
         self.predictions = cross_val_predict(self.modelData, self.dataSet, self.target, cv=self.cv_values)
         matrix = confusion_matrix(self.target, self.predictions)
         print matrix
+        dictResponse = self.exportConfusionMatrix(matrix, dictTransform)
+        return dictResponse
+
+    #metodo que permite generar la matriz de confusion con los valores ya trabajados de prediccion y respuesta
+    def createConfusionMatrixResponseYet(self, dictTransform):
+
+        matrix = confusion_matrix(self.target, self.predictions)
         dictResponse = self.exportConfusionMatrix(matrix, dictTransform)
         return dictResponse
 

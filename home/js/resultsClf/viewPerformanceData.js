@@ -9,7 +9,7 @@ function loadPerformance() {
 
   var job = getQuerystring('job');
   var nameFile = "../../jobs/"+job+"/performance_model.json";
-
+  console.log(nameFile);
 	readTextFile(nameFile, function(text){
 		var data = JSON.parse(text);
     var precision = parseFloat(data.Precision).toFixed(4)*100;
