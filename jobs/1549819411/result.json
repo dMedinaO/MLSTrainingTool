@@ -1,0 +1,1 @@
+[{"data": [{"name": "SVM", "value": 12}, {"name": "NuSVM", "value": 12}], "name": "Accuracy"}, {"data": [{"name": "SVM", "value": 12}, {"name": "NuSVM", "value": 12}], "name": "Recall"}, {"data": [{"name": "SVM", "value": 12}, {"name": "NuSVM", "value": 12}], "name": "Precision"}, {"data": [{"name": "SVM", "value": 12}, {"name": "NuSVM", "value": 12}], "name": "F1"}]

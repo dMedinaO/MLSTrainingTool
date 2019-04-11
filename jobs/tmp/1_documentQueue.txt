@@ -1,1 +1,1 @@
-data.csv
+airfoil_self_noise.csv

@@ -41,12 +41,14 @@ from mls_models.utils import joinModels
 from mls_models.utils import makeworld_cloud
 from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
+from mls_models.utils import exportMetaModel
+from mls_models.utils import useSelectedModelClf
 
 #funcion para completar el proceso de la informacion correspondiente a la data empleada y permite crear los graficos para la vista en web
-def completeProcess(dataSetName, pathResponse):
+def completeProcess(dataSetName, pathResponse, dataSetOriginal):
 
     dataSet = pd.read_csv(dataSetName)
-    listKey = ['Accuracy', 'Recall', 'Precision', 'F1']
+    listKey = ['Accuracy','Recall','Precision','F1']
     otherKeys = ['Algorithm', 'Params', 'Validation']
     modelSelecter = selectorModels.selectedModel(dataSet, pathResponse, listKey, otherKeys)
     dataSetsSelected = []
@@ -55,21 +57,22 @@ def completeProcess(dataSetName, pathResponse):
         modelSelecter.selectedModelData(modelSelecter.meanData[i], modelSelecter.stdData[i], listKey[i])
         dataSetsSelected.append(modelSelecter.dataFrame)
 
-    #testeamos la union de modelos
-    joinModelsObject = joinModels.joinModels(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
-    joinModelsObject.joinAndGetUnique()
-
     #testeamos la generacion del wordcloud
-    makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
+    makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], pathResponse)
     makeWord.createGraphic()
 
     #testeamos la generacion de la data para el grafico de valores anidados
-    makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
+    makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, pathResponse)
     makeDiagram.formatResponse()
 
-    #testeamos la generacion de las medidas de desempeno del modelo de meta learning
-    performancePond = getPerformanceModel.ponderatedModelPerformance(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
-    performancePond.getMeanValuesPerformance()
+    #testeamos la generacion del archivo de meta modelos
+    exportModel = exportMetaModel.exportMetaModel(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], pathResponse)
+    exportModel.getUniqueModels()
+
+    #usamos el meta modelo para obtener las medidas de desempeno
+    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse)
+    modelsMeta.applyModelsSelected()
+
 
 #funcion que permite calcular los estadisticos de un atributo en el set de datos, asociados a las medidas de desempeno
 def estimatedStatisticPerformance(summaryObject, attribute):
@@ -82,6 +85,7 @@ def estimatedStatisticPerformance(summaryObject, attribute):
 #recibimos los parametros desde la terminal...
 emailUser = sys.argv[1]
 job = sys.argv[2]
+dataSetNameInput = sys.argv[3]
 dataSet = pd.read_csv(sys.argv[3])
 pathResponse = sys.argv[4]
 
@@ -123,6 +127,7 @@ data = applyNormal.dataTransform
 header = ["Algorithm", "Params", "Validation", "Accuracy", "Recall", "Precision", "F1"]
 matrixResponse = []
 
+'''
 #comenzamos con las ejecuciones...
 #AdaBoost
 for algorithm in ['SAMME', 'SAMME.R']:
@@ -167,7 +172,7 @@ except:
     iteracionesIncorrectas+=1
     pass
 
-
+'''
 #DecisionTree
 for criterion in ['gini', 'entropy']:
     for splitter in ['best', 'random']:
@@ -182,7 +187,7 @@ for criterion in ['gini', 'entropy']:
         except:
             iteracionesIncorrectas+=1
             pass
-
+'''
 try:
     #GaussianNB
     gaussianObject = GaussianNB.Gaussian(data, target, 10)
@@ -300,7 +305,7 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
             except:
                 iteracionesIncorrectas+=1
                 pass
-
+'''
 #generamos el export de la matriz convirtiendo a data frame
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
 
@@ -352,7 +357,8 @@ nameFileExportCSV = "%s%s/summaryProcessJob_%s.csv" % (pathResponse, job, job)
 with open(nameFileExport, 'w') as fp:
     json.dump(dictionary, fp)
 
-completeProcess(nameFileExportCSV, pathResponse)
+pathResponseExport = pathResponse+job+"/"
+completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput)
 
 #enviar correo con finalizacion del job....
 body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)

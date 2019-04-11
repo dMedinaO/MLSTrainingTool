@@ -1,0 +1,3 @@
+Algorithm,Params,R_Score,Pearson,Spearman,Kendalltau
+DecisionTree,criterion:mae-splitter:best,1.0,1.0,1.0,1.0
+DecisionTree,criterion:mae-splitter:random,1.0,1.0,1.0,1.0

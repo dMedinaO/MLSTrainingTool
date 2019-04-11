@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
 --
 -- Host: localhost    Database: mls_class_db
 -- ------------------------------------------------------
--- Server version	5.7.25-0ubuntu0.16.04.2
+-- Server version	5.7.23-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -44,7 +44,7 @@ CREATE TABLE `jobData` (
 
 LOCK TABLES `jobData` WRITE;
 /*!40000 ALTER TABLE `jobData` DISABLE KEYS */;
-INSERT INTO `jobData` VALUES (1553039362,'New Job Regression','Testing regression Job','david.medina@cebib.cl',0,'2019-03-23 21:49:22','2019-03-24 09:04:52','FINISH','INIT JOB','CLASSIFICATION','data.csv'),(1554153833,'Testing prediction','Testing prediction','david.medina@cebib.cl',0,'2019-04-01 18:23:53','2019-04-01 18:29:18','FINISH','INIT JOB','PREDICTION','data.csv');
+INSERT INTO `jobData` VALUES (1549819411,'Testing iris','Description iris','david.medina@cebib.cl',0,'2019-04-11 14:31:35','2019-04-11 15:08:03','FINISH','INIT JOB','CLASSIFICATION','iris.csv'),(1552975661,'Caesarian data set','Description Demo','david.medina@cebib.cl',0,'2019-04-11 14:33:33','2019-04-11 14:46:12','FINISH','INIT JOB','CLASSIFICATION','caesarian_edit.csv'),(1554836124,'clf','clf','david.medina@cebib.cl',0,'2019-04-09 15:55:24','2019-04-09 15:55:24','FINISH','INIT JOB','CLASSIFICATION','Immunotherapy_edit.csv'),(1554836166,'prediction','prediction','david.medina@cebib.cl',0,'2019-04-09 15:56:06','2019-04-09 15:56:06','FINISH','INIT JOB','PREDICTION','data.csv'),(1555004394,'Testing airfoil data set','Testing airfoil data set','david.medina@cebib.cl',0,'2019-04-11 14:39:54','2019-04-11 14:46:16','START','INIT JOB','PREDICTION','airfoil_self_noise.csv'),(1555004469,'Testing electrical grid','Testing electrical grid','david.medina@cebib.cl',0,'2019-04-11 14:41:09','2019-04-11 15:30:42','START','INIT JOB','PREDICTION','Data_for_UCI_named.csv');
 /*!40000 ALTER TABLE `jobData` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-02 20:39:51
+-- Dump completed on 2019-04-11 15:33:37

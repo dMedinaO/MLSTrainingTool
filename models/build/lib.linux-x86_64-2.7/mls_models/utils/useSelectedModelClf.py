@@ -216,10 +216,16 @@ class useSelectedModels(object):
         dataResponseWeight = self.meanPredictions(predictionsData)
 
         #estimamos las medidas de desempeno
-        accuracy = accuracy_score(self.target, dataResponseWeight)
-        precision = precision_score(self.target, dataResponseWeight)
-        recall = recall_score(self.target, dataResponseWeight)
-        f1 = f1_score(self.target, dataResponseWeight)
+        if kindDataSet == 1:#binario
+            accuracy = accuracy_score(self.target, dataResponseWeight)
+            precision = precision_score(self.target, dataResponseWeight)
+            recall = recall_score(self.target, dataResponseWeight)
+            f1 = f1_score(self.target, dataResponseWeight)
+        else:#multiclass            
+            accuracy = accuracy_score(self.target, dataResponseWeight)
+            precision = precision_score(self.target, dataResponseWeight, average='micro')
+            recall = recall_score(self.target, dataResponseWeight, average='micro')
+            f1 = f1_score(self.target, dataResponseWeight, average='micro')
 
         #exportamos la respuestas al JSON
         dictResponse = {"Recall": recall, "F1": f1, "Precision":precision, "Accuracy":accuracy}

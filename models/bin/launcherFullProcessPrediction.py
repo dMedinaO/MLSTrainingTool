@@ -43,8 +43,10 @@ from mls_models.utils import joinModels
 from mls_models.utils import makeworld_cloud
 from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
+from mls_models.utils import exportMetaModel
+from mls_models.utils import useSelectedModelPrediction
 
-def completeProcess(dataSetName, pathResponse):
+def completeProcess(dataSetName, pathResponse, dataSetOriginal):
 
     dataSet = pd.read_csv(dataSetName)
     listKey = ['R_Score','Pearson','Spearman','Kendalltau']
@@ -56,21 +58,22 @@ def completeProcess(dataSetName, pathResponse):
         modelSelecter.selectedModelData(modelSelecter.meanData[i], modelSelecter.stdData[i], listKey[i])
         dataSetsSelected.append(modelSelecter.dataFrame)
 
-    #testeamos la union de modelos
-    joinModelsObject = joinModels.joinModels(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
-    joinModelsObject.joinAndGetUnique()
-
     #testeamos la generacion del wordcloud
-    makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
+    makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], pathResponse)
     makeWord.createGraphic()
 
     #testeamos la generacion de la data para el grafico de valores anidados
-    makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
+    makeDiagram = makeDiagrammRepresent.defineViewDiagram(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, pathResponse)
     makeDiagram.formatResponse()
 
-    #testeamos la generacion de las medidas de desempeno del modelo de meta learning
-    performancePond = getPerformanceModel.ponderatedModelPerformance(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], listKey, sys.argv[2])
-    performancePond.getMeanValuesPerformance()
+    #testeamos la generacion del archivo de meta modelos
+    exportModel = exportMetaModel.exportMetaModel(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], pathResponse)
+    exportModel.getUniqueModels()
+
+    #usamos el meta modelo para obtener las medidas de desempeno
+    modelsMeta = useSelectedModelPrediction.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse)
+    modelsMeta.applyModelsSelected()
+
 
 #funcion que permite calcular los estadisticos de un atributo en el set de datos, asociados a las medidas de desempeno
 def estimatedStatisticPerformance(summaryObject, attribute):
@@ -83,6 +86,7 @@ def estimatedStatisticPerformance(summaryObject, attribute):
 #recibimos los parametros desde la terminal...
 emailUser = sys.argv[1]
 job = sys.argv[2]
+dataSetNameInput = sys.argv[3]
 dataSet = pd.read_csv(sys.argv[3])
 pathResponse = sys.argv[4]
 
@@ -116,7 +120,6 @@ header = ["Algorithm", "Params", "R_Score", "Pearson", "Spearman", "Kendalltau"]
 matrixResponse = []
 
 #comenzamos con las ejecuciones...
-
 #AdaBoost
 for loss in ['linear', 'squar', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
@@ -173,15 +176,14 @@ for criterion in ['mse', 'friedman_mse', 'mae']:
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-
             params = "criterion:%s-splitter:%s" % (criterion, splitter)
             row = ["DecisionTree", params, decisionTreeObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+            print row
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
             iteracionesIncorrectas+=1
             pass
-
 #gradiente
 for loss in ['ls', 'lad', 'huber', 'quantile']:
     for criterion in ['friedman_mse', 'mse', 'mae']:
@@ -330,8 +332,6 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
                         pass
                     print matrixResponse
 
-
-
 #generamos el export de la matriz convirtiendo a data frame
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
 
@@ -379,8 +379,9 @@ with open(nameFileExport, 'w') as fp:
     json.dump(dictionary, fp)
 
 nameFileExportCSV = "%s%s/summaryProcessJob_%s.csv" % (pathResponse, job, job)
+pathResponseExport = pathResponse+job+"/"
 
-completeProcess(nameFileExportCSV, pathResponse)
+completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput)
 
 #enviar correo con finalizacion del job....
 body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)
