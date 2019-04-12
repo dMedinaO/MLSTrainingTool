@@ -13,65 +13,65 @@
 
 
   <!--Bootstrap Stylesheet [ REQUIRED ]-->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
 
 
   <!--Nifty Stylesheet [ REQUIRED ]-->
-  <link href="css/nifty.min.css" rel="stylesheet">
+  <link href="../css/nifty.min.css" rel="stylesheet">
 
 
   <!--Nifty Premium Icon [ DEMONSTRATION ]-->
-  <link href="css/demo/nifty-demo-icons.min.css" rel="stylesheet">
+  <link href="../css/demo/nifty-demo-icons.min.css" rel="stylesheet">
 
 
   <!--DataTables [ OPTIONAL ]-->
-  <link href="plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
-  <link href="plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet">
+  <link href="../plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+  <link href="../plugins/datatables/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet">
 
   <!--Bootstrap Validator [ OPTIONAL ]-->
-  <link href="plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
+  <link href="../plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
   <!--JAVASCRIPT-->
   <!--=================================================-->
 
   <!--Pace - Page Load Progress Par [OPTIONAL]-->
-  <link href="plugins/pace/pace.min.css" rel="stylesheet">
-  <script src="plugins/pace/pace.min.js"></script>
+  <link href="../plugins/pace/pace.min.css" rel="stylesheet">
+  <script src="../plugins/pace/pace.min.js"></script>
 
 
   <!--jQuery [ REQUIRED ]-->
-  <script src="js/jquery.min.js"></script>
+  <script src="../js/jquery.min.js"></script>
 
 
   <!--BootstrapJS [ RECOMMENDED ]-->
-  <script src="js/bootstrap.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
 
 
   <!--NiftyJS [ RECOMMENDED ]-->
-  <script src="js/nifty.min.js"></script>
+  <script src="../js/nifty.min.js"></script>
 
   <!--Dropzone [ OPTIONAL ]-->
-  <script src="plugins/dropzone/dropzone.min.js"></script>
-  <link href="plugins/dropzone/dropzone.min.css" rel="stylesheet">
-  <script src="js/formatDropzone.js"></script>
+  <script src="../plugins/dropzone/dropzone.min.js"></script>
+  <link href="../plugins/dropzone/dropzone.min.css" rel="stylesheet">
+  <script src="../js/formatDropzone.js"></script>
 
   <!--=================================================-->
 
   <!--Font Awesome [ OPTIONAL ]-->
-  <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!--Ion Icons [ OPTIONAL ]-->
-  <link href="plugins/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+  <link href="../plugins/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
   <!--Ion Icons [ OPTIONAL ]-->
-  <link href="plugins/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="../plugins/ionicons/css/ionicons.min.css" rel="stylesheet">
   <!--Themify Icons [ OPTIONAL ]-->
-  <link href="plugins/themify-icons/themify-icons.min.css" rel="stylesheet">
+  <link href="../plugins/themify-icons/themify-icons.min.css" rel="stylesheet">
   <!--Premium Line Icons [ OPTIONAL ]-->
-  <link href="premium/icon-sets/icons/line-icons/premium-line-icons.min.css" rel="stylesheet">
-  <link href="plugins/spinkit/css/spinkit.min.css" rel="stylesheet">
-  <script src="plugins/bootstrap-validator/bootstrapValidator.min.js"></script>
+  <link href="../premium/icon-sets/icons/line-icons/premium-line-icons.min.css" rel="stylesheet">
+  <link href="../plugins/spinkit/css/spinkit.min.css" rel="stylesheet">
+  <script src="../plugins/bootstrap-validator/bootstrapValidator.min.js"></script>
 
 
   <!-- script para la carga de datos -->
-  <script src="js/jobs/createJob.js"></script>
+  <script src="../js/jobs/tryModelPred.js"></script>
 </head>
 
 <!--TIPS-->
@@ -88,7 +88,7 @@
                 <!--================================-->
                 <div class="navbar-header">
                     <a href="" class="navbar-brand">
-                        <img src="img/logo.png" alt="Nifty Logo" class="brand-icon">
+                        <img src="../img/logo.png" alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
                             <span class="brand-text">MLSTraining</span>
                         </div>
@@ -151,11 +151,12 @@
 
                         <div class="panel-heading">
                           <h3 class="panel-title">
-                            Submmit Job
+                            Try new examples for meta models in prediction data
                           </h3>
                         </div>
                         <div class="panel-body">
-                          <form id="frmAgregarFile" action="php/uploadFile.php" class="dropzone" >
+
+                          <form id="frmAgregarFile" action="../php/uploadFileTry.php" class="dropzone" >
                             <div class="dz-default dz-message">
                               <div class="dz-icon">
                                 <i class="demo-pli-upload-to-cloud icon-5x"></i>
@@ -173,49 +174,13 @@
 
                           <hr>
 
-                          <form id="initNewJob" method="post" class="form-horizontal form-label-left">
-
-                            <div class="form-group">
-                               <label class="col-sm-3 control-label">Email*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="email" name="email" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                               <label class="col-sm-3 control-label">Name Job*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="nameJob" name="nameJob" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                               <label class="col-sm-3 control-label">Description Job*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="descJob" name="descJob" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="optionProcess">Select Option Job <span class="required">*</span>
-                              </label>
-
-                              <div class="col-md-5 col-sm-5 col-xs-12">
-                                <select id="optionProcess" class="form-control">
-                                  <option value="1">Classification</option>
-                                  <option value="2">Regression</option>
-                                </select>
-                              </div>
-                            </div>
-
-                            <div class="ln_solid"></div>
+                          <div class="ln_solid"></div>
 
                             <div class="form-group">
                                 <div class="col-sm-5 col-sm-offset-3">
-                                  <button type="submit" id="processJob" class="btn btn-primary">Create Job</button>
+                                  <button id="processJob" class="btn btn-primary">Try Model</button>
                                 </div>
                             </div>
-                          </form>
 
                           <div class="col-sm-12 col-md-12 col-lg-12" id="loading" style="display:none;">
                               <div class="panel">
@@ -235,12 +200,6 @@
                             </div>
                           </div>
 
-                          <div class="col-sm-12 col-md-12 col-lg-12" id="okResponse" style="display:none;">
-                            <div class="alert alert-success" role="alert">
-                              <p class="messageOK"></p>
-                            </div>
-                          </div>
-
                         </div>
                     </div>
                   </div>
@@ -257,7 +216,7 @@
                         </h3>
                       </div>
                       <div class="panel-body">
-                        Please enter files in * .csv or * .tsv format. If the data set presents examples with null characteristics or without information, the data set will not be considered. This tool is for public use and the components associated with the implementation of models are based on the Python Scikit library. The repository of the tool is public and it presents a GPL 3.0 license for non-commercial software use and respecting the characteristics of Free Software. If you use this software or the modules associated with it, please remember the corresponding appointment of the article associated with the tool. Finally, in case of cloning the repository, it is the sole responsibility of the person who makes it to have all the libraries and requirements for a correct use of MLSTraining.
+                        Please enter files in * .csv or * .tsv format.
                       </div>
                     </div>
                   </div>
@@ -283,7 +242,7 @@
                                 <div id="mainnav-profile" class="mainnav-profile">
                                     <div class="profile-wrap text-center">
                                         <div class="pad-btm">
-                                            <img class="img-circle img-md" src="img/profile-photos/11.png" alt="Profile Picture">
+                                            <img class="img-circle img-md" src="../img/profile-photos/11.png" alt="Profile Picture">
                                         </div>
 
                                         <p class="mnp-name">
@@ -297,7 +256,7 @@
                                   <li class="list-header">Dashboard</li>
 
                                   <li>
-          						                <a href="query/">
+          						                <a href="../query/">
           						                    <i class="fa fa fa-list"></i>
           						                    <span class="menu-title">Query Job</span><i class="arrow"></i>
           						                </a>
@@ -305,7 +264,7 @@
           						            </li>
 
                                   <li>
-          						                <a href="dataSet/">
+          						                <a href="../dataSet/">
           						                    <i class="fa fa fa-archive"></i>
           						                    <span class="menu-title">Data Sets Demo</span><i class="arrow"></i>
           						                </a>
@@ -313,7 +272,7 @@
           						            </li>
 
                                   <li>
-          						                <a href="about">
+          						                <a href="../about">
           						                    <i class="fa fa fa-users"></i>
           						                    <span class="menu-title">About Us</span><i class="arrow"></i>
           						                </a>
@@ -321,7 +280,7 @@
           						            </li>
 
                                   <li>
-          						                <a href="userManual">
+          						                <a href="../userManual">
           						                    <i class="fa fa fa-file"></i>
           						                    <span class="menu-title">How to use</span><i class="arrow"></i>
           						                </a>
@@ -329,7 +288,7 @@
           						            </li>
 
                                   <li>
-          						                <a href="">
+          						                <a href="../">
           						                    <i class="fa fa fa-home"></i>
           						                    <span class="menu-title">Home</span><i class="arrow"></i>
           						                </a>

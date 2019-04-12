@@ -53,10 +53,6 @@
     <script src="../js/nifty.min.js"></script>
 		<script src="../plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 		<script src="../js/demo/form-wizard.js"></script>
-    <!--Dropzone [ OPTIONAL ]-->
-    <script src="../plugins/dropzone/dropzone.min.js"></script>
-    <link href="../plugins/dropzone/dropzone.min.css" rel="stylesheet">
-    <script src="../js/formatDropzone.js"></script>
 
     <!--=================================================-->
 
@@ -96,16 +92,19 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
     <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+    <script src="../js/resultsClf/viewResponseJobClass.js"></script>
+		<script src="../js/resultsClf/processViewStatisticsClass.js"></script>
+		<script src="../js/resultsClf/processViewSummaryClass.js"></script>
 
-    <script src="../js/resultsPred/loadResponseDiagramm.js"></script>
-    <script src="../js/resultsPred/processViewSummaryClass.js"></script>
-    <script src="../js/resultsPred/viewResponseJobClass.js"></script>
-    <script src="../js/resultsPred/processViewStatisticsClass.js"></script>
-    <script src="../js/resultsPred/viewSelectModels.js"></script>
-    <script src="../js/resultsPred/viewSelectModelsGraphic.js"></script>
-    <script src="../js/resultsPred/worldcloud.js"></script>
-    <script src="../js/resultsPred/viewPerformanceData.js"></script>
-    <script src="../js/resultsPred/viewPredictionReal.js"></script>
+		<!-- mostrar la seleccion de modelos-->
+		<script src="../js/resultsClf/viewSelectModels.js"></script>
+		<script src="../js/resultsClf/viewSelectModelsGraphic.js"></script>
+    <script src="../js/resultsClf/worldcloud.js"></script>
+    <script src="../js/resultsClf/loadResponseDiagramm.js"></script>
+    <script src="../js/resultsClf/viewPerformanceData.js"></script>
+    <script src="../js/resultsClf/showResultsForClf.js"></script>
+
+    <script src="../js/resultsClf/downloadMetaModels.js"></script>
 
     <style media="screen">
       #viewDiagramm {
@@ -264,10 +263,10 @@
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Histogram by R Score</h3>
+																	            <h3 class="panel-title">Histogram by Precision</h3>
 																	        </div>
 																	        <div class="panel-body">
-																	          <div id="rScoreHistogram"></div>
+																	          <div id="precisionHistogram"></div>
 																	        </div>
 																	    </div>
 																	  </div>
@@ -275,10 +274,10 @@
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Histogram by Pearson</h3>
+																	            <h3 class="panel-title">Histogram by Accuracy</h3>
 																	        </div>
 																	        <div class="panel-body">
-																	          <div id="pearsonHistogram"></div>
+																	          <div id="accuracyHistogram"></div>
 																	        </div>
 																	    </div>
 																	  </div>
@@ -286,10 +285,10 @@
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Histogram by Spearman</h3>
+																	            <h3 class="panel-title">Histogram by Recall</h3>
 																	        </div>
 																	        <div class="panel-body">
-																	          <div id="spearmanHistogram"></div>
+																	          <div id="recallHistogram"></div>
 																	        </div>
 																	    </div>
 																	  </div>
@@ -297,10 +296,10 @@
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Histogram by Kendall Tau</h3>
+																	            <h3 class="panel-title">Histogram by F1</h3>
 																	        </div>
 																	        <div class="panel-body">
-																	          <div id="kendallHistogram"></div>
+																	          <div id="f1Histogram"></div>
 																	        </div>
 																	    </div>
 																	  </div>
@@ -399,10 +398,40 @@
 
 																	              <tr>
 																	                  <td>
-																	                    <span class="text-main text-semibold">Interpreted results</span>
+																	                    <span class="text-main text-semibold">Accuracy</span>
 																	                  </td>
 																	                  <td>
-																	                      <span class="text-main  interpreted"></span>
+																	                      <span class="text-main  accuracyDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Precision</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main  precisionDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">Recall</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main  recallDefinition"></span>
+																	                      <br>
+																	                  </td>
+																	              </tr>
+
+																	              <tr>
+																	                  <td>
+																	                    <span class="text-main text-semibold">F1 Score</span>
+																	                  </td>
+																	                  <td>
+																	                      <span class="text-main f1Definition"></span>
 																	                      <br>
 																	                  </td>
 																	              </tr>
@@ -427,10 +456,11 @@
 																	                <tr>
 																	                  <th class="min-tablet">Algorithm</th>
 																	                  <th class="min-tablet">Params</th>
-																	                  <th class="min-tablet">R Score</th>
-																	                  <th class="min-tablet">Pearson</th>
-																	                  <th class="min-tablet">Spearman</th>
-																	                  <th class="min-tablet">Kendall Tau</th>
+																	                  <th class="min-tablet">CV</th>
+																	                  <th class="min-tablet">Accuracy</th>
+																	                  <th class="min-tablet">Recall</th>
+																	                  <th class="min-tablet">Precision</th>
+																	                  <th class="min-tablet">F1 Score</th>
 																	                </tr>
 																	              </thead>
 																	          </table>
@@ -472,16 +502,16 @@
 																	  <div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Selected Models By R Score</h3>
+																	            <h3 class="panel-title">Selected Models By Precision</h3>
 																	        </div>
 																	        <div class="panel-body">
 
-																	          <table id="modelR_Score" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	          <table id="modelP" class="table table-striped table-bordered" cellspacing="0" width="100%">
 																	              <thead>
 																	                <tr>
 																	                  <th class="min-tablet">Algorithm</th>
 																	                  <th class="min-tablet">Params</th>
-																	                  <th class="min-tablet">R Score</th>
+																	                  <th class="min-tablet">Precision</th>
 																	                </tr>
 																	              </thead>
 																	          </table>
@@ -493,16 +523,16 @@
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Selected Models By Pearson</h3>
+																	            <h3 class="panel-title">Selected Models By Accuracy</h3>
 																	        </div>
 																	        <div class="panel-body">
 
-																	          <table id="modelPearson" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	          <table id="modelA" class="table table-striped table-bordered" cellspacing="0" width="100%">
 																	              <thead>
 																	                <tr>
 																	                  <th class="min-tablet">Algorithm</th>
 																	                  <th class="min-tablet">Params</th>
-																	                  <th class="min-tablet">Pearson</th>
+																	                  <th class="min-tablet">Accuracy</th>
 																	                </tr>
 																	              </thead>
 																	          </table>
@@ -514,16 +544,16 @@
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Selected Models By Spearman</h3>
+																	            <h3 class="panel-title">Selected Models By Recall</h3>
 																	        </div>
 																	        <div class="panel-body">
 
-																	          <table id="modelSpearman" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	          <table id="modelR" class="table table-striped table-bordered" cellspacing="0" width="100%">
 																	              <thead>
 																	                <tr>
 																	                  <th class="min-tablet">Algorithm</th>
 																	                  <th class="min-tablet">Params</th>
-																	                  <th class="min-tablet">Spearman</th>
+																	                  <th class="min-tablet">Recall</th>
 																	                </tr>
 																	              </thead>
 																	          </table>
@@ -534,16 +564,16 @@
 																		<div class="col-lg-12 col-md-12 col-sm-12">
 																	    <div class="panel panel-bordered panel-primary">
 																	        <div class="panel-heading">
-																	            <h3 class="panel-title">Selected Models By Kendall Tau</h3>
+																	            <h3 class="panel-title">Selected Models By F1</h3>
 																	        </div>
 																	        <div class="panel-body">
 
-																	          <table id="modelKendalltau" class="table table-striped table-bordered" cellspacing="0" width="100%">
+																	          <table id="modelF" class="table table-striped table-bordered" cellspacing="0" width="100%">
 																	              <thead>
 																	                <tr>
 																	                  <th class="min-tablet">Algorithm</th>
 																	                  <th class="min-tablet">Params</th>
-																	                  <th class="min-tablet">Kendall Tau</th>
+																	                  <th class="min-tablet">F1</th>
 																	                </tr>
 																	              </thead>
 																	          </table>
@@ -584,8 +614,8 @@
                                                       </span>
                                                   </div>
                                                   <div class="media-body">
-                                                      <p class="text-2x mar-no text-semibold text-main rscore"></p>
-                                                      <p class="text-muted mar-no">R Score</p>
+                                                      <p class="text-2x mar-no text-semibold text-main precision"></p>
+                                                      <p class="text-muted mar-no">Precision</p>
                                                   </div>
                                               </div>
                                             </div>
@@ -597,8 +627,8 @@
                                                       </span>
                                                   </div>
                                                   <div class="media-body">
-                                                      <p class="text-2x mar-no text-semibold text-main pearson"></p>
-                                                      <p class="text-muted mar-no">Pearson Coeficient</p>
+                                                      <p class="text-2x mar-no text-semibold text-main accuracy"></p>
+                                                      <p class="text-muted mar-no">Accuracy</p>
                                                   </div>
                                               </div>
                                             </div>
@@ -610,8 +640,8 @@
                                                       </span>
                                                   </div>
                                                   <div class="media-body">
-                                                      <p class="text-2x mar-no text-semibold text-main spearman"></p>
-                                                      <p class="text-muted mar-no">Spearman Coeficient</p>
+                                                      <p class="text-2x mar-no text-semibold text-main recall"></p>
+                                                      <p class="text-muted mar-no">Recall</p>
                                                   </div>
                                               </div>
                                             </div>
@@ -623,8 +653,8 @@
                                                       </span>
                                                   </div>
                                                   <div class="media-body">
-                                                      <p class="text-2x mar-no text-semibold text-main kendall"></p>
-                                                      <p class="text-muted mar-no">Kendall Tau</p>
+                                                      <p class="text-2x mar-no text-semibold text-main f1Values"></p>
+                                                      <p class="text-muted mar-no">F1 Score</p>
                                                   </div>
                                               </div>
                                             </div>
@@ -634,34 +664,61 @@
                                     </div>
                                   </div>
 
-                                  <!-- grafico prediccion v/s realidad -->
-                                  <div class="col-lg-6 col-md-6 col-sm-6">
+                                  <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="panel panel-bordered panel-primary">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title">Predictions v/s Real Values</h3>
+                                            <h3 class="panel-title">Confusion Matrix</h3>
                                         </div>
                                         <div class="panel-body">
-                                          <div id="predictionReal"></div>
+                                          <div id="confusionMatrixGraph"></div>
                                         </div>
-                                    </div>
-                                  </div>
 
-                                  <!-- plot de errores -->
-                                  <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="panel panel-bordered panel-primary">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title">Scatter plot for error data</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                          <div id="errorData"></div>
-                                        </div>
                                     </div>
                                   </div>
                                 </div>
 
 																<!--Six tab-->
 																<div id="tryModel" class="tab-pane">
-																</div>
+
+                                  <div class="row">
+
+                                    <div class="col-sm-6 col-md-6">
+
+                                      <div class="panel panel-bordered panel-primary pos-rel">
+                                        <div class="pad-all text-center">
+                                            <div class="widget-control">
+                                            </div>
+                                            <?php
+                                              $job = $_REQUEST['job'];
+                                              echo "<a href='../tryModelClf/?job=".$job."'>";
+                                            ?>
+
+                                              <img alt="Profile Picture" class="img-lg img-circle mar-ver" src="../img/other/use.jpg">
+                                              <p class="text-lg text-semibold mar-no text-main">Try with web tool</p>
+                                              <p class="text-sm">Using models with the web tool involves uploading a file in csv format through the platform. We remind you of the permanence of the files in our system, so this use is limited.</p>
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-sm-6 col-md-6">
+
+                                        <div class="panel panel-bordered panel-primary pos-rel">
+                                          <div class="pad-all text-center">
+                                              <div class="widget-control">
+                                              </div>
+
+                                                <a id="downloadAnchorElem">
+                                                <img alt="Profile Picture" class="img-lg img-circle mar-ver" src="../img/other/try.jpg">
+                                                <p class="text-lg text-semibold mar-no text-main">Try with export models</p>
+                                                <p class="text-sm">Using models locally involves downloading the meta models in JSON format and using the loader provided in the repository in the model/bin section. See README for more information.</p>
+                                              </a>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                  </div>
+															</div>
 														</div>
 												</div>
 
