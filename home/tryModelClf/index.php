@@ -71,7 +71,7 @@
 
 
   <!-- script para la carga de datos -->
-  <script src="../js/jobs/tryModelPred.js"></script>
+  <script src="../js/jobs/tryModelClf.js"></script>
 </head>
 
 <!--TIPS-->
@@ -151,7 +151,7 @@
 
                         <div class="panel-heading">
                           <h3 class="panel-title">
-                            Try new examples for meta models in prediction data
+                            Try new examples for meta models in classification data
                           </h3>
                         </div>
                         <div class="panel-body">

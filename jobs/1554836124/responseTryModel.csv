@@ -1,0 +1,21 @@
+example,class,Prob
+1,YES, class: YES-prob: 90.625 class: NO-prob: 9.375
+2,YES, class: YES-prob: 65.625 class: NO-prob: 34.375
+3,NO, class: YES-prob: 50.0 class: NO-prob: 50.0
+4,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+5,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+6,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+7,NO, class: YES-prob: 21.875 class: NO-prob: 78.125
+8,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+9,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+10,NO, class: YES-prob: 0.0 class: NO-prob: 100.0
+11,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+12,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+13,YES, class: YES-prob: 53.125 class: NO-prob: 46.875
+14,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+15,NO, class: YES-prob: 50.0 class: NO-prob: 50.0
+16,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+17,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+18,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+19,YES, class: YES-prob: 56.25 class: NO-prob: 43.75
+20,YES, class: YES-prob: 56.25 class: NO-prob: 43.75

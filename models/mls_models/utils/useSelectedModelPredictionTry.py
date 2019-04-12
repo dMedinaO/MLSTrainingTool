@@ -38,7 +38,7 @@ class useSelectedModels(object):
         #preparamos la data
         self.prepareDataSet()
 
-    #metodo que permite preparar el set de datos
+    #metodo que permite preparar el set de datos y el set de datos de nuevos ejemplos
     def prepareDataSet(self):
 
         columnas=self.dataSet.columns.tolist()
@@ -58,6 +58,14 @@ class useSelectedModels(object):
         #ahora aplicamos el procesamiento segun lo expuesto
         applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
         self.data = applyNormal.dataTransform
+
+        #manejo de los nuevos ejemplos....
+        #ahora transformamos el set de datos por si existen elementos discretos...
+        transformDataSetNew = transformFrequence.frequenceData(self.dataSetNew)
+        dataSetNewFreqNew = transformDataSetNew.dataTransform
+
+        applyNormalNew = ScaleNormalScore.applyNormalScale(dataSetNewFreqNew)
+        self.dataNew = applyNormalNew.dataTransform
 
     #metodo que permite buscar elementos de un diccionario en un array de diccionario...
     def searchParamValue(self, paramData, key):
@@ -98,7 +106,7 @@ class useSelectedModels(object):
                     AdaBoostObject.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(AdaBoostObject.model.predict(self.dataSetNew))
+                    predictionsData.append(AdaBoostObject.model.predict(self.dataNew))
                 if algorithm == 'Bagging':
 
                     n_estimators = self.searchParamValue(parametros,'n_estimators')
@@ -107,7 +115,7 @@ class useSelectedModels(object):
                     bagginObject.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(bagginObject.model.predict(self.dataSetNew))
+                    predictionsData.append(bagginObject.model.predict(self.dataNew))
 
                 if algorithm == 'DecisionTree':
 
@@ -117,7 +125,7 @@ class useSelectedModels(object):
                     decisionTreeObject.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(decisionTreeObject.model.predict(self.dataSetNew))
+                    predictionsData.append(decisionTreeObject.model.predict(self.dataNew))
 
                 if algorithm == 'GradientBoostingRegressor':
 
@@ -131,7 +139,7 @@ class useSelectedModels(object):
                     gradientObject.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(gradientObject.model.predict(self.dataSetNew))
+                    predictionsData.append(gradientObject.model.predict(self.dataNew))
 
                 if algorithm == 'KNeighborsRegressor':
 
@@ -144,7 +152,7 @@ class useSelectedModels(object):
                     knnObect.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(knnObect.model.predict(self.dataSetNew))
+                    predictionsData.append(knnObect.model.predict(self.dataNew))
 
                 if algorithm == 'MLPRegressor':
 
@@ -162,7 +170,7 @@ class useSelectedModels(object):
                     MLPObject.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(MLPObject.model.predict(self.dataSetNew))
+                    predictionsData.append(MLPObject.model.predict(self.dataNew))
 
                 if algorithm == 'NuSVM':
 
@@ -175,7 +183,7 @@ class useSelectedModels(object):
                     nuSVM.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(nuSVM.model.predict(self.dataSetNew))
+                    predictionsData.append(nuSVM.model.predict(self.dataNew))
 
                 if algorithm == 'SVM':
 
@@ -187,7 +195,7 @@ class useSelectedModels(object):
                     svm.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(svm.model.predict(self.dataSetNew))
+                    predictionsData.append(svm.model.predict(self.dataNew))
 
                 if algorithm == 'RandomForestRegressor':
 
@@ -201,7 +209,7 @@ class useSelectedModels(object):
                     rf.trainingMethod()
 
                     #usamos el modelo entrenado para predecir los nuevos valores
-                    predictionsData.append(rf.model.predict(self.dataSetNew))
+                    predictionsData.append(rf.model.predict(self.dataNew))
 
                 self.exportResponseResult(predictionsData)
         except:

@@ -38,7 +38,7 @@ class useSelectedModels(object):
         #preparamos la data
         self.prepareDataSet()
 
-    #metodo que permite preparar el set de datos
+    #metodo que permite preparar el set de datos y el set de datos de nuevos ejemplos
     def prepareDataSet(self):
 
         columnas=self.dataSet.columns.tolist()
@@ -58,6 +58,14 @@ class useSelectedModels(object):
         #ahora aplicamos el procesamiento segun lo expuesto
         applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
         self.data = applyNormal.dataTransform
+
+        #manejo de los nuevos ejemplos....
+        #ahora transformamos el set de datos por si existen elementos discretos...
+        transformDataSetNew = transformFrequence.frequenceData(self.dataSetNew)
+        dataSetNewFreqNew = transformDataSetNew.dataTransform
+
+        applyNormalNew = ScaleNormalScore.applyNormalScale(dataSetNewFreqNew)
+        self.dataNew = applyNormalNew.dataTransform
 
     #metodo que permite buscar elementos de un diccionario en un array de diccionario...
     def searchParamValue(self, paramData, key):
@@ -83,127 +91,129 @@ class useSelectedModels(object):
         predictionsData = []#matriz con las predicciones obtenidas del modelo
         response = 0
 
+        try:
 
-        for i in range(len(metaModels['models'])):
+            for i in range(len(metaModels['models'])):
 
-            #obtenemos el algoritmo...
-            algorithm = metaModels['models'][i]['algorithm']
-            parametros = metaModels['models'][i]['params']
+                #obtenemos el algoritmo...
+                algorithm = metaModels['models'][i]['algorithm']
+                parametros = metaModels['models'][i]['params']
 
-            if algorithm == 'AdaBoostRegressor':
-                n_estimators = self.searchParamValue(parametros,'n_estimators')
-                loss = self.searchParamValue(parametros,'loss')
-                AdaBoostObject = AdaBoost.AdaBoost(self.data, self.target, int(n_estimators), loss)
-                AdaBoostObject.trainingMethod()
+                if algorithm == 'AdaBoostRegressor':
+                    n_estimators = self.searchParamValue(parametros,'n_estimators')
+                    loss = self.searchParamValue(parametros,'loss')
+                    AdaBoostObject = AdaBoost.AdaBoost(self.data, self.target, int(n_estimators), loss)
+                    AdaBoostObject.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(AdaBoostObject.model.predict(self.dataSetNew))
-            if algorithm == 'Bagging':
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(AdaBoostObject.model.predict(self.dataNew))
+                if algorithm == 'Bagging':
 
-                n_estimators = self.searchParamValue(parametros,'n_estimators')
-                bootstrap = self.searchParamValue(parametros,'bootstrap')
-                bagginObject = Baggin.Baggin(self.data,self.target,int(n_estimators), bootstrap)
-                bagginObject.trainingMethod()
+                    n_estimators = self.searchParamValue(parametros,'n_estimators')
+                    bootstrap = self.searchParamValue(parametros,'bootstrap')
+                    bagginObject = Baggin.Baggin(self.data,self.target,int(n_estimators), bootstrap)
+                    bagginObject.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(bagginObject.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(bagginObject.model.predict(self.dataNew))
 
-            if algorithm == 'DecisionTree':
+                if algorithm == 'DecisionTree':
 
-                criterion = self.searchParamValue(parametros,'criterion')
-                splitter = self.searchParamValue(parametros,'splitter')
-                decisionTreeObject = DecisionTree.DecisionTree(self.data, self.target, criterion, splitter)
-                decisionTreeObject.trainingMethod()
+                    criterion = self.searchParamValue(parametros,'criterion')
+                    splitter = self.searchParamValue(parametros,'splitter')
+                    decisionTreeObject = DecisionTree.DecisionTree(self.data, self.target, criterion, splitter)
+                    decisionTreeObject.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(decisionTreeObject.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(decisionTreeObject.model.predict(self.dataNew))
 
-            if algorithm == 'GradientBoostingRegressor':
+                if algorithm == 'GradientBoostingRegressor':
 
-                criterion = self.searchParamValue(parametros,'criterion')
-                n_estimators = self.searchParamValue(parametros,'n_estimators')
-                loss = self.searchParamValue(parametros,'loss')
-                min_samples_split = self.searchParamValue(parametros,'min_samples_split')
-                min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
+                    criterion = self.searchParamValue(parametros,'criterion')
+                    n_estimators = self.searchParamValue(parametros,'n_estimators')
+                    loss = self.searchParamValue(parametros,'loss')
+                    min_samples_split = self.searchParamValue(parametros,'min_samples_split')
+                    min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
 
-                gradientObject = Gradient.Gradient(self.data,self.target, int(n_estimators), loss, criterion, int(min_samples_split), int(min_samples_leaf))
-                gradientObject.trainingMethod()
+                    gradientObject = Gradient.Gradient(self.data,self.target, int(n_estimators), loss, criterion, int(min_samples_split), int(min_samples_leaf))
+                    gradientObject.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(gradientObject.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(gradientObject.model.predict(self.dataNew))
 
-            if algorithm == 'KNeighborsRegressor':
+                if algorithm == 'KNeighborsRegressor':
 
-                n_neighbors = self.searchParamValue(parametros,'n_neighbors')
-                algorithmData = self.searchParamValue(parametros,'algorithm')
-                metric = self.searchParamValue(parametros,'metric')
-                weights = self.searchParamValue(parametros,'weights')
+                    n_neighbors = self.searchParamValue(parametros,'n_neighbors')
+                    algorithmData = self.searchParamValue(parametros,'algorithm')
+                    metric = self.searchParamValue(parametros,'metric')
+                    weights = self.searchParamValue(parametros,'weights')
 
-                knnObect = knn_regression.KNN_Model(self.data, self.target, int(n_neighbors), algorithmData, metric,  weights)
-                knnObect.trainingMethod()
+                    knnObect = knn_regression.KNN_Model(self.data, self.target, int(n_neighbors), algorithmData, metric,  weights)
+                    knnObect.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(knnObect.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(knnObect.model.predict(self.dataNew))
 
-            if algorithm == 'MLPRegressor':
+                if algorithm == 'MLPRegressor':
 
-                activation = self.searchParamValue(parametros,'activation')
-                solver = self.searchParamValue(parametros,'solver')
-                learning_rate = self.searchParamValue(parametros,'learning')
-                hidden_layer_sizes_a = 1
-                hidden_layer_sizes_b = 1
-                hidden_layer_sizes_c = 1
-                alpha = self.searchParamValue(parametros,'alpha')
-                max_iter = self.searchParamValue(parametros,'max_iter')
-                shuffle = self.searchParamValue(parametros,'shuffle')
+                    activation = self.searchParamValue(parametros,'activation')
+                    solver = self.searchParamValue(parametros,'solver')
+                    learning_rate = self.searchParamValue(parametros,'learning')
+                    hidden_layer_sizes_a = 1
+                    hidden_layer_sizes_b = 1
+                    hidden_layer_sizes_c = 1
+                    alpha = self.searchParamValue(parametros,'alpha')
+                    max_iter = self.searchParamValue(parametros,'max_iter')
+                    shuffle = self.searchParamValue(parametros,'shuffle')
 
-                MLPObject = MLP.MLP(self.data, self.target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, float(alpha), int(max_iter), shuffle)
-                MLPObject.trainingMethod()
+                    MLPObject = MLP.MLP(self.data, self.target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, float(alpha), int(max_iter), shuffle)
+                    MLPObject.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(MLPObject.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(MLPObject.model.predict(self.dataNew))
 
-            if algorithm == 'NuSVM':
+                if algorithm == 'NuSVM':
 
-                kernel = self.searchParamValue(parametros,'kernel')
-                degree = self.searchParamValue(parametros,'degree')
-                gamma = self.searchParamValue(parametros,'gamma')
-                nu = self.searchParamValue(parametros,'nu')
+                    kernel = self.searchParamValue(parametros,'kernel')
+                    degree = self.searchParamValue(parametros,'degree')
+                    gamma = self.searchParamValue(parametros,'gamma')
+                    nu = self.searchParamValue(parametros,'nu')
 
-                nuSVM = NuSVR.NuSVRModel(self.data, self.target, kernel, int(degree), float(gamma), float(nu))
-                nuSVM.trainingMethod()
+                    nuSVM = NuSVR.NuSVRModel(self.data, self.target, kernel, int(degree), float(gamma), float(nu))
+                    nuSVM.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(nuSVM.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(nuSVM.model.predict(self.dataNew))
 
-            if algorithm == 'SVM':
+                if algorithm == 'SVM':
 
-                kernel = self.searchParamValue(parametros,'kernel')
-                degree = self.searchParamValue(parametros,'degree')
-                gamma = self.searchParamValue(parametros,'gamma')
+                    kernel = self.searchParamValue(parametros,'kernel')
+                    degree = self.searchParamValue(parametros,'degree')
+                    gamma = self.searchParamValue(parametros,'gamma')
 
-                svm = SVR.SVRModel(self.data, self.target, kernel, int(degree), float(gamma))
-                svm.trainingMethod()
+                    svm = SVR.SVRModel(self.data, self.target, kernel, int(degree), float(gamma))
+                    svm.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(svm.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(svm.model.predict(self.dataNew))
 
-            if algorithm == 'RandomForestRegressor':
+                if algorithm == 'RandomForestRegressor':
 
-                criterion = self.searchParamValue(parametros,'criterion')
-                n_estimators = self.searchParamValue(parametros,'n_estimators')
-                bootstrap = self.searchParamValue(parametros,'bootstrap')
-                min_samples_split = self.searchParamValue(parametros,'min_samples_split')
-                min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
+                    criterion = self.searchParamValue(parametros,'criterion')
+                    n_estimators = self.searchParamValue(parametros,'n_estimators')
+                    bootstrap = self.searchParamValue(parametros,'bootstrap')
+                    min_samples_split = self.searchParamValue(parametros,'min_samples_split')
+                    min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
 
-                rf = RandomForest.RandomForest(self.data, self.target, int(n_estimators), criterion, int(min_samples_split), int(min_samples_leaf), bootstrap)
-                rf.trainingMethod()
+                    rf = RandomForest.RandomForest(self.data, self.target, int(n_estimators), criterion, int(min_samples_split), int(min_samples_leaf), bootstrap)
+                    rf.trainingMethod()
 
-                #usamos el modelo entrenado para predecir los nuevos valores
-                predictionsData.append(rf.model.predict(self.dataSetNew))
+                    #usamos el modelo entrenado para predecir los nuevos valores
+                    predictionsData.append(rf.model.predict(self.dataNew))
 
-            self.exportResponseResult(predictionsData)
-        
+                self.exportResponseResult(predictionsData)
+        except:
+            response = 1
         print response
 
     #metodo que permite formar la data de salida y obtener la informacion con respecto a los datos de interes
