@@ -44,6 +44,7 @@ from mls_models.utils import getPerformanceModel
 from mls_models.utils import exportMetaModel
 from mls_models.utils import useSelectedModelClf
 from mls_models.utils import encodingFeatures
+from sklearn.model_selection import LeaveOneOut
 
 #funcion para completar el proceso de la informacion correspondiente a la data empleada y permite crear los graficos para la vista en web
 def completeProcess(dataSetName, pathResponse, dataSetOriginal):
@@ -71,7 +72,7 @@ def completeProcess(dataSetName, pathResponse, dataSetOriginal):
     exportModel.getUniqueModels()
 
     #usamos el meta modelo para obtener las medidas de desempeno
-    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse)
+    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, LeaveOneOut())
     modelsMeta.applyModelsSelected()
 
 
@@ -132,13 +133,14 @@ data = applyNormal.dataTransform
 header = ["Algorithm", "Params", "Validation", "Accuracy", "Recall", "Precision", "F1"]
 matrixResponse = []
 
+
 #comenzamos con las ejecuciones...
 #AdaBoost
 for algorithm in ['SAMME', 'SAMME.R']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec AdaBoost with %s - %d" % (algorithm, n_estimators)
-            AdaBoostObject = AdaBoost.AdaBoost(data, target, n_estimators, algorithm, 10)
+            AdaBoostObject = AdaBoost.AdaBoost(data, target, n_estimators, algorithm, -1)
             AdaBoostObject.trainingMethod(kindDataSet)
             params = "Algorithm:%s-n_estimators:%d" % (algorithm, n_estimators)
             row = ["AdaBoostClassifier", params, "CV-10", AdaBoostObject.performanceData.scoreData[3], AdaBoostObject.performanceData.scoreData[4], AdaBoostObject.performanceData.scoreData[5], AdaBoostObject.performanceData.scoreData[6]]
@@ -153,7 +155,7 @@ for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec Bagging with %s - %d" % (bootstrap, n_estimators)
-            bagginObject = Baggin.Baggin(data,target,n_estimators, bootstrap,10)
+            bagginObject = Baggin.Baggin(data,target,n_estimators, bootstrap,-1)
             bagginObject.trainingMethod(kindDataSet)
             params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
             row = ["Bagging", params, "CV-10", bagginObject.performanceData.scoreData[3], bagginObject.performanceData.scoreData[4], bagginObject.performanceData.scoreData[5], bagginObject.performanceData.scoreData[6]]
@@ -165,7 +167,7 @@ for bootstrap in [True, False]:
 
 #BernoulliNB
 try:
-    bernoulliNB = BernoulliNB.Bernoulli(data, target, 10)
+    bernoulliNB = BernoulliNB.Bernoulli(data, target, -1)
     bernoulliNB.trainingMethod(kindDataSet)
     print "Excec Bernoulli Default Params"
     params = "Default"
@@ -181,7 +183,8 @@ for criterion in ['gini', 'entropy']:
     for splitter in ['best', 'random']:
         try:
             print "Excec DecisionTree with %s - %s" % (criterion, splitter)
-            decisionTreeObject = DecisionTree.DecisionTree(data, target, criterion, splitter,10)
+            print data
+            decisionTreeObject = DecisionTree.DecisionTree(data, target, criterion, splitter,-1)
             decisionTreeObject.trainingMethod(kindDataSet)
             params = "criterion:%s-splitter:%s" % (criterion, splitter)
             row = ["DecisionTree", params, "CV-10", decisionTreeObject.performanceData.scoreData[3], decisionTreeObject.performanceData.scoreData[4], decisionTreeObject.performanceData.scoreData[5], decisionTreeObject.performanceData.scoreData[6]]
@@ -190,9 +193,10 @@ for criterion in ['gini', 'entropy']:
         except:
             iteracionesIncorrectas+=1
             pass
+
 try:
     #GaussianNB
-    gaussianObject = GaussianNB.Gaussian(data, target, 10)
+    gaussianObject = GaussianNB.Gaussian(data, target, -1)
     gaussianObject.trainingMethod(kindDataSet)
     print "Excec GaussianNB Default Params"
     params = "Default"
@@ -207,7 +211,7 @@ for loss in ['deviance', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec GradientBoostingClassifier with %s - %d - %d - %d" % (loss, n_estimators, 2, 1)
-            gradientObject = Gradient.Gradient(data,target,n_estimators, loss, min_samples_split, min_samples_leaf, 10)
+            gradientObject = Gradient.Gradient(data,target,n_estimators, loss, min_samples_split, min_samples_leaf, -1)
             gradientObject.trainingMethod(kindDataSet)
             params = "n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (n_estimators, loss, min_samples_split, min_samples_leaf)
             row = ["GradientBoostingClassifier", params, "CV-10", gradientObject.performanceData.scoreData[3], gradientObject.performanceData.scoreData[4], gradientObject.performanceData.scoreData[5], gradientObject.performanceData.scoreData[6]]
@@ -224,7 +228,7 @@ for n_neighbors in range(1,11):
             for weights in ['uniform', 'distance']:
                 try:
                     print "Excec KNeighborsClassifier with %d - %s - %s - %s" % (n_neighbors, algorithm, metric, weights)
-                    knnObect = knn.knn(data, target, n_neighbors, algorithm, metric,  weights,10)
+                    knnObect = knn.knn(data, target, n_neighbors, algorithm, metric,  weights,-1)
                     knnObect.trainingMethod(kindDataSet)
 
                     params = "n_neighbors:%d-algorithm:%s-metric:%s-weights:%s" % (n_neighbors, algorithm, metric, weights)
@@ -248,7 +252,7 @@ for activation in ['identity', 'logistic', 'tanh', 'relu']:
                                 for shuffle in [True, False]:
                                     try:
                                         print "Excec MLP"
-                                        MLPObject = MLP.MLP(data, target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle, 10)
+                                        MLPObject = MLP.MLP(data, target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle, -1)
                                         MLPObject.trainingMethod(kindDataSet)
 
                                         params = "activation:%s-solver:%s-learning:%s-hidden_layer_sizes:%d+%d+%d-alpha:%f-max_iter:%d-shuffle:%s" % (activation, solver, learning_rate, hidden_layer_sizes_a, hidden_layer_sizes_b, hidden_layer_sizes_c, alpha, max_iter, str(shuffle))
@@ -265,7 +269,7 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
         for degree in range(3, 15):
             try:
                 print "Excec NuSVM"
-                nuSVM = NuSVM.NuSVM(data, target, kernel, nu, degree, 0.01, 10)
+                nuSVM = NuSVM.NuSVM(data, target, kernel, nu, degree, 0.01, -1)
                 nuSVM.trainingMethod(kindDataSet)
                 params = "kernel:%s-nu:%f-degree:%d-gamma:%f" % (kernel, nu, degree, gamma)
                 row = ["NuSVM", params, "CV-10", nuSVM.performanceData.scoreData[3], nuSVM.performanceData.scoreData[4], nuSVM.performanceData.scoreData[5], nuSVM.performanceData.scoreData[6]]
@@ -281,7 +285,7 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
         for degree in range(3, 15):
             try:
                 print "Excec SVM"
-                svm = SVM.SVM(data, target, kernel, C_value, degree, 0.01, 10)
+                svm = SVM.SVM(data, target, kernel, C_value, degree, 0.01, -1)
                 svm.trainingMethod(kindDataSet)
                 params = "kernel:%s-c:%f-degree:%d-gamma:%f" % (kernel, C_value, degree, gamma)
                 row = ["SVM", params, "CV-10", svm.performanceData.scoreData[3], svm.performanceData.scoreData[4], svm.performanceData.scoreData[5], svm.performanceData.scoreData[6]]
@@ -297,7 +301,7 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         for bootstrap in [True, False]:
             try:
                 print "Excec RF"
-                rf = RandomForest.RandomForest(data, target, n_estimators, criterion, 2, 1, bootstrap, 10)
+                rf = RandomForest.RandomForest(data, target, n_estimators, criterion, 2, 1, bootstrap, -1)
                 rf.trainingMethod(kindDataSet)
 
                 params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, min_samples_split, min_samples_leaf, str(bootstrap))

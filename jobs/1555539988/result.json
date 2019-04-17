@@ -1,0 +1,1 @@
+[{"data": [{"name": "DecisionTree", "value": 1}], "name": "Accuracy"}, {"data": [{"name": "DecisionTree", "value": 4}], "name": "Recall"}, {"data": [{"name": "DecisionTree", "value": 2}], "name": "Precision"}, {"data": [{"name": "DecisionTree", "value": 3}], "name": "F1"}]

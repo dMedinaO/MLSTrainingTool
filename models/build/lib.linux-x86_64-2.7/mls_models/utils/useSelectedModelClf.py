@@ -28,6 +28,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from mls_models.supervised_learning_clf import createConfusionMatrix
+from sklearn.model_selection import LeaveOneOut
 
 import pandas as pd
 import json
@@ -35,11 +36,12 @@ import numpy as np
 
 class useSelectedModels(object):
 
-    def __init__(self, dataSet, metaModels, pathResponse):
+    def __init__(self, dataSet, metaModels, pathResponse, cv):
 
         self.dataSet = pd.read_csv(dataSet)
         self.metaModelsInfo = metaModels
         self.pathResponse = pathResponse
+        self.cv = cv
 
         #preparamos la data
         self.prepareDataSet()
@@ -105,7 +107,7 @@ class useSelectedModels(object):
             if algorithm == 'AdaBoostClassifier':
                 algorithmData = self.searchParamValue(parametros,'Algorithm')
                 n_estimators = self.searchParamValue(parametros,'n_estimators')
-                AdaBoostObject = AdaBoost.AdaBoost(self.data, self.target, int(n_estimators), algorithmData, 10)
+                AdaBoostObject = AdaBoost.AdaBoost(self.data, self.target, int(n_estimators), algorithmData, self.cv)
                 AdaBoostObject.trainingMethod(kindDataSet)
                 predictionsData.append(AdaBoostObject.model.predict(self.data).tolist())
 
@@ -113,13 +115,13 @@ class useSelectedModels(object):
 
                 n_estimators = self.searchParamValue(parametros,'n_estimators')
                 bootstrap = self.searchParamValue(parametros,'bootstrap')
-                bagginObject = Baggin.Baggin(self.data,self.target, int(n_estimators), bootstrap,10)
+                bagginObject = Baggin.Baggin(self.data,self.target, int(n_estimators), bootstrap,self.cv)
                 bagginObject.trainingMethod(kindDataSet)
                 predictionsData.append(bagginObject.model.predict(self.data).tolist())
 
             if algorithm == 'BernoulliNB':
 
-                bernoulliNB = BernoulliNB.Bernoulli(self.data, self.target, 10)
+                bernoulliNB = BernoulliNB.Bernoulli(self.data, self.target, self.cv)
                 bernoulliNB.trainingMethod(kindDataSet)
                 predictionsData.append(bernoulliNB.model.predict(self.data).tolist())
 
@@ -127,13 +129,13 @@ class useSelectedModels(object):
 
                 criterion = self.searchParamValue(parametros,'criterion')
                 splitter = self.searchParamValue(parametros,'splitter')
-                decisionTreeObject = DecisionTree.DecisionTree(self.data, self.target, criterion, splitter,10)
+                decisionTreeObject = DecisionTree.DecisionTree(self.data, self.target, criterion, splitter,self.cv)
                 decisionTreeObject.trainingMethod(kindDataSet)
                 predictionsData.append(decisionTreeObject.model.predict(self.data).tolist())
 
             if algorithm == 'GaussianNB':
 
-                gaussianObject = GaussianNB.Gaussian(self.data, self.target, 10)
+                gaussianObject = GaussianNB.Gaussian(self.data, self.target, self.cv)
                 gaussianObject.trainingMethod(kindDataSet)
                 predictionsData.append(gaussianObject.model.predict(self.data).tolist())
 
@@ -145,7 +147,7 @@ class useSelectedModels(object):
                 min_samples_split = self.searchParamValue(parametros,'min_samples_split')
                 min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
 
-                gradientObject = Gradient.Gradient(self.data,self.target, int(n_estimators), loss, int(min_samples_split), int(min_samples_leaf), 10)
+                gradientObject = Gradient.Gradient(self.data,self.target, int(n_estimators), loss, int(min_samples_split), int(min_samples_leaf), self.cv)
                 gradientObject.trainingMethod(kindDataSet)
                 predictionsData.append(gradientObject.model.predict(self.data).tolist())
 
@@ -156,7 +158,7 @@ class useSelectedModels(object):
                 metric = self.searchParamValue(parametros,'metric')
                 weights = self.searchParamValue(parametros,'weights')
 
-                knnObect = knn.knn(self.data, self.target, int(n_neighbors), algorithmData, metric,  weights,10)
+                knnObect = knn.knn(self.data, self.target, int(n_neighbors), algorithmData, metric,  weights,self.cv)
                 knnObect.trainingMethod(kindDataSet)
                 predictionsData.append(knnObect.model.predict(self.data).tolist())
 
@@ -172,7 +174,7 @@ class useSelectedModels(object):
                 max_iter = self.searchParamValue(parametros,'max_iter')
                 shuffle = self.searchParamValue(parametros,'shuffle')
 
-                MLPObject = MLP.MLP(self.data, self.target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, float(alpha), int(max_iter), shuffle, 10)
+                MLPObject = MLP.MLP(self.data, self.target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, float(alpha), int(max_iter), shuffle, self.cv)
                 MLPObject.trainingMethod(kindDataSet)
                 predictionsData.append(MLPObject.model.predict(self.data).tolist())
 
@@ -183,7 +185,7 @@ class useSelectedModels(object):
                 gamma = self.searchParamValue(parametros,'gamma')
                 nu = self.searchParamValue(parametros,'nu')
 
-                nuSVM = NuSVM.NuSVM(self.data, self.target, kernel, float(nu), int(degree), 0.01, 10)
+                nuSVM = NuSVM.NuSVM(self.data, self.target, kernel, float(nu), int(degree), 0.01, self.cv)
                 nuSVM.trainingMethod(kindDataSet)
 
                 predictionsData.append(nuSVM.model.predict(self.data).tolist())
@@ -196,7 +198,7 @@ class useSelectedModels(object):
                 gamma = self.searchParamValue(parametros,'gamma')
                 C_value = self.searchParamValue(parametros,'c')
 
-                svm = SVM.SVM(self.data, self.target, kernel, float(C_value), int(degree), 0.01, 10)
+                svm = SVM.SVM(self.data, self.target, kernel, float(C_value), int(degree), 0.01, self.cv)
                 svm.trainingMethod(kindDataSet)
                 predictionsData.append(svm.model.predict(self.data).tolist())
 
@@ -208,7 +210,7 @@ class useSelectedModels(object):
                 min_samples_split = self.searchParamValue(parametros,'min_samples_split')
                 min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
 
-                rf = RandomForest.RandomForest(self.data, self.target, int(n_estimators), criterion, 2, 1, bootstrap, 10)
+                rf = RandomForest.RandomForest(self.data, self.target, int(n_estimators), criterion, 2, 1, bootstrap, self.cv)
                 rf.trainingMethod(kindDataSet)
                 predictionsData.append(rf.model.predict(self.data).tolist())
 
@@ -221,7 +223,7 @@ class useSelectedModels(object):
             precision = precision_score(self.target, dataResponseWeight)
             recall = recall_score(self.target, dataResponseWeight)
             f1 = f1_score(self.target, dataResponseWeight)
-        else:#multiclass            
+        else:#multiclass
             accuracy = accuracy_score(self.target, dataResponseWeight)
             precision = precision_score(self.target, dataResponseWeight, average='micro')
             recall = recall_score(self.target, dataResponseWeight, average='micro')

@@ -21,6 +21,7 @@ class responseTraining(object):
         self.algorithm = algorithm
         self.params = params
         if validation == -1:
+            print "Entre :/"
             self.validation = LeaveOneOut()
             self.validationName = "LeaveOneOut"
         else:
