@@ -43,6 +43,7 @@ from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
 from mls_models.utils import exportMetaModel
 from mls_models.utils import useSelectedModelClf
+from mls_models.utils import encodingFeatures
 
 #funcion para completar el proceso de la informacion correspondiente a la data empleada y permite crear los graficos para la vista en web
 def completeProcess(dataSetName, pathResponse, dataSetOriginal):
@@ -116,8 +117,12 @@ else:
     kindDataSet =2
 
 #ahora transformamos el set de datos por si existen elementos discretos...
-transformDataSet = transformFrequence.frequenceData(dataValues)
-dataSetNewFreq = transformDataSet.dataTransform
+#transformDataSet = transformFrequence.frequenceData(dataValues)
+#dataSetNewFreq = transformDataSet.dataTransform
+
+encoding = encodingFeatures.encodingFeatures(dataValues, 20)
+encoding.evaluEncoderKind()
+dataSetNewFreq = encoding.dataSet
 
 #ahora aplicamos el procesamiento segun lo expuesto
 applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
@@ -127,7 +132,6 @@ data = applyNormal.dataTransform
 header = ["Algorithm", "Params", "Validation", "Accuracy", "Recall", "Precision", "F1"]
 matrixResponse = []
 
-'''
 #comenzamos con las ejecuciones...
 #AdaBoost
 for algorithm in ['SAMME', 'SAMME.R']:
@@ -172,7 +176,6 @@ except:
     iteracionesIncorrectas+=1
     pass
 
-'''
 #DecisionTree
 for criterion in ['gini', 'entropy']:
     for splitter in ['best', 'random']:
@@ -187,7 +190,6 @@ for criterion in ['gini', 'entropy']:
         except:
             iteracionesIncorrectas+=1
             pass
-'''
 try:
     #GaussianNB
     gaussianObject = GaussianNB.Gaussian(data, target, 10)
@@ -232,7 +234,7 @@ for n_neighbors in range(1,11):
                 except:
                     iteracionesIncorrectas+=1
                     pass
-
+'''
 #MLP
 #activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle
 for activation in ['identity', 'logistic', 'tanh', 'relu']:
@@ -256,7 +258,7 @@ for activation in ['identity', 'logistic', 'tanh', 'relu']:
                                     except:
                                         iteracionesIncorrectas+=1
                                         pass
-
+'''
 #NuSVC
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
     for nu in [0.01, 0.05, 0.1, 0.5]:
@@ -305,7 +307,7 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
             except:
                 iteracionesIncorrectas+=1
                 pass
-'''
+
 #generamos el export de la matriz convirtiendo a data frame
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
 

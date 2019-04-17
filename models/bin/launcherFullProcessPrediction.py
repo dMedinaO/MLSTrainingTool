@@ -45,6 +45,7 @@ from mls_models.utils import makeDiagrammRepresent
 from mls_models.utils import getPerformanceModel
 from mls_models.utils import exportMetaModel
 from mls_models.utils import useSelectedModelPrediction
+from mls_models.utils import encodingFeatures
 
 def completeProcess(dataSetName, pathResponse, dataSetOriginal):
 
@@ -108,8 +109,12 @@ transformData = transformDataClass.transformClass(targetResponse)
 target = transformData.transformData
 
 #ahora transformamos el set de datos por si existen elementos discretos...
-transformDataSet = transformFrequence.frequenceData(dataValues)
-dataSetNewFreq = transformDataSet.dataTransform
+#transformDataSet = transformFrequence.frequenceData(dataValues)
+#dataSetNewFreq = transformDataSet.dataTransform
+
+encoding = encodingFeatures.encodingFeatures(dataValues, 20)
+encoding.evaluEncoderKind()
+dataSetNewFreq = encoding.dataSet
 
 #ahora aplicamos el procesamiento segun lo expuesto
 applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
@@ -229,7 +234,7 @@ for n_neighbors in range(1,11):
                 except:
                     iteracionesIncorrectas+=1
                     pass
-
+'''
 #MLP
 #activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle
 for activation in ['identity', 'logistic', 'tanh', 'relu']:
@@ -259,7 +264,7 @@ for activation in ['identity', 'logistic', 'tanh', 'relu']:
                                         iteracionesIncorrectas+=1
                                         pass
                                     print matrixResponse
-
+'''
 #NuSVR
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
     for nu in [0.01, 0.05, 0.1, 0.5]:
