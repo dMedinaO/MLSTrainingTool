@@ -1,0 +1,5 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+Bagging,bootstrap:False-n_estimators:10,CV-5,0.403968253968,0.366666666667,0.33,0.344285714286
+BernoulliNB,Default,CV-5,0.479761904762,0.366666666667,0.316666666667,0.326984126984
+DecisionTree,criterion:gini-splitter:best,CV-5,0.403968253968,0.366666666667,0.34,0.351428571429
+DecisionTree,criterion:entropy-splitter:best,CV-5,0.461111111111,0.366666666667,0.35,0.344285714286

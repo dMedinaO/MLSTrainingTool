@@ -1,0 +1,6 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+MLPClassifier,activation:logistic-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.001000-max_iter:100-shuffle:False,CV-10,0.496455840456,0.9,0.140307692308,0.51393314367
+MLPClassifier,activation:logistic-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:500-shuffle:True,CV-10,0.484455840456,0.9,0.284307692308,0.321045519203
+MLPClassifier,activation:logistic-solver:sgd-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.001000-max_iter:500-shuffle:True,CV-10,0.515532763533,0.9,0.376615384615,0.257887624467
+MLPClassifier,activation:logistic-solver:adam-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:100-shuffle:False,CV-10,0.515544159544,0.9,0.284455840456,0.256045519203
+MLPClassifier,activation:relu-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.020000-max_iter:500-shuffle:False,CV-10,0.484467236467,0.9,0.236307692308,0.38420341394

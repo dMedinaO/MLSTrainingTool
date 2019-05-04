@@ -1,0 +1,7 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+AdaBoostClassifier,Algorithm:SAMME-n_estimators:10,LeaveOneOut,0.6,0.1,0.1,0.1
+AdaBoostClassifier,Algorithm:SAMME.R-n_estimators:10,LeaveOneOut,0.5,0.1,0.1,0.1
+Bagging,bootstrap:False-n_estimators:10,LeaveOneOut,0.5,0.1,0.1,0.1
+DecisionTree,criterion:gini-splitter:best,LeaveOneOut,0.4,0.1,0.2,0.1
+DecisionTree,criterion:entropy-splitter:best,LeaveOneOut,0.5,0.1,0.1,0.1
+DecisionTree,criterion:entropy-splitter:random,LeaveOneOut,0.4,0.1,0.2,0.1

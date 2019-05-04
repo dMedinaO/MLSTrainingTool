@@ -1,0 +1,10 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+MLPClassifier,activation:identity-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.002000-max_iter:1000-shuffle:True,CV-10,0.496455840456,0.570512820513,0.413635327635,0.581113695054
+MLPClassifier,activation:identity-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.020000-max_iter:100-shuffle:False,CV-10,0.51215954416,0.175,0.390398148148,0.579579387296
+MLPClassifier,activation:identity-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:1500-shuffle:True,CV-10,0.511994301994,0.558333333333,0.250666666667,0.583272116101
+MLPClassifier,activation:identity-solver:adam-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.002000-max_iter:1500-shuffle:False,CV-10,0.467270655271,0.483333333333,0.408633545104,0.593802377174
+MLPClassifier,activation:logistic-solver:adam-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:1500-shuffle:True,CV-10,0.500148148148,0.5,0.236307692308,0.641955903272
+MLPClassifier,activation:logistic-solver:adam-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.020000-max_iter:500-shuffle:True,CV-10,0.492148148148,0.4,0.236307692308,0.577091038407
+MLPClassifier,activation:tanh-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.001000-max_iter:1000-shuffle:False,CV-10,0.48415954416,0.508333333333,0.198551994302,0.575336470073
+MLPClassifier,activation:relu-solver:sgd-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:100-shuffle:False,CV-10,0.507544159544,0.433333333333,0.247487179487,0.575471605208
+MLPClassifier,activation:relu-solver:sgd-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.001000-max_iter:200-shuffle:False,CV-10,0.51984045584,0.286538461538,0.269641025641,0.563915975867

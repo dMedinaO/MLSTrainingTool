@@ -1,0 +1,17 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+KNeighborsClassifier,n_neighbors:3-algorithm:auto-metric:minkowski-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:auto-metric:minkowski-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:auto-metric:euclidean-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:auto-metric:euclidean-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:ball_tree-metric:minkowski-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:ball_tree-metric:minkowski-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:ball_tree-metric:euclidean-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:ball_tree-metric:euclidean-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:kd_tree-metric:minkowski-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:kd_tree-metric:minkowski-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:kd_tree-metric:euclidean-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:kd_tree-metric:euclidean-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:brute-metric:minkowski-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:brute-metric:minkowski-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:brute-metric:euclidean-weights:uniform,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636
+KNeighborsClassifier,n_neighbors:3-algorithm:brute-metric:euclidean-weights:distance,LeaveOneOut,0.727272727273,0.363636363636,0.363636363636,0.363636363636

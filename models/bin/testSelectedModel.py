@@ -19,6 +19,7 @@ for i in range(len(listKey)):
     modelSelecter.selectedModelData(modelSelecter.meanData[i], modelSelecter.stdData[i], listKey[i])
     dataSetsSelected.append(modelSelecter.dataFrame)
 
+'''
 #testeamos la generacion del wordcloud
 makeWord = makeworld_cloud.createWorldCloud(dataSetsSelected[0], dataSetsSelected[1], dataSetsSelected[2], dataSetsSelected[3], sys.argv[2])
 makeWord.createGraphic()
@@ -34,3 +35,4 @@ exportModel.getUniqueModels()
 #usamos el meta modelo para obtener las medidas de desempeno
 modelsMeta = useSelectedModelClf.useSelectedModels(sys.argv[3], sys.argv[2]+"meta_models.json", sys.argv[2])
 modelsMeta.applyModelsSelected()
+'''

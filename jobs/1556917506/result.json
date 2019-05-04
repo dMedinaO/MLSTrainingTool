@@ -1,0 +1,1 @@
+[{"data": [{"name": "KNeighborsClassifier", "value": 16}], "name": "Accuracy"}, {"data": [{"name": "KNeighborsClassifier", "value": 8}], "name": "Recall"}, {"data": [{"name": "DecisionTree", "value": 2}, {"name": "KNeighborsClassifier", "value": 8}], "name": "Precision"}, {"data": [{"name": "KNeighborsClassifier", "value": 8}], "name": "F1"}]

@@ -1,0 +1,17 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:minkowski-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:minkowski-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:euclidean-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:euclidean-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:minkowski-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:minkowski-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:euclidean-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:euclidean-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:minkowski-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:minkowski-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:euclidean-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:euclidean-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:minkowski-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:minkowski-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:euclidean-weights:uniform,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086
+KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:euclidean-weights:distance,CV-5,0.606060606061,1.0,0.585227272727,0.737556561086

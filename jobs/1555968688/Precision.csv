@@ -1,0 +1,6 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+MLPClassifier,activation:identity-solver:sgd-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.002000-max_iter:100-shuffle:False,CV-10,0.498928774929,0.352564102564,0.595779220779,0.34408170965
+MLPClassifier,activation:identity-solver:adam-learning:invscaling-hidden_layer_sizes:1+1+1-alpha:0.200000-max_iter:1000-shuffle:False,CV-10,0.547378917379,0.372435897436,0.573730565731,0.369386653729
+MLPClassifier,activation:identity-solver:adam-learning:adaptive-hidden_layer_sizes:1+1+1-alpha:0.200000-max_iter:1000-shuffle:True,CV-10,0.465048433048,0.339743589744,0.688598290598,0.343534455928
+MLPClassifier,activation:tanh-solver:lbfgs-learning:constant-hidden_layer_sizes:1+1+1-alpha:0.001000-max_iter:500-shuffle:False,CV-10,0.52015954416,0.364743589744,0.573392857143,0.36398802664
+MLPClassifier,activation:tanh-solver:lbfgs-learning:constant-hidden_layer_sizes:1+1+1-alpha:0.100000-max_iter:500-shuffle:False,CV-10,0.481663817664,0.372435897436,0.5748159735,0.467244558906

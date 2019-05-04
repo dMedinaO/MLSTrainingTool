@@ -1,0 +1,12 @@
+example,class,Prob
+1,D, class: D-prob: 50.0 class: N-prob: 0.0
+2,D, class: D-prob: 50.0 class: N-prob: 0.0
+3,D, class: D-prob: 50.0 class: N-prob: 0.0
+4,N, class: D-prob: 0.0 class: N-prob: 50.0
+5,N, class: D-prob: 0.0 class: N-prob: 50.0
+6,N, class: D-prob: 0.0 class: N-prob: 50.0
+7,N, class: D-prob: 0.0 class: N-prob: 50.0
+8,N, class: D-prob: 0.0 class: N-prob: 50.0
+9,N, class: D-prob: 0.0 class: N-prob: 50.0
+10,N, class: D-prob: 0.0 class: N-prob: 50.0
+11,D, class: D-prob: 50.0 class: N-prob: 0.0

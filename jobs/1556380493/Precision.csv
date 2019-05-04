@@ -1,0 +1,2 @@
+Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
+Bagging,bootstrap:True-n_estimators:10,CV-5,0.485317460317,0.183333333333,0.613333333333,0.190476190476
