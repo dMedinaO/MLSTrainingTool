@@ -61,14 +61,15 @@ class useSelectedModels(object):
         self.dictTransform = transformData.dictTransform
 
         #ahora transformamos el set de datos por si existen elementos discretos...
-        transformDataSet = transformFrequence.frequenceData(dataValues)
-        dataSetNewFreq = transformDataSet.dataTransform
+        #transformDataSet = transformFrequence.frequenceData(dataValues)
+        #dataSetNewFreq = transformDataSet.dataTransform
 
         #ahora aplicamos el procesamiento segun lo expuesto
-        applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
-        self.data = applyNormal.dataTransform
-
-
+        #applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
+        #self.data = applyNormal.dataTransform
+        self.data = dataValues
+        
+        print self.data
     #metodo que permite buscar elementos de un diccionario en un array de diccionario...
     def searchParamValue(self, paramData, key):
 
@@ -76,8 +77,10 @@ class useSelectedModels(object):
         for i in range(len(paramData)):
 
             keysData = paramData[i].keys()
+
             isData = 0
-            if keysData[0] == key:
+
+            if key in keysData:
                 isData = 1
 
             if isData == 1:
@@ -106,7 +109,9 @@ class useSelectedModels(object):
 
             if algorithm == 'AdaBoostClassifier':
                 algorithmData = self.searchParamValue(parametros,'Algorithm')
-                n_estimators = self.searchParamValue(parametros,'n_estimators')
+                n_estimators = int(self.searchParamValue(parametros,'n_estimators'))
+                print algorithmData
+                print n_estimators
                 AdaBoostObject = AdaBoost.AdaBoost(self.data, self.target, int(n_estimators), algorithmData, self.cv)
                 AdaBoostObject.trainingMethod(kindDataSet)
                 predictionsData.append(AdaBoostObject.model.predict(self.data).tolist())
@@ -167,11 +172,11 @@ class useSelectedModels(object):
                 activation = self.searchParamValue(parametros,'activation')
                 solver = self.searchParamValue(parametros,'solver')
                 learning_rate = self.searchParamValue(parametros,'learning')
-                hidden_layer_sizes_a = 1
-                hidden_layer_sizes_b = 1
-                hidden_layer_sizes_c = 1
-                alpha = self.searchParamValue(parametros,'alpha')
-                max_iter = self.searchParamValue(parametros,'max_iter')
+                hidden_layer_sizes_a = int(self.searchParamValue(parametros,'hidden_a'))
+                hidden_layer_sizes_b = int(self.searchParamValue(parametros,'hidden_b'))
+                hidden_layer_sizes_c = int(self.searchParamValue(parametros,'hidden_c'))
+                alpha = float(self.searchParamValue(parametros,'alpha'))
+                max_iter = int(self.searchParamValue(parametros,'max_iter'))
                 shuffle = self.searchParamValue(parametros,'shuffle')
 
                 MLPObject = MLP.MLP(self.data, self.target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, float(alpha), int(max_iter), shuffle, self.cv)

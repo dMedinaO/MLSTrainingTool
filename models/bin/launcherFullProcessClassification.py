@@ -72,7 +72,7 @@ def completeProcess(dataSetName, pathResponse, dataSetOriginal):
     exportModel.getUniqueModels()
 
     #usamos el meta modelo para obtener las medidas de desempeno
-    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, LeaveOneOut())
+    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, 5)
     modelsMeta.applyModelsSelected()
 
 
@@ -121,6 +121,7 @@ else:
 transformDataSet = transformFrequence.frequenceData(dataValues)
 dataSetNewFreq = transformDataSet.dataTransform
 
+#transformamos la data con ordinal encoder
 #ahora aplicamos el procesamiento segun lo expuesto
 applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
 data = applyNormal.dataTransform

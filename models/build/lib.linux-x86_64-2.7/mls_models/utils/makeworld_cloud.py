@@ -11,12 +11,11 @@ import matplotlib.pyplot as plt
 
 class createWorldCloud(object):
 
-    def __init__(self, dataSet1, dataSet2, dataSet3, dataSet4, pathOutput):
+    def __init__(self, dataSet1, dataSet2, dataSet3, pathOutput):
 
         self.dataSet1 = dataSet1
         self.dataSet2 = dataSet2
         self.dataSet3 = dataSet3
-        self.dataSet4 = dataSet4
         self.pathOutput = pathOutput
 
     #formamos la lista con todos los elementos
@@ -32,12 +31,11 @@ class createWorldCloud(object):
     #metodo que permite crear el worldcloud
     def createGraphic(self):
 
-        commentwords1 = self.createList(self.dataSet1['Algorithm'])
-        commentwords2 = self.createList(self.dataSet2['Algorithm'])
-        commentwords3 = self.createList(self.dataSet3['Algorithm'])
-        commentwords4 = self.createList(self.dataSet4['Algorithm'])
+        commentwords1 = self.createList(self.dataSet1['algorithm'])
+        commentwords2 = self.createList(self.dataSet2['algorithm'])
+        commentwords3 = self.createList(self.dataSet3['algorithm'])
 
-        commentData = commentwords1 + commentwords2 + commentwords3 + commentwords4
+        commentData = commentwords1 + commentwords2 + commentwords3
         wordcloud = WordCloud(width = 800, height = 400,background_color ='white',min_font_size = 10).generate(commentData)
         plt.figure(figsize = (8, 4), facecolor = None)
         plt.imshow(wordcloud, interpolation='bilinear')
