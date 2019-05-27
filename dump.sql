@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
 --
 -- Host: localhost    Database: mls_class_db
 -- ------------------------------------------------------
--- Server version	5.7.25-0ubuntu0.16.04.2
+-- Server version	5.7.23-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,32 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `feature`
+--
+
+DROP TABLE IF EXISTS `feature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feature` (
+  `idfeature` int(11) NOT NULL AUTO_INCREMENT,
+  `nameFeature` varchar(45) NOT NULL,
+  `kind` varchar(45) NOT NULL,
+  `dataSet` int(11) NOT NULL,
+  PRIMARY KEY (`idfeature`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feature`
+--
+
+LOCK TABLES `feature` WRITE;
+/*!40000 ALTER TABLE `feature` DISABLE KEYS */;
+INSERT INTO `feature` VALUES (1,'AAWT','CATEGORICAL',1558867458),(2,'Pos','CONTINUE',1558867458),(3,'AAMT','CATEGORICAL',1558867458),(4,'ChainID','CATEGORICAL',1558867458),(5,'WT_SSE','CATEGORICAL',1558867458),(6,'WT_RSA','CONTINUE',1558867458),(7,'WT_DEPTH','CONTINUE',1558867458),(8,'WT_OSP','CONTINUE',1558867458),(9,'MT_SSE','CATEGORICAL',1558867458),(10,'MT_RSA','CONTINUE',1558867458),(11,'MT_DEPTH','CONTINUE',1558867458),(12,'MT_OSP','CONTINUE',1558867458),(13,'DDG','CONTINUE',1558867458),(14,'Outcome','CATEGORICAL',1558867458),(15,'AAWT','CATEGORICAL',1558867802),(16,'Pos','CONTINUE',1558867802),(17,'AAMT','CATEGORICAL',1558867802),(18,'ChainID','CATEGORICAL',1558867802),(19,'WT_SSE','CATEGORICAL',1558867802),(20,'WT_RSA','CONTINUE',1558867802),(21,'WT_DEPTH','CONTINUE',1558867802),(22,'WT_OSP','CONTINUE',1558867802),(23,'MT_SSE','CATEGORICAL',1558867802),(24,'MT_RSA','CONTINUE',1558867802),(25,'MT_DEPTH','CONTINUE',1558867802),(26,'MT_OSP','CONTINUE',1558867802),(27,'DDG','CONTINUE',1558867802),(28,'Outcome','CATEGORICAL',1558867802),(29,'AAWT','CATEGORICAL',1558870802),(30,'Pos','CONTINUE',1558870802),(31,'AAMT','CATEGORICAL',1558870802),(32,'ChainID','CATEGORICAL',1558870802),(33,'WT_SSE','CATEGORICAL',1558870802),(34,'WT_RSA','CONTINUE',1558870802),(35,'WT_DEPTH','CONTINUE',1558870802),(36,'WT_OSP','CONTINUE',1558870802),(37,'MT_SSE','CATEGORICAL',1558870802),(38,'MT_RSA','CONTINUE',1558870802),(39,'MT_DEPTH','CONTINUE',1558870802),(40,'MT_OSP','CONTINUE',1558870802),(41,'DDG','CONTINUE',1558870802),(42,'Response','CONTINUE',1558870802),(43,'AAWT','CATEGORICAL',1558885359),(44,'Pos','CONTINUE',1558885359),(45,'AAMT','CATEGORICAL',1558885359),(46,'ChainID','CATEGORICAL',1558885359),(47,'WT_SSE','CATEGORICAL',1558885359),(48,'WT_RSA','CONTINUE',1558885359),(49,'WT_DEPTH','CONTINUE',1558885359),(50,'WT_OSP','CONTINUE',1558885359),(51,'MT_SSE','CATEGORICAL',1558885359),(52,'MT_RSA','CONTINUE',1558885359),(53,'MT_DEPTH','CONTINUE',1558885359),(54,'MT_OSP','CONTINUE',1558885359),(55,'DDG','CONTINUE',1558885359),(56,'Outcome','CATEGORICAL',1558885359),(57,'AAWT','CATEGORICAL',1558889033),(58,'Pos','CONTINUE',1558889033),(59,'AAMT','CATEGORICAL',1558889033),(60,'ChainID','CATEGORICAL',1558889033),(61,'WT_SSE','CATEGORICAL',1558889033),(62,'WT_RSA','CONTINUE',1558889033),(63,'WT_DEPTH','CONTINUE',1558889033),(64,'WT_OSP','CONTINUE',1558889033),(65,'MT_SSE','CATEGORICAL',1558889033),(66,'MT_RSA','CONTINUE',1558889033),(67,'MT_DEPTH','CONTINUE',1558889033),(68,'MT_OSP','CONTINUE',1558889033),(69,'DDG','CONTINUE',1558889033),(70,'Response','CONTINUE',1558889033);
+/*!40000 ALTER TABLE `feature` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `jobData`
@@ -44,8 +70,35 @@ CREATE TABLE `jobData` (
 
 LOCK TABLES `jobData` WRITE;
 /*!40000 ALTER TABLE `jobData` DISABLE KEYS */;
-INSERT INTO `jobData` VALUES (1549819411,'Testing iris','Description iris','david.medina@cebib.cl',0,'2019-04-11 14:31:35','2019-04-11 15:08:03','FINISH','INIT JOB','CLASSIFICATION','iris.csv'),(1552975661,'Caesarian data set','Description Demo','david.medina@cebib.cl',0,'2019-04-11 14:33:33','2019-04-11 14:46:12','FINISH','INIT JOB','CLASSIFICATION','caesarian_edit.csv'),(1554836124,'clf','clf','david.medina@cebib.cl',0,'2019-04-09 15:55:24','2019-04-09 15:55:24','FINISH','INIT JOB','CLASSIFICATION','Immunotherapy_edit.csv'),(1554836166,'prediction','prediction','david.medina@cebib.cl',0,'2019-04-09 15:56:06','2019-04-09 15:56:06','FINISH','INIT JOB','PREDICTION','data.csv'),(1555004394,'Testing airfoil data set','Testing airfoil data set','david.medina@cebib.cl',0,'2019-04-11 14:39:54','2019-04-17 19:15:39','PROCESSING','INIT JOB','PREDICTION','airfoil_self_noise.csv'),(1555004469,'Testing electrical grid','Testing electrical grid','david.medina@cebib.cl',0,'2019-04-11 14:41:09','2019-04-17 19:15:41','PROCESSING','INIT JOB','PREDICTION','Data_for_UCI_named.csv'),(1555539299,'A Atribute VHL','A Atribue VHL','david.medina@cebib.cl',0,'2019-04-17 19:14:59','2019-04-17 19:15:44','PROCESSING','INIT JOB','CLASSIFICATION','iris.csv'),(1555539520,'A Atribute VHL','A Group','david.medina@cebib.cl',0,'2019-04-17 19:18:40','2019-04-17 19:19:14','PROCESSING','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1555539762,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:22:42','2019-04-17 19:22:51','PROCESSING','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1555539842,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:24:02','2019-04-17 19:24:39','FINISH','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1555539988,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:26:28','2019-04-17 19:37:43','FINISH','INIT JOB','CLASSIFICATION','B_Attribute.csv'),(1555540830,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:40:30','2019-04-17 19:41:22','FINISH','INIT JOB','CLASSIFICATION','C_Attribute.csv'),(1555540950,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:42:31','2019-04-17 19:42:54','FINISH','INIT JOB','CLASSIFICATION','F_Attribute.csv'),(1555541052,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:44:12','2019-04-17 19:44:38','FINISH','INIT JOB','CLASSIFICATION','H_Attribute.csv'),(1555541125,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:45:25','2019-04-17 19:45:58','FINISH','INIT JOB','CLASSIFICATION','M_Attribute.csv'),(1555541211,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:46:51','2019-04-17 19:46:57','PROCESSING','INIT JOB','CLASSIFICATION','N_Attribute.csv'),(1555541264,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:47:44','2019-04-17 19:48:27','FINISH','INIT JOB','CLASSIFICATION','O_Attribute.csv'),(1555541378,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:49:38','2019-04-17 19:50:21','FINISH','INIT JOB','CLASSIFICATION','P_Attribute.csv'),(1555541489,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:51:29','2019-04-17 19:52:53','FINISH','INIT JOB','CLASSIFICATION','R_Attribute.csv'),(1555541700,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:55:00','2019-04-17 19:55:11','PROCESSING','INIT JOB','CLASSIFICATION','T_Attribute.csv'),(1555541775,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:56:15','2019-04-17 19:56:41','FINISH','INIT JOB','CLASSIFICATION','T_Attribute.csv'),(1555541830,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:57:10','2019-04-17 19:57:34','FINISH','INIT JOB','CLASSIFICATION','U_Attribute.csv'),(1555541932,'123','123','david.medina@cebib.cl',0,'2019-04-17 19:58:52','2019-04-17 19:59:37','FINISH','INIT JOB','CLASSIFICATION','Z_Attribute.csv'),(1555542085,'A Atribute VHL','A Group','david.medina@cebib.cl',0,'2019-04-17 20:01:25','2019-04-18 00:08:53','FINISH','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1555542111,'B Atribute VHL','B Group','david.medina@cebib.cl',0,'2019-04-17 20:01:51','2019-04-17 22:34:01','FINISH','INIT JOB','CLASSIFICATION','B_Attribute.csv'),(1555542132,'C Atribute VHL','C group','david.medina@cebib.cl',0,'2019-04-17 20:02:12','2019-04-22 15:17:49','FINISH','INIT JOB','CLASSIFICATION','C_Attribute.csv'),(1555542157,'F Atribute VHL','F group','david.medina@cebib.cl',0,'2019-04-17 20:02:37','2019-04-17 22:30:30','FINISH','INIT JOB','CLASSIFICATION','F_Attribute.csv'),(1555957247,'Testing full','Testing full','david.medina@cebib.cl',0,'2019-04-22 15:20:47','2019-04-22 15:24:45','FINISH','INIT JOB','CLASSIFICATION','dataCSV.csv'),(1555960466,'Testing VHL','Testing VHL','david.medina@cebib.cl',0,'2019-04-22 16:14:26','2019-04-22 16:15:14','PROCESSING','INIT JOB','CLASSIFICATION','dataCSV.csv'),(1555963157,'A Atribute VHL','A Atribue VHL','david.medina@cebib.cl',0,'2019-04-22 16:59:17','2019-04-22 17:34:42','FINISH','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1555968688,'Testing Full VHL','Testing Full VHL','david.medina@cebib.cl',0,'2019-04-22 18:31:28','2019-04-22 21:42:30','FINISH','INIT JOB','CLASSIFICATION','dataCSV.csv'),(1556376546,'A Atribute VHL','A Atribue VHL','david.medina@cebib.cl',0,'2019-04-27 11:49:06','2019-04-27 12:14:23','FINISH','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1556376569,'B Atribute VHL','B Group','david.medina@cebib.cl',0,'2019-04-27 11:49:29','2019-04-27 12:48:55','FINISH','INIT JOB','CLASSIFICATION','B_Attribute.csv'),(1556376591,'C Atribute VHL','C group','david.medina@cebib.cl',0,'2019-04-27 11:49:51','2019-04-27 12:13:26','FINISH','INIT JOB','CLASSIFICATION','C_Attribute.csv'),(1556376801,'F Atribute VHL','F group','david.medina@cebib.cl',0,'2019-04-27 11:53:21','2019-04-27 12:13:42','FINISH','INIT JOB','CLASSIFICATION','F_Attribute.csv'),(1556380438,'H Group','H group','david.medina@cebib.cl',0,'2019-04-27 12:53:58','2019-04-27 12:56:57','PROCESSING','INIT JOB','CLASSIFICATION','H_Attribute.csv'),(1556380457,'M group','M group','david.medina@cebib.cl',0,'2019-04-27 12:54:17','2019-04-27 13:38:20','FINISH','INIT JOB','CLASSIFICATION','M_Attribute.csv'),(1556380493,'O group','O group','david.medina@cebib.cl',0,'2019-04-27 12:54:53','2019-04-27 13:38:39','FINISH','INIT JOB','CLASSIFICATION','O_Attribute.csv'),(1556380516,'P group','P group','david.medina@cebib.cl',0,'2019-04-27 12:55:16','2019-04-27 13:37:53','FINISH','INIT JOB','CLASSIFICATION','P_Attribute.csv'),(1556827080,'B Atribute VHL','B Group','david.medina@cebib.cl',0,'2019-05-02 16:58:00','2019-05-02 18:21:16','FINISH','INIT JOB','CLASSIFICATION','B_Attribute.csv'),(1556917169,'A Atribute VHL','A Atribue VHL','david.medina@cebib.cl',0,'2019-05-03 17:59:29','2019-05-03 20:36:30','FINISH','INIT JOB','CLASSIFICATION','A_Attribute.csv'),(1556917506,'B Atribute VHL','B Group','david.medina@cebib.cl',0,'2019-05-03 18:05:06','2019-05-03 19:36:06','FINISH','INIT JOB','CLASSIFICATION','B_Attribute.csv'),(1556917529,'C Atribute VHL','C group','david.medina@cebib.cl',0,'2019-05-03 18:05:29','2019-05-03 19:26:49','FINISH','INIT JOB','CLASSIFICATION','C_Attribute.csv'),(1556917552,'C Atribute VHL','C group','david.medina@cebib.cl',0,'2019-05-03 18:05:52','2019-05-03 19:36:26','FINISH','INIT JOB','CLASSIFICATION','F_Attribute.csv');
+INSERT INTO `jobData` VALUES (1558867458,'Testing 1A22 clf','Testing 1A22 clf','david.medina@cebib.cl',0,'2019-05-26 06:44:18','2019-05-26 06:44:18','INIT','INIT JOB','CLASSIFICATION','1A22_SDM_clf.csv'),(1558867543,'Testing 1A22 clf','Testing 1A22 clf','david.medina@cebib.cl',0,'2019-05-26 06:45:43','2019-05-26 06:45:43','INIT','INIT JOB','CLASSIFICATION','1A22_SDM_clf.csv'),(1558867751,'Testing 1A22 clf','Testing 1A22 clf','david.medina@cebib.cl',0,'2019-05-26 06:49:11','2019-05-26 06:49:11','INIT','INIT JOB','CLASSIFICATION','1A22_SDM_clf.csv'),(1558867802,'Testing 1A22 clf','Testing 1A22 clf','david.medina@cebib.cl',0,'2019-05-26 06:50:02','2019-05-26 06:50:02','INIT','INIT JOB','CLASSIFICATION','1A22_SDM_clf.csv'),(1558870802,'Testing 1A22 rgx','Testing 1A22 rgx','david.medina@cebib.cl',0,'2019-05-26 09:15:28','2019-05-26 07:40:02','START','INIT JOB','PREDICTION','1A22_SDM.csv'),(1558885359,'Testing 1A22 clf','Testing 1A22 clf','david.medina@cebib.cl',0,'2019-05-26 12:07:39','2019-05-26 11:42:39','START','INIT JOB','CLASSIFICATION','1A22_SDM_clf.csv'),(1558889033,'Testing 1A22','Testing 1A22','david.medina@cebib.cl',0,'2019-05-26 12:44:01','2019-05-26 17:01:08','FINISH','INIT JOB','PREDICTION','1A22_SDM.csv');
 /*!40000 ALTER TABLE `jobData` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `response`
+--
+
+DROP TABLE IF EXISTS `response`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `response` (
+  `idResponse` int(11) NOT NULL AUTO_INCREMENT,
+  `nameFeature` varchar(500) NOT NULL,
+  `dataSet` int(11) NOT NULL,
+  `removeElements` int(11) NOT NULL,
+  `tipo` int(11) NOT NULL,
+  PRIMARY KEY (`idResponse`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `response`
+--
+
+LOCK TABLES `response` WRITE;
+/*!40000 ALTER TABLE `response` DISABLE KEYS */;
+INSERT INTO `response` VALUES (2,'DDG',1558870802,2,2),(3,'Outcome',1558885359,2,1),(4,'Outcome',1558885359,1,1),(5,'Response',1558889033,1,2);
+/*!40000 ALTER TABLE `response` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-04 13:24:18
+-- Dump completed on 2019-05-27 12:31:10
