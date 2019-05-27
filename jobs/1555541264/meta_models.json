@@ -1,1 +1,0 @@
-{"models": [{"params": [{"criterion": "gini"}, {"splitter": "best"}], "algorithm": "DecisionTree"}, {"params": [{"criterion": "entropy"}, {"splitter": "best"}], "algorithm": "DecisionTree"}, {"params": [{"criterion": "entropy"}, {"splitter": "random"}], "algorithm": "DecisionTree"}]}

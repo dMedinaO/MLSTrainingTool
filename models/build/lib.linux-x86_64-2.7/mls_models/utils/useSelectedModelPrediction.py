@@ -21,6 +21,7 @@ from mls_models.utils import ScaleNormalScore
 from mls_models.utils import ScaleMinMax
 from mls_models.utils import ScaleDataSetLog
 from mls_models.utils import ScaleLogNormalScore
+from mls_models.utils import encodingFeatures
 
 import pandas as pd
 import json
@@ -28,11 +29,12 @@ import numpy as np
 
 class useSelectedModels(object):
 
-    def __init__(self, dataSet, metaModels, pathResponse):
+    def __init__(self, dataSet, metaModels, pathResponse, featureResponse):
 
         self.dataSet = pd.read_csv(dataSet)
         self.metaModelsInfo = metaModels
         self.pathResponse = pathResponse
+        self.featureResponse = featureResponse
 
         #preparamos la data
         self.prepareDataSet()
@@ -40,23 +42,19 @@ class useSelectedModels(object):
     #metodo que permite preparar el set de datos
     def prepareDataSet(self):
 
-        columnas=self.dataSet.columns.tolist()
-        x=columnas[len(columnas)-1]
-        targetResponse=self.dataSet[x]#clases
-        y=columnas[0:len(columnas)-1]
-        dataValues=self.dataSet[y]#atributos
+        self.target = self.dataSet[self.featureResponse]#respuestas
+        dataValues=self.dataSet
+        del dataValues[self.featureResponse]
 
-        #transformamos la clase si presenta atributos discretos
-        transformData = transformDataClass.transformClass(targetResponse)
-        self.target = transformData.transformData
+        #generamos la codificacion
+        encoding = encodingFeatures.encodingFeatures(dataValues, 20)
+        encoding.evaluEncoderKind()
+        dataEncoding = encoding.dataSet
 
-        #ahora transformamos el set de datos por si existen elementos discretos...
-        transformDataSet = transformFrequence.frequenceData(dataValues)
-        dataSetNewFreq = transformDataSet.dataTransform
-
-        #ahora aplicamos el procesamiento segun lo expuesto
-        applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
+        #aplicamos la normalizacion
+        applyNormal = ScaleNormalScore.applyNormalScale(dataEncoding)
         self.data = applyNormal.dataTransform
+
 
     #metodo que permite buscar elementos de un diccionario en un array de diccionario...
     def searchParamValue(self, paramData, key):

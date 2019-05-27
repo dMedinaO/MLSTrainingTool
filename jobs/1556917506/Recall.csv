@@ -1,9 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-KNeighborsClassifier,n_neighbors:7-algorithm:auto-metric:minkowski-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:auto-metric:euclidean-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:ball_tree-metric:minkowski-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:ball_tree-metric:euclidean-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:kd_tree-metric:minkowski-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:kd_tree-metric:euclidean-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:brute-metric:minkowski-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545
-KNeighborsClassifier,n_neighbors:7-algorithm:brute-metric:euclidean-weights:distance,LeaveOneOut,0.636363636364,0.454545454545,0.454545454545,0.454545454545

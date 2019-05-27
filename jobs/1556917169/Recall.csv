@@ -1,3 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-BernoulliNB,Default,LeaveOneOut,0.6,0.45,0.45,0.45
-GaussianNB,Default,LeaveOneOut,0.6,0.45,0.45,0.45

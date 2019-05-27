@@ -1,1 +1,0 @@
-[{"data": [{"name": "MLPClassifier", "value": 9}], "name": "Accuracy"}, {"data": [{"name": "MLPClassifier", "value": 5}], "name": "Recall"}, {"data": [{"name": "MLPClassifier", "value": 5}], "name": "Precision"}, {"data": [{"name": "MLPClassifier", "value": 9}], "name": "F1"}]

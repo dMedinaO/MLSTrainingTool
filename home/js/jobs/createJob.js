@@ -60,12 +60,8 @@ $(document).ready(function() {
           $('#errorResponse').show();
           setTimeout("location.href=''", 5000);
         }else{
-          $('#loading').hide();
           var job = response.job;
-          var message = "The job ID: "+job+" has been correctly generated, changes will be notified via email. Use the ID to consult for the status of the Job.";
-          $(".messageOK").html( message);
-          $('#okResponse').show();
-          setTimeout("location.href=''", 5000);
+          location.href="checkDataSet/?job="+job+"&kind="+optionProcess;
         }
       });
   });

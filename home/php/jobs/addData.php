@@ -34,7 +34,7 @@
   $response ['nameFile'] = $nameDocument;
 
   #hacemos la insercion a la base de datos...
-  $query = "insert into jobData values ($idJob, '$nameJob', '$descJob', '$email', 0, NOW(), NOW(), 'START', 'INIT JOB', '$kind', '$nameDocument')";
+  $query = "insert into jobData values ($idJob, '$nameJob', '$descJob', '$email', 0, NOW(), NOW(), 'INIT', 'INIT JOB', '$kind', '$nameDocument')";
   $resultado = mysqli_query($conexion, $query);
   $requestData = verificar_resultado($resultado);
 
@@ -55,6 +55,12 @@
     $pathMove = "/var/www/html/MLSTrainingTool/jobs/$idJob/";
 
     $command = "mv $pathActual $pathMove";
+    $pathDataSet ="/var/www/html/MLSTrainingTool/jobs/$idJob/$nameDocument";
+    exec($command);
+
+    //ejecutamos el script python que permite el analisis de las caracteristicas
+    $command = "python /var/www/html/MLSTrainingTool/models/bin/launcherCheckFeature.py $pathDataSet $idJob";
+    $response['command'] = $command;
     exec($command);
 
     $response['exec'] = "OK";

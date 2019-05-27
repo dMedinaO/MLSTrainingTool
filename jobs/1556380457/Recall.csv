@@ -1,2 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-DecisionTree,criterion:entropy-splitter:random,CV-5,0.466666666667,0.9,0.433333333333,0.393333333333

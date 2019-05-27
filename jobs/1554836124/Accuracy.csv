@@ -1,5 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-Bagging,bootstrap:True-n_estimators:50,CV-10,0.878888888889,0.55,0.6,0.513333333333
-Bagging,bootstrap:True-n_estimators:500,CV-10,0.878888888889,0.55,0.616666666667,0.563333333333
-Bagging,bootstrap:True-n_estimators:1000,CV-10,0.878888888889,0.55,0.566666666667,0.546666666667
-Bagging,bootstrap:True-n_estimators:1500,CV-10,0.878888888889,0.55,0.566666666667,0.563333333333

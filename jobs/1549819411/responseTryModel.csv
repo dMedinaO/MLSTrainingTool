@@ -1,8 +1,0 @@
-example,class,Prob
-1,Versicolor, class: Setosa-prob: 0.0 class: Versicolor-prob: 100.0 class: Virginica-prob: 0.0
-2,Versicolor, class: Setosa-prob: 0.0 class: Versicolor-prob: 100.0 class: Virginica-prob: 0.0
-3,Setosa, class: Setosa-prob: 100.0 class: Versicolor-prob: 0.0 class: Virginica-prob: 0.0
-4,Versicolor, class: Setosa-prob: 0.0 class: Versicolor-prob: 100.0 class: Virginica-prob: 0.0
-5,Versicolor, class: Setosa-prob: 0.0 class: Versicolor-prob: 100.0 class: Virginica-prob: 0.0
-6,Virginica, class: Setosa-prob: 0.0 class: Versicolor-prob: 0.0 class: Virginica-prob: 100.0
-7,Versicolor, class: Setosa-prob: 0.0 class: Versicolor-prob: 100.0 class: Virginica-prob: 0.0

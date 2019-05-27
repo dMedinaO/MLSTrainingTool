@@ -47,7 +47,23 @@ from mls_models.utils import exportMetaModel
 from mls_models.utils import useSelectedModelPrediction
 from mls_models.utils import encodingFeatures
 
-def completeProcess(dataSetName, pathResponse, dataSetOriginal):
+#funcion que permite eliminar outliers
+def removeOutliersData(dataSet, featureResponse):
+
+    outliers = []
+    dataValues = dataSet[featureResponse]
+    threshold=3
+    mean_1 = np.mean(dataValues)
+    std_1 =np.std(dataValues)
+    index=0
+    for y in dataValues:
+        z_score= (y - mean_1)/std_1
+        if np.abs(z_score) > threshold:
+            outliers.append(index)
+        index+=1
+    return outliers
+
+def completeProcess(dataSetName, pathResponse, dataSetOriginal, featureResponse):
 
     dataSet = pd.read_csv(dataSetName)
     listKey = ['R_Score','Pearson','Spearman','Kendalltau']
@@ -72,7 +88,7 @@ def completeProcess(dataSetName, pathResponse, dataSetOriginal):
     exportModel.getUniqueModels()
 
     #usamos el meta modelo para obtener las medidas de desempeno
-    modelsMeta = useSelectedModelPrediction.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse)
+    modelsMeta = useSelectedModelPrediction.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, featureResponse)
     modelsMeta.applyModelsSelected()
 
 
@@ -90,6 +106,8 @@ job = sys.argv[2]
 dataSetNameInput = sys.argv[3]
 dataSet = pd.read_csv(sys.argv[3])
 pathResponse = sys.argv[4]
+featureResponse = sys.argv[5]#atributo respuesta
+removeOutliers = int(sys.argv[6])
 
 #valores iniciales
 start_time = time.time()
@@ -97,27 +115,26 @@ inicio = datetime.datetime.now()
 iteracionesCorrectas = 0
 iteracionesIncorrectas = 0
 
+#revisamos si debo eliminar outliers
+if removeOutliers == 2:#se eliminan outliers
+
+    outliers = removeOutliersData(dataSet, featureResponse)
+    dataSet.drop(outliers)
+
 #procesamos el set de datos para obtener los atributos y las clases...
-columnas=dataSet.columns.tolist()
-x=columnas[len(columnas)-1]
-targetResponse=dataSet[x]#clases
-y=columnas[0:len(columnas)-1]
-dataValues=dataSet[y]#atributos
+targResponse=dataSet[featureResponse]#clases
 
-#transformamos la clase si presenta atributos discretos
-transformData = transformDataClass.transformClass(targetResponse)
-target = transformData.transformData
+#generamos una copia y eliminamos la respuesta de los atributos
+dataValues = dataSet
+del dataValues[featureResponse]
 
-#ahora transformamos el set de datos por si existen elementos discretos...
-#transformDataSet = transformFrequence.frequenceData(dataValues)
-#dataSetNewFreq = transformDataSet.dataTransform
-
+#generamos la codificacion
 encoding = encodingFeatures.encodingFeatures(dataValues, 20)
 encoding.evaluEncoderKind()
-dataSetNewFreq = encoding.dataSet
+dataEncoding = encoding.dataSet
 
-#ahora aplicamos el procesamiento segun lo expuesto
-applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
+#aplicamos la normalizacion
+applyNormal = ScaleNormalScore.applyNormalScale(dataEncoding)
 data = applyNormal.dataTransform
 
 #generamos una lista con los valores obtenidos...
@@ -126,15 +143,16 @@ matrixResponse = []
 
 #comenzamos con las ejecuciones...
 #AdaBoost
-for loss in ['linear', 'squar', 'exponential']:
+#3x8
+for loss in ['linear', 'square', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec AdaBoostRegressor with %s - %d" % (loss, n_estimators)
-            AdaBoostObject = AdaBoost.AdaBoost(data, target, n_estimators, loss)
+            AdaBoostObject = AdaBoost.AdaBoost(data, targResponse, n_estimators, loss)
             AdaBoostObject.trainingMethod()
 
             #obtenemos el restante de performance
-            performanceValues = performanceData.performancePrediction(target, AdaBoostObject.predicctions.tolist())
+            performanceValues = performanceData.performancePrediction(targResponse, AdaBoostObject.predicctions.tolist())
             pearsonValue = performanceValues.calculatedPearson()['pearsonr']
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -152,16 +170,17 @@ for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec Bagging with %s - %d" % (bootstrap, n_estimators)
-            bagginObject = Baggin.Baggin(data,target,n_estimators, bootstrap)
+            bagginObject = Baggin.Baggin(data,targResponse,n_estimators, bootstrap)
             bagginObject.trainingMethod()
 
-            performanceValues = performanceData.performancePrediction(target, bagginObject.predicctions.tolist())
+            performanceValues = performanceData.performancePrediction(targResponse, bagginObject.predicctions.tolist())
             pearsonValue = performanceValues.calculatedPearson()['pearsonr']
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
             params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
-            row = ["Baggin", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+            row = ["Bagging", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
@@ -173,22 +192,22 @@ for criterion in ['mse', 'friedman_mse', 'mae']:
     for splitter in ['best', 'random']:
         try:
             print "Excec DecisionTree with %s - %s" % (criterion, splitter)
-            decisionTreeObject = DecisionTree.DecisionTree(data, target, criterion, splitter)
+            decisionTreeObject = DecisionTree.DecisionTree(data, targResponse, criterion, splitter)
             decisionTreeObject.trainingMethod()
 
-            performanceValues = performanceData.performancePrediction(target, decisionTreeObject.predicctions.tolist())
+            performanceValues = performanceData.performancePrediction(targResponse, decisionObject.predicctions.tolist())
             pearsonValue = performanceValues.calculatedPearson()['pearsonr']
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
             params = "criterion:%s-splitter:%s" % (criterion, splitter)
             row = ["DecisionTree", params, decisionTreeObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
-            print row
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
             iteracionesIncorrectas+=1
             pass
+
 #gradiente
 for loss in ['ls', 'lad', 'huber', 'quantile']:
     for criterion in ['friedman_mse', 'mse', 'mae']:
@@ -197,10 +216,10 @@ for loss in ['ls', 'lad', 'huber', 'quantile']:
                 for min_samples_leaf in range(1, 11):
                     try:
                         print "Excec GradientBoostingRegressor with %s - %d - %d - %d" % (loss, n_estimators, min_samples_split, min_samples_leaf)
-                        gradientObject = Gradient.Gradient(data,target,n_estimators, loss, criterion, min_samples_split, min_samples_leaf)
+                        gradientObject = Gradient.Gradient(data,targResponse,n_estimators, loss, criterion, min_samples_split, min_samples_leaf)
                         gradientObject.trainingMethod()
 
-                        performanceValues = performanceData.performancePrediction(target, gradientObject.predicctions.tolist())
+                        performanceValues = performanceData.performancePrediction(targResponse, gradientObject.predicctions.tolist())
                         pearsonValue = performanceValues.calculatedPearson()['pearsonr']
                         spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                         kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -219,10 +238,10 @@ for n_neighbors in range(1,11):
             for weights in ['uniform', 'distance']:
                 try:
                     print "Excec KNeighborsRegressor with %d - %s - %s - %s" % (n_neighbors, algorithm, metric, weights)
-                    knnObect = knn_regression.KNN_Model(data, target, n_neighbors, algorithm, metric,  weights)
+                    knnObect = knn_regression.KNN_Model(data, targResponse, n_neighbors, algorithm, metric,  weights)
                     knnObect.trainingMethod()
 
-                    performanceValues = performanceData.performancePrediction(target, knnObect.predicctions.tolist())
+                    performanceValues = performanceData.performancePrediction(targResponse, knnObect.predicctions.tolist())
                     pearsonValue = performanceValues.calculatedPearson()['pearsonr']
                     spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                     kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -234,37 +253,7 @@ for n_neighbors in range(1,11):
                 except:
                     iteracionesIncorrectas+=1
                     pass
-'''
-#MLP
-#activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle
-for activation in ['identity', 'logistic', 'tanh', 'relu']:
-    for solver in ['lbfgs', 'sgd', 'adam']:
-        for learning_rate in ['constant', 'invscaling', 'adaptive']:
-            for hidden_layer_sizes_a in  range(1,2):
-                for hidden_layer_sizes_b in range(1,2):
-                    for hidden_layer_sizes_c in range(1,2):
-                        for alpha in [0.001, 0.002, 0.01, 0.02, 0.1, 0.2]:
-                            for max_iter in [100,200,500,1000,1500]:
-                                for shuffle in [True, False]:
-                                    try:
-                                        print "Excec MLP"
-                                        MLPObject = MLP.MLP(data, target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle)
-                                        MLPObject.trainingMethod()
 
-                                        performanceValues = performanceData.performancePrediction(target, MLPObject.predicctions.tolist())
-                                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
-                                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
-                                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
-
-                                        params = "activation:%s-solver:%s-learning:%s-hidden_layer_sizes:%d+%d+%d-alpha:%f-max_iter:%d-shuffle:%s" % (activation, solver, learning_rate, hidden_layer_sizes_a, hidden_layer_sizes_b, hidden_layer_sizes_c, alpha, max_iter, str(shuffle))
-                                        row = ["MLPRegressor", params, MLPObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
-                                        matrixResponse.append(row)
-                                        iteracionesCorrectas+=1
-                                    except:
-                                        iteracionesIncorrectas+=1
-                                        pass
-                                    print matrixResponse
-'''
 #NuSVR
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
     for nu in [0.01, 0.05, 0.1, 0.5]:
@@ -272,10 +261,10 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
             for gamma in [0.01, 0.1, 1, 10, 100]:
                 try:
                     print "Excec NuSVM"
-                    nuSVM = NuSVR.NuSVRModel(data, target, kernel, degree, gamma, nu)
+                    nuSVM = NuSVR.NuSVRModel(data, targResponse, kernel, degree, gamma, nu)
                     nuSVM.trainingMethod()
 
-                    performanceValues = performanceData.performancePrediction(target, nuSVM.predicctions.tolist())
+                    performanceValues = performanceData.performancePrediction(targResponse, nuSVM.predicctions.tolist())
                     pearsonValue = performanceValues.calculatedPearson()['pearsonr']
                     spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                     kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -295,10 +284,10 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
         for gamma in [0.01, 0.1, 1, 10, 100]:
             try:
                 print "Excec SVM"
-                svm = SVR.SVRModel(data, target, kernel, degree, gamma)
+                svm = SVR.SVRModel(data, targResponse, kernel, degree, gamma)
                 svm.trainingMethod()
 
-                performanceValues = performanceData.performancePrediction(target, svm.predicctions.tolist())
+                performanceValues = performanceData.performancePrediction(targResponse, svm.predicctions.tolist())
                 pearsonValue = performanceValues.calculatedPearson()['pearsonr']
                 spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                 kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -320,10 +309,10 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
                 for bootstrap in [True, False]:
                     try:
                         print "Excec RF"
-                        rf = RandomForest.RandomForest(data, target, n_estimators, criterion, min_samples_split, min_samples_leaf, bootstrap)
+                        rf = RandomForest.RandomForest(data, targResponse, n_estimators, criterion, min_samples_split, min_samples_leaf, bootstrap)
                         rf.trainingMethod()
 
-                        performanceValues = performanceData.performancePrediction(target, rf.predicctions.tolist())
+                        performanceValues = performanceData.performancePrediction(targResponse, rf.predicctions.tolist())
                         pearsonValue = performanceValues.calculatedPearson()['pearsonr']
                         spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                         kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
@@ -341,7 +330,7 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
 
 #generamos el nombre del archivo
-nameFileExport = "%s%s/summaryProcessJob_%s.csv" % (pathResponse, job, job)
+nameFileExport = "%s/summaryProcessJob_%s.csv" % (pathResponse, job)
 dataFrame.to_csv(nameFileExport, index=False)
 
 #estimamos los estadisticos resumenes para cada columna en el header
@@ -354,7 +343,7 @@ matrixSummaryStatistic.append(estimatedStatisticPerformance(statisticObject, 'R_
 
 #generamos el nombre del archivo
 dataFrame = pd.DataFrame(matrixSummaryStatistic, columns=['Performance','Mean', 'STD', 'Variance', 'MAX', 'MIN'])
-nameFileExport = "%s%s/statisticPerformance_%s.csv" % (pathResponse, job, job)
+nameFileExport = "%s/statisticPerformance_%s.csv" % (pathResponse, job)
 dataFrame.to_csv(nameFileExport, index=False)
 
 #cambiamos el estado al job
@@ -379,16 +368,18 @@ dictionary.update({"job": job})
 dictionary.update({"iteracionesCorrectas": iteracionesCorrectas})
 dictionary.update({"iteracionesIncorrectas": iteracionesIncorrectas})
 
-nameFileExport = "%s%s/summaryProcess_%s.json" % (pathResponse, job, job)
+nameFileExport = "%s/summaryProcess_%s.json" % (pathResponse, job)
 with open(nameFileExport, 'w') as fp:
     json.dump(dictionary, fp)
 
-nameFileExportCSV = "%s%s/summaryProcessJob_%s.csv" % (pathResponse, job, job)
-pathResponseExport = pathResponse+job+"/"
+nameFileExportCSV = "%s/summaryProcessJob_%s.csv" % (pathResponse, job)
+pathResponseExport = pathResponse
 
-completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput)
+print pathResponseExport
+print dataSetNameInput
+completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput, featureResponse)
 
 #enviar correo con finalizacion del job....
 body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)
-emailData = sendEmail.sendEmail('smarttrainingserviceteam@gmail.com', emailUser, "Change status in job "+ str(job), body, 'smart123ewq')
-emailData.sendEmailUser()
+#emailData = sendEmail.sendEmail('smarttrainingserviceteam@gmail.com', emailUser, "Change status in job "+ str(job), body, 'smart123ewq')
+#emailData.sendEmailUser()

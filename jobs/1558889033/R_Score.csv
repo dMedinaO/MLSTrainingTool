@@ -1,0 +1,2 @@
+Algorithm,Params,R_Score,Pearson,Spearman,Kendalltau
+AdaBoostRegressor,loss:exponential-n_estimators:1500,0.711513043187,0.86677616894,0.603197856904,0.447547173563

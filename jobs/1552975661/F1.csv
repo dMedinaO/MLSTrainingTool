@@ -1,9 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:minkowski-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:auto-metric:euclidean-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:minkowski-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:ball_tree-metric:euclidean-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:minkowski-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:kd_tree-metric:euclidean-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:minkowski-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984
-KNeighborsClassifier,n_neighbors:9-algorithm:brute-metric:euclidean-weights:uniform,CV-10,0.708531746032,0.791666666667,0.655,0.701984126984

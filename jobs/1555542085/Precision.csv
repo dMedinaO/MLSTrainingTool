@@ -1,2 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-GaussianNB,Default,CV-10,0.6,0.45,0.45,0.45

@@ -1,3 +1,0 @@
-Algorithm,Params,R_Score,Pearson,Spearman,Kendalltau
-RandomForestRegressor,n_estimators:1000-criterion:mse-min_samples_split:2-min_samples_leaf:1-bootstrap:False,0.996692578554,0.998344919632,0.998344327741,0.987497583537
-RandomForestRegressor,n_estimators:1000-criterion:mae-min_samples_split:2-min_samples_leaf:1-bootstrap:False,0.996692578554,0.998344919632,0.998344327741,0.987497583537

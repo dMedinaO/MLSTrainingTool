@@ -1,2 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-DecisionTree,criterion:gini-splitter:random,CV-10,0.692307692308,0.230769230769,0.230769230769,0.307692307692

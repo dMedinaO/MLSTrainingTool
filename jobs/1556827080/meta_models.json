@@ -1,1 +1,0 @@
-{"models": [{"params": [{"Algorithm": "SAMME"}, {"n_estimators": "10"}], "algorithm": "AdaBoostClassifier"}, {"params": [{"Algorithm": "SAMME.R"}, {"n_estimators": "10"}], "algorithm": "AdaBoostClassifier"}]}

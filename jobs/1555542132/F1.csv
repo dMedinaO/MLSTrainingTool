@@ -1,4 +1,0 @@
-Algorithm,Params,Validation,Accuracy,Recall,Precision,F1
-DecisionTree,criterion:gini-splitter:best,CV-10,0.633333333333,0.4,0.2,0.133333333333
-DecisionTree,criterion:entropy-splitter:best,CV-10,0.633333333333,0.2,0.2,0.133333333333
-DecisionTree,criterion:entropy-splitter:random,CV-10,0.733333333333,0.4,0.4,0.133333333333

@@ -8,18 +8,19 @@ import json
 
 class defineViewDiagram(object):
 
-    def __init__(self, dataSet1, dataSet2, dataSet3, listPerformance, pathOutput):
+    def __init__(self, dataSet1, dataSet2, dataSet3, dataSet4, listPerformance, pathOutput):
 
         self.dataSet1 = dataSet1
         self.dataSet2 = dataSet2
         self.dataSet3 = dataSet3
+        self.dataSet4 = dataSet4
         self.pathOutput = pathOutput
         self.listPerformance = listPerformance
 
     #metodo que permite formar la estructura de datos con respecto al set de datos correspondiente
     def createDataStruct(self, dataSet, performance):
 
-        algorithms = dataSet['algorithm']#obtenemos los algoritmos
+        algorithms = dataSet['Algorithm']#obtenemos los algoritmos
         listUnique = list(set(algorithms))
 
         dictCount = []
@@ -45,8 +46,9 @@ class defineViewDiagram(object):
         dictP1 = self.createDataStruct(self.dataSet1, self.listPerformance[0])
         dictP2 = self.createDataStruct(self.dataSet2, self.listPerformance[1])
         dictP3 = self.createDataStruct(self.dataSet3, self.listPerformance[2])
+        dictP4 = self.createDataStruct(self.dataSet4, self.listPerformance[3])
 
-        dictFull = [dictP1, dictP2, dictP3]
+        dictFull = [dictP1, dictP2, dictP3, dictP4]
         nameDoc = self.pathOutput+"result.json"
         with open(nameDoc, 'w') as fp:
             json.dump(dictFull, fp)
