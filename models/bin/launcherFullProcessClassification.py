@@ -45,6 +45,7 @@ from mls_models.utils import exportMetaModel
 from mls_models.utils import useSelectedModelClf
 from mls_models.utils import encodingFeatures
 from sklearn.model_selection import LeaveOneOut
+from mls_models.utils import encodingFeatures
 
 #funcion para completar el proceso de la informacion correspondiente a la data empleada y permite crear los graficos para la vista en web
 def completeProcess(dataSetName, pathResponse, dataSetOriginal):
@@ -72,7 +73,7 @@ def completeProcess(dataSetName, pathResponse, dataSetOriginal):
     exportModel.getUniqueModels()
 
     #usamos el meta modelo para obtener las medidas de desempeno
-    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, 5)
+    modelsMeta = useSelectedModelClf.useSelectedModels(dataSetOriginal, pathResponse+"meta_models.json", pathResponse, 5, featureResponse)
     modelsMeta.applyModelsSelected()
 
 
@@ -90,6 +91,8 @@ job = sys.argv[2]
 dataSetNameInput = sys.argv[3]
 dataSet = pd.read_csv(sys.argv[3])
 pathResponse = sys.argv[4]
+featureResponse = sys.argv[5]
+removeInbalance = int(sys.argv[6])
 
 #valores iniciales
 start_time = time.time()
@@ -98,13 +101,22 @@ iteracionesCorrectas = 0
 iteracionesIncorrectas = 0
 
 #procesamos el set de datos para obtener los atributos y las clases...
-columnas=dataSet.columns.tolist()
-x=columnas[len(columnas)-1]
-targetResponse=dataSet[x]#clases
-y=columnas[0:len(columnas)-1]
-dataValues=dataSet[y]#atributos
+targetResponse=dataSet[featureResponse]#clases
 
-#transformamos la clase si presenta atributos discretos
+#generamos una copia y eliminamos la respuesta de los atributos
+dataValues = dataSet
+del dataValues[featureResponse]
+
+#generamos la codificacion
+encoding = encodingFeatures.encodingFeatures(dataValues, 20)
+encoding.evaluEncoderKind()
+dataEncoding = encoding.dataSet
+
+#aplicamos la normalizacion
+applyNormal = ScaleNormalScore.applyNormalScale(dataEncoding)
+data = applyNormal.dataTransform
+
+#transformamos la clase si presenta atributos categoricos
 transformData = transformDataClass.transformClass(targetResponse)
 target = transformData.transformData
 dictTransform = transformData.dictTransform
@@ -117,15 +129,6 @@ if len(classArray) ==2:
 else:
     kindDataSet =2
 
-#ahora transformamos el set de datos por si existen elementos discretos...
-transformDataSet = transformFrequence.frequenceData(dataValues)
-dataSetNewFreq = transformDataSet.dataTransform
-
-#transformamos la data con ordinal encoder
-#ahora aplicamos el procesamiento segun lo expuesto
-applyNormal = ScaleNormalScore.applyNormalScale(dataSetNewFreq)
-data = applyNormal.dataTransform
-
 #generamos una lista con los valores obtenidos...
 header = ["Algorithm", "Params", "Validation", "Accuracy", "Recall", "Precision", "F1"]
 matrixResponse = []
@@ -136,13 +139,13 @@ for algorithm in ['SAMME', 'SAMME.R']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec AdaBoost with %s - %d" % (algorithm, n_estimators)
-            AdaBoostObject = AdaBoost.AdaBoost(data, target, n_estimators, algorithm, LeaveOneOut())
+            AdaBoostObject = AdaBoost.AdaBoost(data, target, n_estimators, algorithm, 5)
             AdaBoostObject.trainingMethod(kindDataSet)
             params = "Algorithm:%s-n_estimators:%d" % (algorithm, n_estimators)
-            row = ["AdaBoostClassifier", params, "LeaveOneOut", AdaBoostObject.performanceData.scoreData[3], AdaBoostObject.performanceData.scoreData[4], AdaBoostObject.performanceData.scoreData[5], AdaBoostObject.performanceData.scoreData[6]]
+            row = ["AdaBoostClassifier", params, "Cv-5", AdaBoostObject.performanceData.scoreData[3], AdaBoostObject.performanceData.scoreData[4], AdaBoostObject.performanceData.scoreData[5], AdaBoostObject.performanceData.scoreData[6]]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
-            break
+
         except:
             iteracionesIncorrectas+=1
             pass
@@ -152,10 +155,10 @@ for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec Bagging with %s - %d" % (bootstrap, n_estimators)
-            bagginObject = Baggin.Baggin(data,target,n_estimators, bootstrap,LeaveOneOut())
+            bagginObject = Baggin.Baggin(data,target,n_estimators, bootstrap,5)
             bagginObject.trainingMethod(kindDataSet)
             params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
-            row = ["Bagging", params, "LeaveOneOut", bagginObject.performanceData.scoreData[3], bagginObject.performanceData.scoreData[4], bagginObject.performanceData.scoreData[5], bagginObject.performanceData.scoreData[6]]
+            row = ["Bagging", params, "Cv-5", bagginObject.performanceData.scoreData[3], bagginObject.performanceData.scoreData[4], bagginObject.performanceData.scoreData[5], bagginObject.performanceData.scoreData[6]]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
             break
@@ -165,26 +168,27 @@ for bootstrap in [True, False]:
 
 #BernoulliNB
 try:
-    bernoulliNB = BernoulliNB.Bernoulli(data, target, LeaveOneOut())
+    bernoulliNB = BernoulliNB.Bernoulli(data, target, 5)
     bernoulliNB.trainingMethod(kindDataSet)
     print "Excec Bernoulli Default Params"
     params = "Default"
-    row = ["BernoulliNB", params, "LeaveOneOut", bernoulliNB.performanceData.scoreData[3], bernoulliNB.performanceData.scoreData[4], bernoulliNB.performanceData.scoreData[5], bernoulliNB.performanceData.scoreData[6]]
+    row = ["BernoulliNB", params, "Cv-5", bernoulliNB.performanceData.scoreData[3], bernoulliNB.performanceData.scoreData[4], bernoulliNB.performanceData.scoreData[5], bernoulliNB.performanceData.scoreData[6]]
     matrixResponse.append(row)
     iteracionesCorrectas+=1
 except:
     iteracionesIncorrectas+=1
     pass
 
+
 #DecisionTree
 for criterion in ['gini', 'entropy']:
     for splitter in ['best', 'random']:
         try:
             print "Excec DecisionTree with %s - %s" % (criterion, splitter)
-            decisionTreeObject = DecisionTree.DecisionTree(data, target, criterion, splitter,LeaveOneOut())
+            decisionTreeObject = DecisionTree.DecisionTree(data, target, criterion, splitter,5)
             decisionTreeObject.trainingMethod(kindDataSet)
             params = "criterion:%s-splitter:%s" % (criterion, splitter)
-            row = ["DecisionTree", params, "LeaveOneOut", decisionTreeObject.performanceData.scoreData[3], decisionTreeObject.performanceData.scoreData[4], decisionTreeObject.performanceData.scoreData[5], decisionTreeObject.performanceData.scoreData[6]]
+            row = ["DecisionTree", params, "Cv-5", decisionTreeObject.performanceData.scoreData[3], decisionTreeObject.performanceData.scoreData[4], decisionTreeObject.performanceData.scoreData[5], decisionTreeObject.performanceData.scoreData[6]]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
         except:
@@ -193,12 +197,12 @@ for criterion in ['gini', 'entropy']:
 
 try:
     #GaussianNB
-    gaussianObject = GaussianNB.Gaussian(data, target, LeaveOneOut())
+    gaussianObject = GaussianNB.Gaussian(data, target, 5)
     gaussianObject.trainingMethod(kindDataSet)
     print "Excec GaussianNB Default Params"
     params = "Default"
 
-    row = ["GaussianNB", params, "LeaveOneOut", gaussianObject.performanceData.scoreData[3], gaussianObject.performanceData.scoreData[4], gaussianObject.performanceData.scoreData[5], gaussianObject.performanceData.scoreData[6]]
+    row = ["GaussianNB", params, "Cv-5", gaussianObject.performanceData.scoreData[3], gaussianObject.performanceData.scoreData[4], gaussianObject.performanceData.scoreData[5], gaussianObject.performanceData.scoreData[6]]
     matrixResponse.append(row)
 except:
     pass
@@ -208,13 +212,12 @@ for loss in ['deviance', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
             print "Excec GradientBoostingClassifier with %s - %d - %d - %d" % (loss, n_estimators, 2, 1)
-            gradientObject = Gradient.Gradient(data,target,n_estimators, loss, min_samples_split, min_samples_leaf, LeaveOneOut())
+            gradientObject = Gradient.Gradient(data,target,n_estimators, loss, 2, 1, 5)
             gradientObject.trainingMethod(kindDataSet)
-            params = "n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (n_estimators, loss, min_samples_split, min_samples_leaf)
-            row = ["GradientBoostingClassifier", params, "LeaveOneOut", gradientObject.performanceData.scoreData[3], gradientObject.performanceData.scoreData[4], gradientObject.performanceData.scoreData[5], gradientObject.performanceData.scoreData[6]]
+            params = "n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (n_estimators, loss, 2, 1)
+            row = ["GradientBoostingClassifier", params, "Cv-5", gradientObject.performanceData.scoreData[3], gradientObject.performanceData.scoreData[4], gradientObject.performanceData.scoreData[5], gradientObject.performanceData.scoreData[6]]
             matrixResponse.append(row)
             iteracionesCorrectas+=1
-            break
         except:
             iteracionesIncorrectas+=1
             pass
@@ -226,42 +229,16 @@ for n_neighbors in range(1,11):
             for weights in ['uniform', 'distance']:
                 try:
                     print "Excec KNeighborsClassifier with %d - %s - %s - %s" % (n_neighbors, algorithm, metric, weights)
-                    knnObect = knn.knn(data, target, n_neighbors, algorithm, metric,  weights,LeaveOneOut())
+                    knnObect = knn.knn(data, target, n_neighbors, algorithm, metric,  weights,5)
                     knnObect.trainingMethod(kindDataSet)
 
                     params = "n_neighbors:%d-algorithm:%s-metric:%s-weights:%s" % (n_neighbors, algorithm, metric, weights)
-                    row = ["KNeighborsClassifier", params, "LeaveOneOut", knnObect.performanceData.scoreData[3], knnObect.performanceData.scoreData[4], knnObect.performanceData.scoreData[5], knnObect.performanceData.scoreData[6]]
+                    row = ["KNeighborsClassifier", params, "Cv-5", knnObect.performanceData.scoreData[3], knnObect.performanceData.scoreData[4], knnObect.performanceData.scoreData[5], knnObect.performanceData.scoreData[6]]
                     matrixResponse.append(row)
                     iteracionesCorrectas+=1
                 except:
                     iteracionesIncorrectas+=1
                     pass
-
-'''
-#MLP
-#activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle
-for activation in ['identity', 'logistic', 'tanh', 'relu']:
-    for solver in ['lbfgs', 'sgd', 'adam']:
-        for learning_rate in ['constant', 'invscaling', 'adaptive']:
-            for hidden_layer_sizes_a in  range(1,2):
-                for hidden_layer_sizes_b in range(1,2):
-                    for hidden_layer_sizes_c in range(1, 2):
-                        for alpha in [0.001, 0.002, 0.01, 0.02, 0.1, 0.2]:
-                            for max_iter in [100,200,500,1000,1500]:
-                                for shuffle in [True, False]:
-                                    try:
-                                        print "Excec MLP"
-                                        MLPObject = MLP.MLP(data, target, activation, solver, learning_rate, hidden_layer_sizes_a,hidden_layer_sizes_b,hidden_layer_sizes_c, alpha, max_iter, shuffle, 2)
-                                        MLPObject.trainingMethod(kindDataSet)
-
-                                        params = "activation:%s-solver:%s-learning:%s-hidden_layer_sizes:%d+%d+%d-alpha:%f-max_iter:%d-shuffle:%s" % (activation, solver, learning_rate, hidden_layer_sizes_a, hidden_layer_sizes_b, hidden_layer_sizes_c, alpha, max_iter, str(shuffle))
-                                        row = ["MLPClassifier", params, "LeaveOneOut", MLPObject.performanceData.scoreData[3], MLPObject.performanceData.scoreData[4], MLPObject.performanceData.scoreData[5], MLPObject.performanceData.scoreData[6]]
-                                        matrixResponse.append(row)
-                                        iteracionesCorrectas+=1
-                                    except:
-                                        iteracionesIncorrectas+=1
-                                        pass
-'''
 
 #NuSVC
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
@@ -269,10 +246,10 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
         for degree in range(3, 15):
             try:
                 print "Excec NuSVM"
-                nuSVM = NuSVM.NuSVM(data, target, kernel, nu, degree, 0.01, LeaveOneOut())
+                nuSVM = NuSVM.NuSVM(data, target, kernel, nu, degree, 0.01, 5)
                 nuSVM.trainingMethod(kindDataSet)
-                params = "kernel:%s-nu:%f-degree:%d-gamma:%f" % (kernel, nu, degree, gamma)
-                row = ["NuSVM", params, "LeaveOneOut", nuSVM.performanceData.scoreData[3], nuSVM.performanceData.scoreData[4], nuSVM.performanceData.scoreData[5], nuSVM.performanceData.scoreData[6]]
+                params = "kernel:%s-nu:%f-degree:%d-gamma:%f" % (kernel, nu, degree, 0.001)
+                row = ["NuSVM", params, "Cv-5", nuSVM.performanceData.scoreData[3], nuSVM.performanceData.scoreData[4], nuSVM.performanceData.scoreData[5], nuSVM.performanceData.scoreData[6]]
                 matrixResponse.append(row)
                 iteracionesCorrectas+=1
             except:
@@ -285,10 +262,10 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
         for degree in range(3, 15):
             try:
                 print "Excec SVM"
-                svm = SVM.SVM(data, target, kernel, C_value, degree, 0.01, LeaveOneOut())
+                svm = SVM.SVM(data, target, kernel, C_value, degree, 0.01, 5)
                 svm.trainingMethod(kindDataSet)
-                params = "kernel:%s-c:%f-degree:%d-gamma:%f" % (kernel, C_value, degree, gamma)
-                row = ["SVM", params, "LeaveOneOut", svm.performanceData.scoreData[3], svm.performanceData.scoreData[4], svm.performanceData.scoreData[5], svm.performanceData.scoreData[6]]
+                params = "kernel:%s-c:%f-degree:%d-gamma:%f" % (kernel, C_value, degree, 0.001)
+                row = ["SVM", params, "Cv-5", svm.performanceData.scoreData[3], svm.performanceData.scoreData[4], svm.performanceData.scoreData[5], svm.performanceData.scoreData[6]]
                 matrixResponse.append(row)
                 iteracionesCorrectas+=1
             except:
@@ -301,11 +278,11 @@ for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         for bootstrap in [True, False]:
             try:
                 print "Excec RF"
-                rf = RandomForest.RandomForest(data, target, n_estimators, criterion, 2, 1, bootstrap, LeaveOneOut())
+                rf = RandomForest.RandomForest(data, target, n_estimators, criterion, 2, 1, bootstrap, 5)
                 rf.trainingMethod(kindDataSet)
 
-                params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, min_samples_split, min_samples_leaf, str(bootstrap))
-                row = ["RandomForestClassifier", params, "LeaveOneOut", rf.performanceData.scoreData[3], rf.performanceData.scoreData[4], rf.performanceData.scoreData[5], rf.performanceData.scoreData[6]]
+                params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, 2, 1, str(bootstrap))
+                row = ["RandomForestClassifier", params, "Cv-5", rf.performanceData.scoreData[3], rf.performanceData.scoreData[4], rf.performanceData.scoreData[5], rf.performanceData.scoreData[6]]
                 matrixResponse.append(row)
                 iteracionesCorrectas+=1
             except:
