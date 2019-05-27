@@ -153,6 +153,7 @@ class useSelectedModels(object):
                 n_estimators = self.searchParamValue(parametros,'n_estimators')
                 min_samples_split = self.searchParamValue(parametros,'min_samples_split')
                 min_samples_leaf = self.searchParamValue(parametros,'min_samples_leaf')
+                loss = self.searchParamValue(parametros,'loss')
 
                 gradientObject = Gradient.Gradient(self.data,self.target, int(n_estimators), loss, int(min_samples_split), int(min_samples_leaf), self.cv)
                 gradientObject.trainingMethod(kindDataSet)
