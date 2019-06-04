@@ -33,11 +33,25 @@ function createGraphicDataOnlyTrace(values, xValues){
 		line: {
       line: {shape: 'spline'}
     },
+    marker: {
+      color: 'rgb(142, 124, 195)',
+      size: 8
+    }
 	};
+
+  var layout = {
+    xaxis:{
+      title: "Elements"
+    },
+
+    yaxis:{
+      title: "Error values"
+    }
+  };
 
 	var data = [trace2];
 
-	Plotly.newPlot('errorData', data);
+	Plotly.newPlot('errorData', data, layout);
 
 }
 
@@ -51,7 +65,7 @@ function createGraphicData(valuesReal, valuesPredict, xValues){
 	  type: 'scatter',
     marker: {
       color: 'rgb(142, 124, 195)',
-      size: 5
+      size: 8
     }
 	};
 

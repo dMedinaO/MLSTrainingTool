@@ -143,7 +143,7 @@ matrixResponse = []
 
 #comenzamos con las ejecuciones...
 #AdaBoost
-#3x8
+
 for loss in ['linear', 'square', 'exponential']:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
         try:
@@ -157,14 +157,16 @@ for loss in ['linear', 'square', 'exponential']:
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-            params = "loss:%s-n_estimators:%d" % (loss, n_estimators)
-            row = ["AdaBoostRegressor", params, AdaBoostObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
-            matrixResponse.append(row)
-            iteracionesCorrectas+=1
+            if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and AdaBoostObject.r_score != "ERROR"):
+                params = "loss:%s-n_estimators:%d" % (loss, n_estimators)
+                row = ["AdaBoostRegressor", params, AdaBoostObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                matrixResponse.append(row)
+                iteracionesCorrectas+=1
+            else:
+                iteracionesIncorrectas+=1
         except:
             iteracionesIncorrectas+=1
             pass
-
 #Baggin
 for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
@@ -178,11 +180,15 @@ for bootstrap in [True, False]:
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-            params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
-            row = ["Bagging", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+            if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and bagginObject.r_score != "ERROR"):
 
-            matrixResponse.append(row)
-            iteracionesCorrectas+=1
+                params = "bootstrap:%s-n_estimators:%d" % (str(bootstrap), n_estimators)
+                row = ["Bagging", params, bagginObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+
+                matrixResponse.append(row)
+                iteracionesCorrectas+=1
+            else:
+                iteracionesIncorrectas+=1
         except:
             iteracionesIncorrectas+=1
             pass
@@ -195,15 +201,18 @@ for criterion in ['mse', 'friedman_mse', 'mae']:
             decisionTreeObject = DecisionTree.DecisionTree(data, targResponse, criterion, splitter)
             decisionTreeObject.trainingMethod()
 
-            performanceValues = performanceData.performancePrediction(targResponse, decisionObject.predicctions.tolist())
+            performanceValues = performanceData.performancePrediction(targResponse, decisionTreeObject.predicctions.tolist())
             pearsonValue = performanceValues.calculatedPearson()['pearsonr']
             spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
             kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-            params = "criterion:%s-splitter:%s" % (criterion, splitter)
-            row = ["DecisionTree", params, decisionTreeObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
-            matrixResponse.append(row)
-            iteracionesCorrectas+=1
+            if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and decisionTreeObject.r_score != "ERROR"):
+                params = "criterion:%s-splitter:%s" % (criterion, splitter)
+                row = ["DecisionTree", params, decisionTreeObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                matrixResponse.append(row)
+                iteracionesCorrectas+=1
+            else:
+                iteracionesIncorrectas+=1
         except:
             iteracionesIncorrectas+=1
             pass
@@ -212,25 +221,29 @@ for criterion in ['mse', 'friedman_mse', 'mae']:
 for loss in ['ls', 'lad', 'huber', 'quantile']:
     for criterion in ['friedman_mse', 'mse', 'mae']:
         for n_estimators in [10,50,100,200,500,1000,1500,2000]:
-            for min_samples_split in range (2, 11):
-                for min_samples_leaf in range(1, 11):
-                    try:
-                        print "Excec GradientBoostingRegressor with %s - %d - %d - %d" % (loss, n_estimators, min_samples_split, min_samples_leaf)
-                        gradientObject = Gradient.Gradient(data,targResponse,n_estimators, loss, criterion, min_samples_split, min_samples_leaf)
-                        gradientObject.trainingMethod()
+            try:
+                min_samples_leaf=1
+                min_samples_split=2
+                print "Excec GradientBoostingRegressor with %s - %d - %d - %d" % (loss, n_estimators, min_samples_split, min_samples_leaf)
+                gradientObject = Gradient.Gradient(data,targResponse,n_estimators, loss, criterion, min_samples_split, min_samples_leaf)
+                gradientObject.trainingMethod()
 
-                        performanceValues = performanceData.performancePrediction(targResponse, gradientObject.predicctions.tolist())
-                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
-                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
-                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
+                performanceValues = performanceData.performancePrediction(targResponse, gradientObject.predicctions.tolist())
+                pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-                        params = "criterion:%s-n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (criterion, n_estimators, loss, min_samples_split, min_samples_leaf)
-                        row = ["GradientBoostingRegressor", params, gradientObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
-                        matrixResponse.append(row)
-                        iteracionesCorrectas+=1
-                    except:
-                        iteracionesIncorrectas+=1
-                        pass
+                if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and gradientObject.r_score != "ERROR"):
+                    params = "criterion:%s-n_estimators:%d-loss:%s-min_samples_split:%d-min_samples_leaf:%d" % (criterion, n_estimators, loss, min_samples_split, min_samples_leaf)
+                    row = ["GradientBoostingRegressor", params, gradientObject.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                    matrixResponse.append(row)
+                    iteracionesCorrectas+=1
+                else:
+                    iteracionesIncorrectas+=1
+            except:
+                iteracionesIncorrectas+=1
+                pass
+
 #knn
 for n_neighbors in range(1,11):
     for algorithm in ['auto', 'ball_tree', 'kd_tree', 'brute']:
@@ -246,10 +259,13 @@ for n_neighbors in range(1,11):
                     spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                     kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-                    params = "n_neighbors:%d-algorithm:%s-metric:%s-weights:%s" % (n_neighbors, algorithm, metric, weights)
-                    row = ["KNeighborsRegressor", params, knnObect.r_score, pearsonValue, spearmanValue, kendalltauValue]
-                    matrixResponse.append(row)
-                    iteracionesCorrectas+=1
+                    if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and knnObect.r_score != "ERROR"):
+                        params = "n_neighbors:%d-algorithm:%s-metric:%s-weights:%s" % (n_neighbors, algorithm, metric, weights)
+                        row = ["KNeighborsRegressor", params, knnObect.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                        matrixResponse.append(row)
+                        iteracionesCorrectas+=1
+                    else:
+                        iteracionesIncorrectas+=1
                 except:
                     iteracionesIncorrectas+=1
                     pass
@@ -258,30 +274,31 @@ for n_neighbors in range(1,11):
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
     for nu in [0.01, 0.05, 0.1, 0.5]:
         for degree in range(3, 15):
-            for gamma in [0.01, 0.1, 1, 10, 100]:
-                try:
-                    print "Excec NuSVM"
-                    nuSVM = NuSVR.NuSVRModel(data, targResponse, kernel, degree, gamma, nu)
-                    nuSVM.trainingMethod()
+            try:
+                gamma= 0.001
+                nuSVM = NuSVR.NuSVRModel(data, targResponse, kernel, degree, gamma, nu)
+                nuSVM.trainingMethod()
 
-                    performanceValues = performanceData.performancePrediction(targResponse, nuSVM.predicctions.tolist())
-                    pearsonValue = performanceValues.calculatedPearson()['pearsonr']
-                    spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
-                    kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
-
+                performanceValues = performanceData.performancePrediction(targResponse, nuSVM.predicctions.tolist())
+                pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
+                if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and nuSVM.r_score != "ERROR"):
                     params = "kernel:%s-nu:%f-degree:%d-gamma:%f" % (kernel, nu, degree, gamma)
+                    print params
                     row = ["NuSVM", params, nuSVM.r_score, pearsonValue, spearmanValue, kendalltauValue]
                     matrixResponse.append(row)
                     iteracionesCorrectas+=1
-                except:
+                else:
                     iteracionesIncorrectas+=1
-                    pass
-                print matrixResponse
+            except:
+                iteracionesIncorrectas+=1
+                pass
 
 #SVC
 for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
     for degree in range(3, 15):
-        for gamma in [0.01, 0.1, 1, 10, 100]:
+        for gamma in [0.01, 0.1, 1]:
             try:
                 print "Excec SVM"
                 svm = SVR.SVRModel(data, targResponse, kernel, degree, gamma)
@@ -292,39 +309,43 @@ for kernel in ['rbf', 'linear', 'poly', 'sigmoid', 'precomputed']:
                 spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
                 kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-                params = "kernel:%s-degree:%d-gamma:%f" % (kernel, degree, gamma)
-                row = ["SVM", params, svm.r_score, pearsonValue, spearmanValue, kendalltauValue]
-                matrixResponse.append(row)
-                iteracionesCorrectas+=1
+                if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and svm.r_score != "ERROR"):
+                    params = "kernel:%s-degree:%d-gamma:%f" % (kernel, degree, gamma)
+                    row = ["SVM", params, svm.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                    matrixResponse.append(row)
+                    iteracionesCorrectas+=1
+                else:
+                    iteracionesIncorrectas+=1
             except:
                 iteracionesIncorrectas+=1
                 pass
 
-
 #RF
 for n_estimators in [10,50,100,200,500,1000,1500,2000]:
     for criterion in ['mse', 'mae']:
-        for min_samples_split in range (2, 11):
-            for min_samples_leaf in range(1, 11):
-                for bootstrap in [True, False]:
-                    try:
-                        print "Excec RF"
-                        rf = RandomForest.RandomForest(data, targResponse, n_estimators, criterion, min_samples_split, min_samples_leaf, bootstrap)
-                        rf.trainingMethod()
+        for bootstrap in [True, False]:
+            try:
+                min_samples_leaf=1
+                min_samples_split=2
+                print "Excec RF"
+                rf = RandomForest.RandomForest(data, targResponse, n_estimators, criterion, min_samples_split, min_samples_leaf, bootstrap)
+                rf.trainingMethod()
 
-                        performanceValues = performanceData.performancePrediction(targResponse, rf.predicctions.tolist())
-                        pearsonValue = performanceValues.calculatedPearson()['pearsonr']
-                        spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
-                        kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
+                performanceValues = performanceData.performancePrediction(targResponse, rf.predicctions.tolist())
+                pearsonValue = performanceValues.calculatedPearson()['pearsonr']
+                spearmanValue = performanceValues.calculatedSpearman()['spearmanr']
+                kendalltauValue = performanceValues.calculatekendalltau()['kendalltau']
 
-                        params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, min_samples_split, min_samples_leaf, str(bootstrap))
-                        row = ["RandomForestRegressor", params, rf.r_score, pearsonValue, spearmanValue, kendalltauValue]
-                        matrixResponse.append(row)
-                        iteracionesCorrectas+=1
-                    except:
-                        iteracionesIncorrectas+=1
-                        pass
-                    print matrixResponse
+                if (pearsonValue!= "ERROR" and spearmanValue != "ERROR" and kendalltauValue != "ERROR" and rf.r_score != "ERROR"):
+                    params = "n_estimators:%d-criterion:%s-min_samples_split:%d-min_samples_leaf:%d-bootstrap:%s" % (n_estimators, criterion, min_samples_split, min_samples_leaf, str(bootstrap))
+                    row = ["RandomForestRegressor", params, rf.r_score, pearsonValue, spearmanValue, kendalltauValue]
+                    matrixResponse.append(row)
+                    iteracionesCorrectas+=1
+                else:
+                    iteracionesIncorrectas+=1
+            except:
+                iteracionesIncorrectas+=1
+                pass
 
 #generamos el export de la matriz convirtiendo a data frame
 dataFrame = pd.DataFrame(matrixResponse, columns=header)
