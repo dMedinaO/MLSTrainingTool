@@ -46,6 +46,7 @@ from mls_models.utils import useSelectedModelClf
 from mls_models.utils import encodingFeatures
 from sklearn.model_selection import LeaveOneOut
 from mls_models.utils import encodingFeatures
+from imblearn.over_sampling import SMOTE, ADASYN
 
 #funcion para completar el proceso de la informacion correspondiente a la data empleada y permite crear los graficos para la vista en web
 def completeProcess(dataSetName, pathResponse, dataSetOriginal, cvValue, featureResponse):
@@ -128,15 +129,6 @@ targetResponse=dataSet[featureResponse]#clases
 dataValues = dataSet
 del dataValues[featureResponse]
 
-#generamos la codificacion
-encoding = encodingFeatures.encodingFeatures(dataValues, 20)
-encoding.evaluEncoderKind()
-dataEncoding = encoding.dataSet
-
-#aplicamos la normalizacion
-applyNormal = ScaleNormalScore.applyNormalScale(dataEncoding)
-data = applyNormal.dataTransform
-
 #transformamos la clase si presenta atributos categoricos
 transformData = transformDataClass.transformClass(targetResponse)
 target = transformData.transformData
@@ -149,6 +141,25 @@ if len(classArray) ==2:
     kindDataSet =1
 else:
     kindDataSet =2
+
+
+listFeatures = list(dataValues.keys())
+
+#generamos la codificacion
+encoding = encodingFeatures.encodingFeatures(dataValues, 20)
+encoding.evaluEncoderKind()
+dataEncoding = encoding.dataSet
+
+#preguntamos por el manejo de desbalance de clases
+if removeInbalance == 2:
+    dataEncoding, target = SMOTE().fit_resample(dataEncoding, target)
+
+    #transformamos los valores a dataFrame
+    dataEncoding = pd.DataFrame(dataEncoding, columns=listFeatures)
+
+#aplicamos la normalizacion
+applyNormal = ScaleNormalScore.applyNormalScale(dataEncoding)
+data = applyNormal.dataTransform
 
 #obtenemos la validacion y el string para formar la respuesta
 responseString, cvValue = checkCrossValidationKValues(len(data))
@@ -173,7 +184,6 @@ for algorithm in ['SAMME', 'SAMME.R']:
         except:
             iteracionesIncorrectas+=1
             pass
-
 #Baggin
 for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
@@ -368,6 +378,6 @@ pathResponseExport = pathResponse+job+"/"
 completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput, cvValue, featureResponse)
 
 #enviar correo con finalizacion del job....
-body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)
+body = "Dear User.\nThe job with ID: %s has been update to status: FINISH.\nBest Regards, SmartTraining Team" % (job)
 emailData = sendEmail.sendEmail('smarttrainingserviceteam@gmail.com', emailUser, "Change status in job "+ str(job), body, 'smart123ewq')
 emailData.sendEmailUser()

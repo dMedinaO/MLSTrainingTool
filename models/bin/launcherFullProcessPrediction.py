@@ -167,6 +167,7 @@ for loss in ['linear', 'square', 'exponential']:
         except:
             iteracionesIncorrectas+=1
             pass
+
 #Baggin
 for bootstrap in [True, False]:
     for n_estimators in [10,50,100,200,500,1000,1500,2000]:
@@ -401,6 +402,6 @@ print dataSetNameInput
 completeProcess(nameFileExportCSV, pathResponseExport, dataSetNameInput, featureResponse)
 
 #enviar correo con finalizacion del job....
-body = "Dear User.\nThe job with ID: %s has been update to status: FINISH. It will notify by email when job finish.\nBest Regards, SmartTraining Team" % (job)
-#emailData = sendEmail.sendEmail('smarttrainingserviceteam@gmail.com', emailUser, "Change status in job "+ str(job), body, 'smart123ewq')
-#emailData.sendEmailUser()
+body = "Dear User.\nThe job with ID: %s has been update to status: FINISH.\nBest Regards, SmartTraining Team" % (job)
+emailData = sendEmail.sendEmail('smarttrainingserviceteam@gmail.com', emailUser, "Change status in job "+ str(job), body, 'smart123ewq')
+emailData.sendEmailUser()

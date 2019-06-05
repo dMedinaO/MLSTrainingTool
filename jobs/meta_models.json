@@ -1,0 +1,1 @@
+{"models": [{"params": [{"loss": "exponential"}, {"n_estimators": "200"}], "algorithm": "AdaBoostRegressor"}, {"params": [{"loss": "exponential"}, {"n_estimators": "1000"}], "algorithm": "AdaBoostRegressor"}, {"params": [{"loss": "linear"}, {"n_estimators": "200"}], "algorithm": "AdaBoostRegressor"}]}

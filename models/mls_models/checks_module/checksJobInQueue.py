@@ -50,11 +50,33 @@ class checkJobs(object):
         self.connect.closeConnectionDB()
         return listResponse[0][0]#retornamos el nombre del set de datos
 
+    #metodo que permite obtener el nombre de la feature de respuesta en el set de datos
+    def getFeatureResponse(self, job):
+
+        query = "select response.nameFeature from response where response.dataSet = %s" %job
+        self.connect.initConnectionDB()
+        listResponse = self.handler.queryBasicDataBase(query, self.connect)
+
+        self.connect.closeConnectionDB()
+        return listResponse[0][0]#retornamos la caracteristica respuesta
+
+    #metodo que permite obtener el valor del procesamiento a la respuesta
+    def getValuesProcessResponse(self, job):
+
+        query = "select response.removeElements from response where response.dataSet = %s" %job
+        self.connect.initConnectionDB()
+        listResponse = self.handler.queryBasicDataBase(query, self.connect)
+
+        self.connect.closeConnectionDB()
+        return listResponse[0][0]#retornamos la caracteristica respuesta
+
     #metodo que permite recibir un job y hacer la ejecucion del job, cambia estado y notifica el cambio via correo electronico
     def execJob(self, job):
 
         nameDataset = self.getNameDataSet(job)
         emailUser, tipo_job = self.getUserInfoByJob(job)
+        featureResponse = self.getFeatureResponse(job)
+        removeElements = self.getValuesProcessResponse(job)
 
         #hacemos la actualizacion del job en el servidor
         query = "update jobData set jobData.statusJob = 'PROCESSING', jobData.dateFinish=NOW() where jobData.idjobData = %s" % job
@@ -70,10 +92,10 @@ class checkJobs(object):
         dataSet = "/var/www/html/MLSTrainingTool/jobs/%s/%s" % (job, nameDataset)
         if tipo_job == "PREDICTION":#prediction launcher
 
-            command = "python /var/www/html/MLSTrainingTool/models/bin/launcherFullProcessPrediction.py %s %s %s /var/www/html/MLSTrainingTool/jobs/ &" % (emailUser, job, dataSet)
+            command = "python /var/www/html/MLSTrainingTool/models/bin/launcherFullProcessPrediction.py %s %s %s /var/www/html/MLSTrainingTool/jobs/ %s %s &" % (emailUser, job, dataSet, featureResponse, removeElements)
             #os.system(command)
             print command
         else:#classification launcher
-            command = "python /var/www/html/MLSTrainingTool/models/bin/launcherFullProcessClassification.py %s %s %s /var/www/html/MLSTrainingTool/jobs/ &" % (emailUser, job, dataSet)
+            command = "python /var/www/html/MLSTrainingTool/models/bin/launcherFullProcessClassification.py %s %s %s /var/www/html/MLSTrainingTool/jobs/ %s %s &" % (emailUser, job, dataSet, featureResponse, removeElements)
             #os.system(command)
             print command
