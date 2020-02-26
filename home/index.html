@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard MLSTraining</title>
+  <title>Dashboard STSClustering</title>
 
   <!--STYLESHEET-->
   <!--=================================================-->
@@ -90,7 +90,7 @@
                     <a href="" class="navbar-brand">
                         <img src="img/logo.png" alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text">MLSTraining</span>
+                            <span class="brand-text">STSClustering</span>
                         </div>
                     </a>
                 </div>
@@ -151,7 +151,7 @@
 
                         <div class="panel-heading">
                           <h3 class="panel-title">
-                            Submmit Job
+                            Submmit a Job
                           </h3>
                         </div>
                         <div class="panel-body">
@@ -176,34 +176,37 @@
                           <form id="initNewJob" method="post" class="form-horizontal form-label-left">
 
                             <div class="form-group">
-                               <label class="col-sm-3 control-label">Email*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="email" name="email" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                               <label class="col-sm-3 control-label">Name Job*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="nameJob" name="nameJob" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                               <label class="col-sm-3 control-label">Description Job*</label>
-                                <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="descJob" name="descJob" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="optionProcess">Select Option Job <span class="required">*</span>
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="optionProcess">Select Option scale values<span class="required">*</span>
                               </label>
 
                               <div class="col-md-5 col-sm-5 col-xs-12">
                                 <select id="optionProcess" class="form-control">
-                                  <option value="1">Classification</option>
-                                  <option value="2">Regression</option>
+                                  <option value="1">Quick scale</option>
+                                  <option value="2">Standar scale</option>
+                                  <option value="3">Min max scaler</option>
+                                  <option value="4">Quantil Transformation</option>
+                                  <option value="5">Power Transformation</option>
+                                  <option value="0">No apply scaler option</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                               <label class="col-sm-3 control-label">Percentage member in groups*</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="percentage" name="percentage" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="significanceLevel">Significance Level<span class="required">*</span>
+                              </label>
+
+                              <div class="col-md-5 col-sm-5 col-xs-12">
+                                <select id="significanceLevel" class="form-control">
+                                  <option value="0.1">90% significance</option>
+                                  <option value="0.05">95% significance</option>
+                                  <option value="0.01">99% significance</option>
                                 </select>
                               </div>
                             </div>
@@ -257,7 +260,7 @@
                         </h3>
                       </div>
                       <div class="panel-body">
-                        Please enter files in * .csv or * .tsv format. If the data set presents examples with null characteristics or without information, the data set will not be considered. This tool is for public use and the components associated with the implementation of models are based on the Python Scikit library. The repository of the tool is public and it presents a GPL 3.0 license for non-commercial software use and respecting the characteristics of Free Software. If you use this software or the modules associated with it, please remember the corresponding appointment of the article associated with the tool. Finally, in case of cloning the repository, it is the sole responsibility of the person who makes it to have all the libraries and requirements for a correct use of MLSTraining.
+                        Please enter files in * .csv or * .tsv format. If the data set presents examples with null characteristics or without information, this examples will be to remove. This tool is for public use and the components associated with the implementation of models are based on the Python Scikit library. The repository of the tool is public and it presents a GPL 3.0 license for non-commercial software use and respecting the characteristics of Free Software. If you use this software or the modules associated with it, please remember the corresponding appointment of the article associated with the tool. Finally, in case of cloning the repository, it is the sole responsibility of the person who makes it to have all the libraries and requirements for a correct use of STSClustering.
                       </div>
                     </div>
                   </div>
@@ -295,14 +298,6 @@
                                 <ul id="mainnav-menu" class="list-group">
 
                                   <li class="list-header">Dashboard</li>
-
-                                  <li>
-          						                <a href="query/">
-          						                    <i class="fa fa fa-list"></i>
-          						                    <span class="menu-title">Query Job</span><i class="arrow"></i>
-          						                </a>
-
-          						            </li>
 
                                   <li>
           						                <a href="dataSet/">

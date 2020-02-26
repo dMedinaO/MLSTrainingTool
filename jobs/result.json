@@ -1,1 +1,0 @@
-[{"data": [{"name": "AdaBoostRegressor", "value": 1}], "name": "R_Score"}, {"data": [{"name": "AdaBoostRegressor", "value": 1}], "name": "Pearson"}, {"data": [{"name": "AdaBoostRegressor", "value": 1}], "name": "Spearman"}, {"data": [{"name": "AdaBoostRegressor", "value": 1}], "name": "Kendalltau"}]

@@ -1,2 +1,0 @@
-Algorithm,Params,R_Score,Pearson,Spearman,Kendalltau
-AdaBoostRegressor,loss:linear-n_estimators:200,0.753524877436,0.882715790595,0.673145493139,0.508423956257

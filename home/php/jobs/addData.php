@@ -1,74 +1,44 @@
 <?php
 
-  #session_start();
-  #$idUSer = $_SESSION['idUser'];
-  $idUSer = "1";
-
-  include("../connection.php");
   include("../readDocument.php");
-  include("../checkResultDB.php");
 
   #recibimos los parametros...
-  $email = $_REQUEST['email'];
-  $nameJob = $_REQUEST['nameJob'];
-  $descJob = $_REQUEST['descJob'];
   $optionProcess = $_REQUEST['optionProcess'];
+  $percentage = $_REQUEST['percentage'];
+  $significanceLevel = $_REQUEST['significanceLevel'];
 
-  $kind="";
-
-  if($optionProcess == 1){
-    $kind="CLASSIFICATION";
-  }else{
-    $kind="PREDICTION";
-  }
-
-  #obtenemos los datos desde la sesion...
-
+  #creamos un directorio para almacenar los resultados
   $idJob = time();#sera el id del job...
   $response ['job'] = $idJob;
 
-  $pathRespone = "/var/www/html/MLSTrainingTool/jobs/";
+  $pathRespone = "/var/www/html/clusteringShortTimeSeries/jobs/";
   #obtenemos el nombre del archivo de entrada...
-  $pathData = "/var/www/html/MLSTrainingTool/jobs/tmp/".$idUSer."_documentQueue.txt";
+  $pathData = "/var/www/html/clusteringShortTimeSeries/jobs/tmp/1_documentQueue.txt";
   $nameDocument = readDocument($pathData);
   $response ['nameFile'] = $nameDocument;
 
-  #hacemos la insercion a la base de datos...
-  $query = "insert into jobData values ($idJob, '$nameJob', '$descJob', '$email', 0, NOW(), NOW(), 'INIT', 'INIT JOB', '$kind', '$nameDocument')";
-  $resultado = mysqli_query($conexion, $query);
-  $requestData = verificar_resultado($resultado);
+  #movemos el archivo... creamos directorio
+  $path = "/var/www/html/clusteringShortTimeSeries/jobs/$idJob";
 
-  $response ['queriesInsert'] = $query;
-
-  if ($requestData == "BIEN"){#movemos el archivo de tmp al path del usuario y ejecutamos el proceso solo si la opcion de algorithm es todos...
-
-    #movemos el archivo... creamos directorio
-    $path = "/var/www/html/MLSTrainingTool/jobs/$idJob";
-
-    if (!file_exists($path)) {
-        mkdir($path, 0777, true);
-    }
-
-    #movemos el archivo...
-    //movemos el archivo al path de la licitacion...
-    $pathActual = "/var/www/html/MLSTrainingTool/jobs/tmp/$nameDocument";
-    $pathMove = "/var/www/html/MLSTrainingTool/jobs/$idJob/";
-
-    $command = "mv $pathActual $pathMove";
-    $pathDataSet ="/var/www/html/MLSTrainingTool/jobs/$idJob/$nameDocument";
-    exec($command);
-
-    //ejecutamos el script python que permite el analisis de las caracteristicas
-    $command = "python /var/www/html/MLSTrainingTool/models/bin/launcherCheckFeature.py $pathDataSet $idJob";
-    $response['command'] = $command;
-    exec($command);
-
-    $response['exec'] = "OK";
-
-  }else{
-    $response['exec'] = "ERROR";
-
+  if (!file_exists($path)) {
+      mkdir($path, 0777, true);
   }
+
+  #movemos el archivo...
+  //movemos el archivo al path de la licitacion...
+  $pathActual = "/var/www/html/clusteringShortTimeSeries/jobs/tmp/$nameDocument";
+  $pathMove = "/var/www/html/clusteringShortTimeSeries/jobs/$idJob/";
+
+  $command = "mv $pathActual $pathMove";
+  $nameDocFull ="/var/www/html/clusteringShortTimeSeries/jobs/$idJob/$nameDocument";
+  exec($command);
+
+  #hacemos la ejecucion del script para el algoritmo
+  $command = "python /var/www/html/clusteringShortTimeSeries/exec/LauncherClustering.py $nameDocFull $pathMove $optionProcess $percentage $significanceLevel";
+  $output = [];
+  exec($command, $output);
+
+  $response['exec'] = $output[0];
 
   echo json_encode($response);
 

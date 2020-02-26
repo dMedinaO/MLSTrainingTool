@@ -8,25 +8,10 @@ $(document).ready(function() {
         },
         fields: {
 
-            email: {
+            percentage: {
                 validators: {
                     notEmpty: {
-                        message: 'The email is required'
-                    }
-                }
-            },
-
-            nameJob: {
-                validators: {
-                    notEmpty: {
-                        message: 'The nameJob is required'
-                    }
-                }
-            },
-            descJob: {
-                validators: {
-                    notEmpty: {
-                        message: 'The description Job is required'
+                        message: 'The percentage is required'
                     }
                 }
             }
@@ -34,19 +19,17 @@ $(document).ready(function() {
     }).on('success.form.bv', function(e) {
       e.preventDefault();
       $('#loading').show();
-      var email = $("#initNewJob #email").val();
-      var nameJob = $("#initNewJob #nameJob").val();
-      var descJob = $("#initNewJob #descJob").val();
       var optionProcess = $("#initNewJob #optionProcess").val();
+      var percentage = $("#initNewJob #percentage").val();
+      var significanceLevel = $("#initNewJob #significanceLevel").val();
 
       $.ajax({
         method: "POST",
         url: "php/jobs/addData.php",
         data: {
-          "email"   : email,
-          "nameJob"   : nameJob,
-          "descJob"   : descJob,
-          "optionProcess"   : optionProcess
+          "optionProcess"   : optionProcess,
+          "percentage"   : percentage,
+          "significanceLevel"   : significanceLevel
 
         }
       }).done( function( info ){
@@ -61,7 +44,7 @@ $(document).ready(function() {
           setTimeout("location.href=''", 5000);
         }else{
           var job = response.job;
-          location.href="checkDataSet/?job="+job+"&kind="+optionProcess;
+          location.href="resultProcess/?job="+job+"&file="+response.nameFile;
         }
       });
   });
